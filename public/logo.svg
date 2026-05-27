@@ -1,0 +1,26 @@
+<svg width="180" height="48" viewBox="0 0 180 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- D20 die mark -->
+  <polygon points="28,6 46,16 28,26 10,16" fill="url(#d20-top)" stroke="#D6A84F" strokeWidth="0.8"/>
+  <polygon points="28,26 46,16 46,34 28,42" fill="url(#d20-right)" stroke="#D6A84F" strokeWidth="0.8"/>
+  <polygon points="28,26 10,16 10,34 28,42" fill="url(#d20-left)" stroke="#D6A84F" strokeWidth="0.8"/>
+  <line x1="28" y1="26" x2="28" y2="42" stroke="#B58A35" strokeWidth="0.8"/>
+  <line x1="28" y1="26" x2="46" y2="34" stroke="#B58A35" strokeWidth="0.8"/>
+  <line x1="28" y1="26" x2="10" y2="34" stroke="#B58A35" strokeWidth="0.8"/>
+  <text x="28" y="20" textAnchor="middle" fontFamily="Georgia,serif" fontSize="10" fontWeight="700" fill="#0F0D0B">20</text>
+  <text x="38" y="35" textAnchor="middle" fontFamily="Georgia,serif" fontSize="8" fontWeight="700" fill="#0F0D0B">L1</text>
+  <text x="18" y="35" textAnchor="middle" fontFamily="Georgia,serif" fontSize="8" fontWeight="700" fill="#0F0D0B">L1</text>
+  <!-- Text -->
+  <text x="60" y="28" fontFamily="Georgia,serif" fontSize="22" fontWeight="700" fill="#E7C172" letterSpacing="4">LVL</text>
+  <text x="60" y="42" fontFamily="system-ui,sans-serif" fontSize="11" fill="#8B7E6A" letterSpacing="6">ONE</text>
+  <defs>
+    <linearGradient id="d20-top" x1="28" y1="6" x2="28" y2="26">
+      <stop stop-color="#E7C172"/><stop offset="1" stop-color="#D6A84F"/>
+    </linearGradient>
+    <linearGradient id="d20-right" x1="46" y1="16" x2="28" y2="42">
+      <stop stop-color="#D6A84F"/><stop offset="1" stop-color="#B58A35"/>
+    </linearGradient>
+    <linearGradient id="d20-left" x1="10" y1="16" x2="28" y2="42">
+      <stop stop-color="#C49A3C"/><stop offset="1" stop-color="#A07828"/>
+    </linearGradient>
+  </defs>
+</svg>

@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" width="1200" height="400">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="60%" r="60%">
+      <stop offset="0%" stop-color="#3A2A1A"/>
+      <stop offset="60%" stop-color="#1A1510"/>
+      <stop offset="100%" stop-color="#0A0806"/>
+    </radialGradient>
+    <radialGradient id="candle1" cx="50%" cy="30%" r="50%">
+      <stop offset="0%" stop-color="#FFD780" stop-opacity="0.6"/>
+      <stop offset="40%" stop-color="#D4843A" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#D4843A" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="candle2" cx="50%" cy="30%" r="50%">
+      <stop offset="0%" stop-color="#FFD780" stop-opacity="0.4"/>
+      <stop offset="40%" stop-color="#D4843A" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#D4843A" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="wood" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#3C2A1E"/>
+      <stop offset="100%" stop-color="#1A110A"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D4A843"/>
+      <stop offset="50%" stop-color="#F2D77D"/>
+      <stop offset="100%" stop-color="#B8862D"/>
+    </linearGradient>
+    <linearGradient id="titleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#D4A843"/>
+      <stop offset="50%" stop-color="#F2D77D"/>
+      <stop offset="100%" stop-color="#D4A843"/>
+    </linearGradient>
+    <filter id="softGlow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="400" fill="url(#glow)"/>
+
+  <ellipse cx="600" cy="380" rx="620" ry="60" fill="url(#wood)" opacity="0.8"/>
+  <line x1="0" y1="380" x2="1200" y2="380" stroke="#4A3520" stroke-width="2" opacity="0.5"/>
+  <line x1="0" y1="365" x2="1200" y2="365" stroke="#2A1A0E" stroke-width="1" opacity="0.3"/>
+
+  <g opacity="0.06">
+    <circle cx="400" cy="340" r="40"/><circle cx="800" cy="340" r="40"/>
+    <circle cx="300" cy="350" r="30"/><circle cx="700" cy="350" r="30"/>
+    <circle cx="500" cy="345" r="35"/><circle cx="900" cy="345" r="35"/>
+  </g>
+
+  <rect x="0" y="0" width="1200" height="400" fill="url(#candle1)" opacity="0.3"/>
+  <rect x="0" y="0" width="1200" height="400" fill="url(#candle2)" opacity="0.2"/>
+
+  <text x="600" y="185" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="64" font-weight="bold" fill="url(#titleGrad)" filter="url(#softGlow)" letter-spacing="8">DM TOOLS</text>
+  <text x="600" y="240" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="18" fill="#B8862D" opacity="0.7" letter-spacing="12">HERRAMIENTAS DEL MAESTRO</text>
+
+  <line x1="300" y1="260" x2="900" y2="260" stroke="url(#gold)" stroke-width="1" opacity="0.3"/>
+  <line x1="350" y1="264" x2="850" y2="264" stroke="url(#gold)" stroke-width="0.5" opacity="0.15"/>
+
+  <g opacity="0.25" fill="url(#gold)">
+    <text x="100" y="350" font-family="Georgia, serif" font-size="12" opacity="0.5">⚔</text>
+    <text x="1100" y="350" font-family="Georgia, serif" font-size="12" opacity="0.5">⚔</text>
+  </g>
+
+  <g opacity="0.08" fill="#F2D77D">
+    <rect x="80" y="280" width="60" height="80" rx="4"/>
+    <rect x="160" y="300" width="40" height="60" rx="3"/>
+    <rect x="940" y="280" width="60" height="80" rx="4"/>
+    <rect x="1020" y="300" width="40" height="60" rx="3"/>
+  </g>
+</svg>
