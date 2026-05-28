@@ -78,7 +78,7 @@ export function Sidebar() {
                 background: isActive(it.href) ? "rgba(214,168,79,0.12)" : "transparent",
                 color: isActive(it.href) ? "var(--quest-gold-hi)" : "var(--text-mid)",
                 textDecoration: "none",
-                transition: "background .12s, color .12s",
+                transition: "color 140ms var(--ease-out)",
               }}>
                 <Ico name={it.icon} size={15}/>
                 <span className="lo-sidebar-label">{it.label}</span>
@@ -87,7 +87,7 @@ export function Sidebar() {
           </nav>
 
           <div className="lo-sidebar-user" style={{ borderTop: "1px solid var(--line)", paddingTop: 14, marginTop: 14, flexShrink: 0 }}>
-            <Link href="/account" style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8, textDecoration: "none", borderRadius: 8, padding: "4px 6px", margin: "0 -6px 8px", background: pathname === "/account" ? "rgba(214,168,79,0.08)" : "transparent", transition: "background .12s" }}>
+            <Link href="/account" style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8, textDecoration: "none", borderRadius: 8, padding: "4px 6px", margin: "0 -6px 8px", background: pathname === "/account" ? "rgba(214,168,79,0.08)" : "transparent" }}>
               <div style={{ width: 30, height: 30, borderRadius: 999, background: "linear-gradient(135deg, var(--quest-gold-lo), var(--arcane-blue))", display: "grid", placeItems: "center", fontSize: 12, fontWeight: 600, color: "var(--text-hi)", flexShrink: 0 }}>
                 {state.user?.username?.[0]?.toUpperCase() ?? "?"}
               </div>
@@ -104,14 +104,25 @@ export function Sidebar() {
                   <div style={{
                     width: `${Math.min(((xpData.total % 500) / 500) * 100, 100)}%`,
                     height: "100%", background: "var(--quest-gold-hi)", borderRadius: 2,
-                    transition: "width .4s",
+                    transition: "width 0.4s var(--ease-out)",
                   }}/>
                 </div>
               </div>
             )}
-            <button onClick={() => setConfirmLogout(true)} style={{ fontSize: 11, color: "var(--text-low)", cursor: "pointer", padding: 0, background: "none", border: "none" }}>
-              Cerrar sesión
-            </button>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <a
+                href="https://discord.gg/nwQ8pPVc6f"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="lo-discord-link"
+                style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 11, color: "var(--text-low)", textDecoration: "none" }}
+              >
+                <Ico name="discord" size={12}/> Discord
+              </a>
+              <button onClick={() => setConfirmLogout(true)} style={{ fontSize: 11, color: "var(--text-low)", cursor: "pointer", padding: 0, background: "none", border: "none" }}>
+                Cerrar sesión
+              </button>
+            </div>
           </div>
         </div>
       </aside>
@@ -124,7 +135,7 @@ export function Sidebar() {
         >
           <div
             className="lo-card-elev"
-            style={{ width: "100%", maxWidth: 340, padding: 24, borderRadius: 14 }}
+            style={{ width: "100%", maxWidth: 340, padding: 24, borderRadius: 14, background: "var(--bg-elev-3)" }}
             onClick={e => e.stopPropagation()}
           >
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
