@@ -60,7 +60,7 @@ export default function FeatsPage() {
             {ALL_TYPES.map(t => <option key={t} value={t}>{TYPE_LABEL[t]}</option>)}
           </select>
           {(search || filterType) && (
-            <button className="lo-btn lo-btn-ghost" onClick={() => { setSearch(""); setFilterType(""); }} style={{ fontSize: 12, padding: "6px 10px" }}>
+            <button type="button" className="lo-btn lo-btn-ghost" onClick={() => { setSearch(""); setFilterType(""); }} style={{ fontSize: 12, padding: "6px 10px" }}>
               <Ico name="x" size={12} /> Limpiar
             </button>
           )}

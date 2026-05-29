@@ -103,13 +103,13 @@ export default function FactionDetailPage({ params }: Props) {
             <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
               {editing ? (
                 <>
-                  <button className="lo-btn lo-btn-ghost" onClick={() => { setDraft(faction); setEditing(false); }}>Cancelar</button>
-                  <button className="lo-btn lo-btn-primary" onClick={save}><Ico name="check" size={13}/> Guardar</button>
+                  <button type="button" className="lo-btn lo-btn-ghost" onClick={() => { setDraft(faction); setEditing(false); }}>Cancelar</button>
+                  <button type="button" className="lo-btn lo-btn-primary" onClick={save}><Ico name="check" size={13}/> Guardar</button>
                 </>
               ) : (
                 <>
-                  <button className="lo-btn lo-btn-ghost" onClick={() => { setDraft({ ...faction }); setEditing(true); }}><Ico name="cog" size={13}/> Editar</button>
-                  <button className="lo-btn lo-btn-ghost" onClick={del} style={{ color: "#C28F8F", padding: "6px 10px" }}><Ico name="trash" size={14}/></button>
+                  <button type="button" className="lo-btn lo-btn-ghost" onClick={() => { setDraft({ ...faction }); setEditing(true); }}><Ico name="cog" size={13}/> Editar</button>
+                  <button type="button" className="lo-btn lo-btn-ghost" onClick={del} style={{ color: "#C28F8F", padding: "6px 10px" }}><Ico name="trash" size={14}/></button>
                 </>
               )}
             </div>
@@ -146,7 +146,7 @@ export default function FactionDetailPage({ params }: Props) {
               {isDm && (
                 <div style={{ display: "flex", gap: 4, justifyContent: "center", flexWrap: "wrap" }}>
                   {[-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5].map(v => (
-                    <button key={v} onClick={() => setRep(v)} style={{ width: 28, height: 28, borderRadius: 6, border: `1px solid ${faction.playerReputation === v ? rep.color : "var(--border-lo)"}`, background: faction.playerReputation === v ? `${rep.color}22` : "transparent", color: faction.playerReputation === v ? rep.color : "var(--text-mid)", fontSize: 11, cursor: "pointer", fontWeight: faction.playerReputation === v ? 700 : 400 }}>
+                    <button type="button" key={v} onClick={() => setRep(v)} style={{ width: 28, height: 28, borderRadius: 6, border: `1px solid ${faction.playerReputation === v ? rep.color : "var(--border-lo)"}`, background: faction.playerReputation === v ? `${rep.color}22` : "transparent", color: faction.playerReputation === v ? rep.color : "var(--text-mid)", fontSize: 11, cursor: "pointer", fontWeight: faction.playerReputation === v ? 700 : 400 }}>
                       {v > 0 ? `+${v}` : v}
                     </button>
                   ))}
@@ -183,7 +183,7 @@ export default function FactionDetailPage({ params }: Props) {
                 <Link href={`/campaigns/${campaign.id}/world/factions/${target.id}`} style={{ flex: 1, fontSize: 14, color: "var(--text-hi)", textDecoration: "none", fontWeight: 500 }}>{target.name}</Link>
                 <span style={{ fontSize: 12, color: relRep.color, fontWeight: 600, padding: "2px 8px", background: `${relRep.color}18`, borderRadius: 4 }}>{FACTION_RELATION_LABEL[rel.type]}</span>
                 {isDm && (
-                  <button onClick={() => removeRelation(rel.targetFactionId)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-low)", padding: "2px 4px" }}>
+                  <button type="button" onClick={() => removeRelation(rel.targetFactionId)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-low)", padding: "2px 4px" }}>
                     <Ico name="x" size={13}/>
                   </button>
                 )}
@@ -203,7 +203,7 @@ export default function FactionDetailPage({ params }: Props) {
                   <option key={t} value={t}>{FACTION_RELATION_LABEL[t]}</option>
                 ))}
               </select>
-              <button className="lo-btn lo-btn-ghost" onClick={addRelation} disabled={!newRelTarget}>
+              <button type="button" className="lo-btn lo-btn-ghost" onClick={addRelation} disabled={!newRelTarget}>
                 <Ico name="plus" size={13}/>
               </button>
             </div>

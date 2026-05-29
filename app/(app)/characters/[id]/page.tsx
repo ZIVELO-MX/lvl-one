@@ -188,19 +188,19 @@ export default function CharacterSheetPage({ params }: Props) {
           </div>
           <div data-no-print style={{ display: "flex", gap: 8 }}>
             {character.level < 20 && (
-              <button className="lo-btn lo-btn-primary" style={{ fontSize: 12 }}
+              <button type="button" className="lo-btn lo-btn-primary" style={{ fontSize: 12 }}
                 onClick={() => setShowLevelUp(true)}>
                 <span style={{ display: "inline-block", transform: "rotate(-90deg)" }}><Ico name="arrow" size={12}/></span> Subir de Nivel
               </button>
             )}
-            <button className="lo-btn lo-btn-ghost" style={{ fontSize: 12 }} onClick={() => router.push(`/characters/${id}/print`)}>
+            <button type="button" className="lo-btn lo-btn-ghost" style={{ fontSize: 12 }} onClick={() => router.push(`/characters/${id}/print`)}>
               Ver PDF
             </button>
-            <button className="lo-btn lo-btn-ghost" style={{ fontSize: 12 }}
+            <button type="button" className="lo-btn lo-btn-ghost" style={{ fontSize: 12 }}
               onClick={() => { dispatch({ type: "DRAFT_INIT", draft: character }); router.push(`/characters/${id}/edit/1`); }}>
               <Ico name="chevron" size={12} /> Editar
             </button>
-            <button className="lo-btn lo-btn-ghost" style={{ fontSize: 12 }} onClick={() => router.push("/characters")}>
+            <button type="button" className="lo-btn lo-btn-ghost" style={{ fontSize: 12 }} onClick={() => router.push("/characters")}>
               ← Mis personajes
             </button>
           </div>
@@ -212,10 +212,10 @@ export default function CharacterSheetPage({ params }: Props) {
           <div style={{ flex: "0 0 auto", paddingRight: 28, borderRight: "1px solid var(--line-strong)", marginRight: 28 }}>
             <div className="lo-label" style={{ marginBottom: 8 }}>Puntos de golpe</div>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-              <button onClick={() => patchAndSync({ hpCurrent: Math.max(0, hpCurrent - 1) })}
+              <button type="button" onClick={() => patchAndSync({ hpCurrent: Math.max(0, hpCurrent - 1) })}
                 className="lo-btn lo-btn-ghost" style={{ padding: "4px 12px", fontSize: 16, lineHeight: 1 }}>−</button>
               <div style={{ fontSize: 32, fontFamily: "var(--font-display)", color: hpColor, lineHeight: 1, padding: "0 4px" }}>{hpCurrent}</div>
-              <button onClick={() => patchAndSync({ hpCurrent: Math.min(maxHp, hpCurrent + 1) })}
+              <button type="button" onClick={() => patchAndSync({ hpCurrent: Math.min(maxHp, hpCurrent + 1) })}
                 className="lo-btn lo-btn-ghost" style={{ padding: "4px 12px", fontSize: 16, lineHeight: 1 }}>+</button>
               <span style={{ fontSize: 11, color: "var(--text-low)", marginLeft: 4 }}>/ {maxHp}</span>
             </div>
@@ -244,7 +244,7 @@ export default function CharacterSheetPage({ params }: Props) {
                       <div style={{ fontSize: 10, color: "var(--text-low)", marginBottom: 6 }}>Nivel {lvl}</div>
                       <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
                         {Array.from({ length: total }).map((_, i) => (
-                          <button key={i} onClick={() => clickSlot(lvl, i)}
+                          <button type="button" key={`slot-${lvl}-${i}`} onClick={() => clickSlot(lvl, i)}
                             title={i < available ? "Gastar espacio" : "Recuperar espacio"}
                             style={{ width: 20, height: 20, borderRadius: 999, cursor: "pointer",
                               border: "2px solid var(--arcane-blue)",
@@ -253,7 +253,7 @@ export default function CharacterSheetPage({ params }: Props) {
                         ))}
                         <span style={{ fontSize: 11, color: "var(--text-low)" }}>{available}/{total}</span>
                         {used > 0 && (
-                          <button onClick={() => patchAndSync({ spellSlotsUsed: { ...slotsUsed, [lvl]: 0 } })}
+                          <button type="button" onClick={() => patchAndSync({ spellSlotsUsed: { ...slotsUsed, [lvl]: 0 } })}
                             className="lo-btn lo-btn-ghost" style={{ padding: "2px 6px", fontSize: 10 }}>Rest</button>
                         )}
                       </div>
@@ -329,7 +329,7 @@ export default function CharacterSheetPage({ params }: Props) {
             {items.length > 0 ? (
               <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
                 {items.map((item, i) => (
-                  <li key={i} style={{ fontSize: 12, color: "var(--text-mid)", padding: "4px 0", borderBottom: "1px solid var(--line-subtle)", display: "flex", gap: 8, alignItems: "center" }}>
+                  <li key={`${i}-${item}`} style={{ fontSize: 12, color: "var(--text-mid)", padding: "4px 0", borderBottom: "1px solid var(--line-subtle)", display: "flex", gap: 8, alignItems: "center" }}>
                     <span style={{ width: 4, height: 4, borderRadius: 999, background: "var(--quest-gold)" }} />
                     {item}
                   </li>

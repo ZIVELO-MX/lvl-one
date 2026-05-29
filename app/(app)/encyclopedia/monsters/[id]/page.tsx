@@ -156,7 +156,7 @@ export default function MonsterDetailPage({ params }: Props) {
             <h3 style={{ fontSize: 12, color: "var(--text-low)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 12 }}>Rasgos</h3>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               {m.traits.map((t, i) => (
-                <div key={i}>
+                <div key={`trait-${i}-${t.name}`}>
                   <span style={{ fontSize: 13, fontWeight: 700, color: "var(--text-hi)", fontStyle: "italic" }}>{t.name}. </span>
                   <span style={{ fontSize: 13, color: "var(--text-mid)", lineHeight: 1.5 }}>{t.desc}</span>
                 </div>
@@ -186,7 +186,7 @@ export default function MonsterDetailPage({ params }: Props) {
           <h3 style={{ fontSize: 12, color: "#C28F8F", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 12 }}>Acciones</h3>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {m.actions.map((a, i) => (
-              <div key={i} style={{ paddingBottom: 10, borderBottom: i < m.actions.length - 1 ? "1px solid var(--border-lo)" : "none" }}>
+              <div key={`action-${i}-${a.name}`} style={{ paddingBottom: 10, borderBottom: i < m.actions.length - 1 ? "1px solid var(--border-lo)" : "none" }}>
                 <span style={{ fontSize: 13, fontWeight: 700, color: "var(--text-hi)", fontStyle: "italic" }}>{a.name}. </span>
                 <span style={{ fontSize: 13, color: "var(--text-mid)", lineHeight: 1.5 }}>{a.desc}</span>
                 {(a.damage || a.attackBonus !== undefined) && (
@@ -206,7 +206,7 @@ export default function MonsterDetailPage({ params }: Props) {
             <h3 style={{ fontSize: 12, color: "var(--quest-gold-hi)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 12 }}>Reacciones</h3>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               {m.reactions.map((r, i) => (
-                <div key={i}>
+                <div key={`reaction-${i}-${r.name}`}>
                   <span style={{ fontSize: 13, fontWeight: 700, color: "var(--text-hi)", fontStyle: "italic" }}>{r.name}. </span>
                   <span style={{ fontSize: 13, color: "var(--text-mid)", lineHeight: 1.5 }}>{r.desc}</span>
                 </div>
@@ -226,7 +226,7 @@ export default function MonsterDetailPage({ params }: Props) {
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               {m.legendaryActions.map((la, i) => (
-                <div key={i}>
+                <div key={`legendary-${i}-${la.name}`}>
                   <span style={{ fontSize: 13, fontWeight: 700, color: "var(--text-hi)", fontStyle: "italic" }}>{la.name}. </span>
                   <span style={{ fontSize: 13, color: "var(--text-mid)", lineHeight: 1.5 }}>{la.desc}</span>
                 </div>

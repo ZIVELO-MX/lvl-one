@@ -76,7 +76,7 @@ export default function NewFactionPage({ params }: Props) {
 
         <div style={{ display: "flex", gap: 10, marginTop: 20, justifyContent: "flex-end" }}>
           <Link href={`/campaigns/${campaign.id}/world/factions`} className="lo-btn lo-btn-ghost">Cancelar</Link>
-          <button className="lo-btn lo-btn-primary" onClick={save} disabled={!form.name.trim()}>
+          <button type="button" className="lo-btn lo-btn-primary" onClick={save} disabled={!form.name.trim()}>
             <Ico name="check" size={13}/> Crear facción
           </button>
         </div>

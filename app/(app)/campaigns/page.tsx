@@ -83,7 +83,7 @@ export default function CampaignsPage() {
                     </div>
                   </div>
                   <div style={{ display: "flex", gap: 8 }}>
-                    <button className="lo-btn lo-btn-primary" style={{ flex: 1, justifyContent: "center", padding: "8px 0", fontSize: 13 }} onClick={(e) => { e.preventDefault(); router.push(`/campaigns/${s.id}`); }}>
+                    <button type="button" className="lo-btn lo-btn-primary" style={{ flex: 1, justifyContent: "center", padding: "8px 0", fontSize: 13 }} onClick={(e) => { e.preventDefault(); router.push(`/campaigns/${s.id}`); }}>
                       Ver campaña <Ico name="arrow" size={13}/>
                     </button>
                   </div>

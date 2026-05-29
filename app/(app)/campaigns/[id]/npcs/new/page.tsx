@@ -120,7 +120,7 @@ export default function NewNpcPage({ params }: Props) {
 
           <div style={{ display: "flex", gap: 10, justifyContent: "flex-end", marginTop: 8 }}>
             <Link href={`/campaigns/${campaign.id}/npcs`} className="lo-btn lo-btn-ghost">Cancelar</Link>
-            <button className="lo-btn lo-btn-primary" onClick={save} disabled={!name.trim()}>
+            <button type="button" className="lo-btn lo-btn-primary" onClick={save} disabled={!name.trim()}>
               <Ico name="plus" size={14}/> Crear NPC
             </button>
           </div>

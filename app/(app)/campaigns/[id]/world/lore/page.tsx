@@ -75,19 +75,19 @@ export default function LorePage({ params }: Props) {
             </Link>
             <h2 style={{ fontSize: 20, margin: 0 }}>Lore <span style={{ fontSize: 14, color: "var(--text-low)", fontWeight: 400 }}>({allLore.length})</span></h2>
           </div>
-          {isDm && <button className="lo-btn lo-btn-primary" onClick={startCreate}><Ico name="plus" size={13}/> Nueva entrada</button>}
+          {isDm && <button type="button" className="lo-btn lo-btn-primary" onClick={startCreate}><Ico name="plus" size={13}/> Nueva entrada</button>}
         </div>
 
         {/* Category filter */}
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 20 }}>
-          <button onClick={() => setFilter("all")} className="lo-btn lo-btn-ghost" style={{ fontSize: 12, padding: "4px 12px", borderBottom: filter === "all" ? "2px solid var(--quest-gold-hi)" : "2px solid transparent", color: filter === "all" ? "var(--quest-gold-hi)" : "var(--text-mid)" }}>
+          <button type="button" onClick={() => setFilter("all")} className="lo-btn lo-btn-ghost" style={{ fontSize: 12, padding: "4px 12px", borderBottom: filter === "all" ? "2px solid var(--quest-gold-hi)" : "2px solid transparent", color: filter === "all" ? "var(--quest-gold-hi)" : "var(--text-mid)" }}>
             Todo ({allLore.length})
           </button>
           {(Object.keys(LORE_CATEGORY_LABEL) as LoreCategory[]).map(cat => {
             const count = allLore.filter(l => l.category === cat).length;
             if (count === 0) return null;
             return (
-              <button key={cat} onClick={() => setFilter(cat)} className="lo-btn lo-btn-ghost" style={{ fontSize: 12, padding: "4px 12px", borderBottom: filter === cat ? `2px solid ${CATEGORY_COLORS[cat]}` : "2px solid transparent", color: filter === cat ? CATEGORY_COLORS[cat] : "var(--text-mid)" }}>
+              <button type="button" key={cat} onClick={() => setFilter(cat)} className="lo-btn lo-btn-ghost" style={{ fontSize: 12, padding: "4px 12px", borderBottom: filter === cat ? `2px solid ${CATEGORY_COLORS[cat]}` : "2px solid transparent", color: filter === cat ? CATEGORY_COLORS[cat] : "var(--text-mid)" }}>
                 {LORE_CATEGORY_LABEL[cat]} ({count})
               </button>
             );
@@ -116,8 +116,8 @@ export default function LorePage({ params }: Props) {
               <input className="lo-input" value={form.tags} onChange={e => setForm(f => ({ ...f, tags: e.target.value }))} placeholder="Separadas por coma"/>
             </div>
             <div style={{ display: "flex", gap: 8 }}>
-              <button className="lo-btn lo-btn-ghost" onClick={() => setCreating(false)}>Cancelar</button>
-              <button className="lo-btn lo-btn-primary" onClick={saveLore} disabled={!form.title.trim()}><Ico name="check" size={13}/> Guardar</button>
+              <button type="button" className="lo-btn lo-btn-ghost" onClick={() => setCreating(false)}>Cancelar</button>
+              <button type="button" className="lo-btn lo-btn-primary" onClick={saveLore} disabled={!form.title.trim()}><Ico name="check" size={13}/> Guardar</button>
             </div>
           </div>
         )}
@@ -129,13 +129,13 @@ export default function LorePage({ params }: Props) {
             <p style={{ color: "var(--text-mid)", marginTop: 12, marginBottom: 16 }}>
               {filter === "all" ? "No hay entradas de lore todavía." : `No hay entradas en "${LORE_CATEGORY_LABEL[filter as LoreCategory]}".`}
             </p>
-            {isDm && filter === "all" && <button className="lo-btn lo-btn-primary" onClick={startCreate}>Crear primera entrada</button>}
+            {isDm && filter === "all" && <button type="button" className="lo-btn lo-btn-primary" onClick={startCreate}>Crear primera entrada</button>}
           </div>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {lore.map(entry => (
               <div key={entry.id} className="lo-card" style={{ padding: 0, overflow: "hidden" }}>
-                <button onClick={() => setExpanded(expanded === entry.id ? null : entry.id)} style={{ width: "100%", background: "none", border: "none", padding: "14px 16px", cursor: "pointer", textAlign: "left", display: "flex", alignItems: "center", gap: 12 }}>
+                <button type="button" onClick={() => setExpanded(expanded === entry.id ? null : entry.id)} style={{ width: "100%", background: "none", border: "none", padding: "14px 16px", cursor: "pointer", textAlign: "left", display: "flex", alignItems: "center", gap: 12 }}>
                   <div style={{ width: 6, height: 6, borderRadius: "50%", background: CATEGORY_COLORS[entry.category], flexShrink: 0 }}/>
                   <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 10 }}>
                     <span style={{ fontSize: 14, fontWeight: 600, color: "var(--text-hi)" }}>{entry.title}</span>
@@ -166,8 +166,8 @@ export default function LorePage({ params }: Props) {
                         <textarea className="lo-input" rows={6} value={form.content} onChange={e => setForm(f => ({ ...f, content: e.target.value }))} style={{ resize: "vertical" }}/>
                         <input className="lo-input" value={form.tags} onChange={e => setForm(f => ({ ...f, tags: e.target.value }))} placeholder="Etiquetas separadas por coma"/>
                         <div style={{ display: "flex", gap: 8 }}>
-                          <button className="lo-btn lo-btn-ghost" onClick={() => setEditing(null)}>Cancelar</button>
-                          <button className="lo-btn lo-btn-primary" onClick={saveLore}><Ico name="check" size={13}/> Guardar</button>
+                          <button type="button" className="lo-btn lo-btn-ghost" onClick={() => setEditing(null)}>Cancelar</button>
+                          <button type="button" className="lo-btn lo-btn-primary" onClick={saveLore}><Ico name="check" size={13}/> Guardar</button>
                         </div>
                       </div>
                     ) : (
@@ -180,8 +180,8 @@ export default function LorePage({ params }: Props) {
                         )}
                         {isDm && (
                           <div style={{ display: "flex", gap: 8 }}>
-                            <button className="lo-btn lo-btn-ghost" onClick={() => startEdit(entry.id)} style={{ fontSize: 12 }}><Ico name="cog" size={12}/> Editar</button>
-                            <button className="lo-btn lo-btn-ghost" onClick={() => deleteLore(entry.id)} style={{ fontSize: 12, color: "#C28F8F" }}><Ico name="trash" size={12}/></button>
+                            <button type="button" className="lo-btn lo-btn-ghost" onClick={() => startEdit(entry.id)} style={{ fontSize: 12 }}><Ico name="cog" size={12}/> Editar</button>
+                            <button type="button" className="lo-btn lo-btn-ghost" onClick={() => deleteLore(entry.id)} style={{ fontSize: 12, color: "#C28F8F" }}><Ico name="trash" size={12}/></button>
                           </div>
                         )}
                       </div>

@@ -77,7 +77,7 @@ export default function NewCampaignPage() {
               <label style={{ display: "block", fontSize: 12, color: "var(--text-mid)", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.06em" }}>Color de portada</label>
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                 {COVER_COLORS.map(c => (
-                  <button key={c} onClick={() => setCoverColor(c)} style={{ width: 32, height: 32, borderRadius: 8, background: c, border: coverColor === c ? "2px solid white" : "2px solid transparent", outline: coverColor === c ? "2px solid var(--quest-gold-hi)" : "none", cursor: "pointer" }} aria-label={`Color ${c}`}/>
+                  <button type="button" key={c} onClick={() => setCoverColor(c)} style={{ width: 32, height: 32, borderRadius: 8, background: c, border: coverColor === c ? "2px solid white" : "2px solid transparent", outline: coverColor === c ? "2px solid var(--quest-gold-hi)" : "none", cursor: "pointer" }} aria-label={`Color ${c}`}/>
                 ))}
               </div>
             </div>
@@ -85,7 +85,7 @@ export default function NewCampaignPage() {
               <label style={{ display: "block", fontSize: 12, color: "var(--text-mid)", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.06em" }}>Estado</label>
               <div style={{ display: "flex", gap: 8 }}>
                 {(["planning", "active", "paused"] as CampaignStatus[]).map(s => (
-                  <button key={s} onClick={() => setStatus(s)} className={`lo-btn ${status === s ? "lo-btn-primary" : "lo-btn-ghost"}`} style={{ padding: "6px 12px", fontSize: 12 }}>
+                  <button type="button" key={s} onClick={() => setStatus(s)} className={`lo-btn ${status === s ? "lo-btn-primary" : "lo-btn-ghost"}`} style={{ padding: "6px 12px", fontSize: 12 }}>
                     {s === "planning" ? "Planificación" : s === "active" ? "Activa" : "Pausada"}
                   </button>
                 ))}
@@ -99,19 +99,19 @@ export default function NewCampaignPage() {
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <span style={{ fontSize: 14 }}>Multiclase permitida</span>
-              <button onClick={() => setAllowMulticlass(!allowMulticlass)} className={`lo-btn ${allowMulticlass ? "lo-btn-primary" : "lo-btn-ghost"}`} style={{ padding: "6px 14px", fontSize: 12 }}>
+              <button type="button" onClick={() => setAllowMulticlass(!allowMulticlass)} className={`lo-btn ${allowMulticlass ? "lo-btn-primary" : "lo-btn-ghost"}`} style={{ padding: "6px 14px", fontSize: 12 }}>
                 {allowMulticlass ? "Sí" : "No"}
               </button>
             </div>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <span style={{ fontSize: 14 }}>Feats permitidos</span>
-              <button onClick={() => setAllowFeats(!allowFeats)} className={`lo-btn ${allowFeats ? "lo-btn-primary" : "lo-btn-ghost"}`} style={{ padding: "6px 14px", fontSize: 12 }}>
+              <button type="button" onClick={() => setAllowFeats(!allowFeats)} className={`lo-btn ${allowFeats ? "lo-btn-primary" : "lo-btn-ghost"}`} style={{ padding: "6px 14px", fontSize: 12 }}>
                 {allowFeats ? "Sí" : "No"}
               </button>
             </div>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <span style={{ fontSize: 14 }}>Homebrew permitido</span>
-              <button onClick={() => setAllowHomebrew(!allowHomebrew)} className={`lo-btn ${allowHomebrew ? "lo-btn-primary" : "lo-btn-ghost"}`} style={{ padding: "6px 14px", fontSize: 12 }}>
+              <button type="button" onClick={() => setAllowHomebrew(!allowHomebrew)} className={`lo-btn ${allowHomebrew ? "lo-btn-primary" : "lo-btn-ghost"}`} style={{ padding: "6px 14px", fontSize: 12 }}>
                 {allowHomebrew ? "Sí" : "No"}
               </button>
             </div>
@@ -126,7 +126,7 @@ export default function NewCampaignPage() {
               <label style={{ display: "block", fontSize: 12, color: "var(--text-mid)", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.06em" }}>Generación de stats</label>
               <div style={{ display: "flex", gap: 8 }}>
                 {(["standard", "roll", "point-buy"] as const).map(m => (
-                  <button key={m} onClick={() => setStatGeneration(m)} className={`lo-btn ${statGeneration === m ? "lo-btn-primary" : "lo-btn-ghost"}`} style={{ padding: "6px 12px", fontSize: 12 }}>
+                  <button type="button" key={m} onClick={() => setStatGeneration(m)} className={`lo-btn ${statGeneration === m ? "lo-btn-primary" : "lo-btn-ghost"}`} style={{ padding: "6px 12px", fontSize: 12 }}>
                     {m === "standard" ? "Array estándar" : m === "roll" ? "Tirar dados" : "Compra de puntos"}
                   </button>
                 ))}
@@ -136,8 +136,8 @@ export default function NewCampaignPage() {
         </div>
 
         <div style={{ display: "flex", gap: 10, justifyContent: "flex-end" }}>
-          <button className="lo-btn lo-btn-ghost" onClick={() => router.push("/campaigns")}>Cancelar</button>
-          <button className="lo-btn lo-btn-primary" onClick={save} disabled={!name.trim() || saving}>
+          <button type="button" className="lo-btn lo-btn-ghost" onClick={() => router.push("/campaigns")}>Cancelar</button>
+          <button type="button" className="lo-btn lo-btn-primary" onClick={save} disabled={!name.trim() || saving}>
             <Ico name="save" size={14}/> {saving ? "Guardando..." : "Crear campaña"}
           </button>
         </div>

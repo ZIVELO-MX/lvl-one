@@ -83,7 +83,7 @@ export default function CampaignNotesPage({ params }: Props) {
             <p style={{ color: "var(--text-mid)", fontSize: 13, margin: 0 }}>{campaign.setting || "Sin ambientación"}</p>
           </div>
           {isDm && (
-            <button className="lo-btn lo-btn-primary" onClick={() => setShowNew(!showNew)}>
+            <button type="button" className="lo-btn lo-btn-primary" onClick={() => setShowNew(!showNew)}>
               <Ico name="plus" size={14}/> Nueva nota
             </button>
           )}
@@ -120,8 +120,8 @@ export default function CampaignNotesPage({ params }: Props) {
               </div>
             </div>
             <div style={{ display: "flex", gap: 10, justifyContent: "flex-end", marginTop: 14 }}>
-              <button className="lo-btn lo-btn-ghost" onClick={() => setShowNew(false)}>Cancelar</button>
-              <button className="lo-btn lo-btn-primary" onClick={saveNote} disabled={!title.trim() || !content.trim()}>
+              <button type="button" className="lo-btn lo-btn-ghost" onClick={() => setShowNew(false)}>Cancelar</button>
+              <button type="button" className="lo-btn lo-btn-primary" onClick={saveNote} disabled={!title.trim() || !content.trim()}>
                 <Ico name="save" size={14}/> Guardar
               </button>
             </div>
@@ -144,7 +144,7 @@ export default function CampaignNotesPage({ params }: Props) {
                     {n.isDmOnly && <span className="lo-chip lo-chip-red" style={{ fontSize: 9 }}>DM only</span>}
                   </div>
                   {isDm && (
-                    <button className="lo-btn lo-btn-ghost" onClick={() => deleteNote(n.id)} style={{ padding: "4px 8px", color: "var(--text-low)" }} title="Eliminar" aria-label={`Eliminar nota ${n.title}`}>
+                    <button type="button" className="lo-btn lo-btn-ghost" onClick={() => deleteNote(n.id)} style={{ padding: "4px 8px", color: "var(--text-low)" }} title="Eliminar" aria-label={`Eliminar nota ${n.title}`}>
                       <Ico name="close" size={12}/>
                     </button>
                   )}

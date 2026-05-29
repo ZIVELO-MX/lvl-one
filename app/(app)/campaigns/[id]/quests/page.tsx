@@ -123,7 +123,7 @@ export default function CampaignQuestsPage({ params }: Props) {
                             </div>
                           </div>
                           {isDm && (
-                            <button
+                            <button type="button"
                               onClick={() => deleteQuest(q.id)}
                               style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-low)", padding: 2, flexShrink: 0 }}
                               title="Eliminar"
@@ -146,7 +146,7 @@ export default function CampaignQuestsPage({ params }: Props) {
                         {isDm && (
                           <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
                             {STATUS_COLUMNS.filter(s => s.status !== col.status).map(s => (
-                              <button key={s.status} onClick={() => moveStatus(q.id, s.status)} style={{ fontSize: 10, padding: "2px 8px", borderRadius: 4, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(244,231,197,0.08)", color: s.color, cursor: "pointer" }}>
+                              <button type="button" key={s.status} onClick={() => moveStatus(q.id, s.status)} style={{ fontSize: 10, padding: "2px 8px", borderRadius: 4, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(244,231,197,0.08)", color: s.color, cursor: "pointer" }}>
                                 → {QUEST_STATUS_LABEL[s.status]}
                               </button>
                             ))}

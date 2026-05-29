@@ -95,7 +95,7 @@ export default function CampaignSessionsPage({ params }: Props) {
             <p style={{ color: "var(--text-mid)", fontSize: 13, margin: 0 }}>{campaign.setting || "Sin ambientación"}</p>
           </div>
           {isDm && (
-            <button className="lo-btn lo-btn-primary" onClick={() => setShowNew(!showNew)}>
+            <button type="button" className="lo-btn lo-btn-primary" onClick={() => setShowNew(!showNew)}>
               <Ico name="plus" size={14}/> Nueva sesión
             </button>
           )}
@@ -126,10 +126,10 @@ export default function CampaignSessionsPage({ params }: Props) {
                 <label style={{ display: "block", fontSize: 11, color: "var(--text-mid)", marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.06em" }}>Fecha</label>
                 <input type="date" className="lo-input" value={newDate} onChange={e => setNewDate(e.target.value)} style={{ padding: "8px 10px" }}/>
               </div>
-              <button className="lo-btn lo-btn-primary" onClick={createSession} disabled={!newTitle.trim()}>
+              <button type="button" className="lo-btn lo-btn-primary" onClick={createSession} disabled={!newTitle.trim()}>
                 Crear
               </button>
-              <button className="lo-btn lo-btn-ghost" onClick={() => setShowNew(false)}>Cancelar</button>
+              <button type="button" className="lo-btn lo-btn-ghost" onClick={() => setShowNew(false)}>Cancelar</button>
             </div>
           </div>
         )}
@@ -158,11 +158,11 @@ export default function CampaignSessionsPage({ params }: Props) {
                         <div style={{ fontSize: 12, color: "var(--text-low)" }}>Sesión #{s.number} · {s.date}</div>
                       </div>
                       <div style={{ display: "flex", gap: 6 }}>
-                        <button className="lo-btn lo-btn-ghost" onClick={() => router.push(`/campaigns/${campaign.id}/sessions/${s.id}`)} style={{ padding: "6px 12px", fontSize: 12 }}>
+                        <button type="button" className="lo-btn lo-btn-ghost" onClick={() => router.push(`/campaigns/${campaign.id}/sessions/${s.id}`)} style={{ padding: "6px 12px", fontSize: 12 }}>
                           Ver detalle
                         </button>
                         {isDm && (
-                          <button className="lo-btn lo-btn-ghost" onClick={() => deleteSession(s.id)} style={{ padding: "6px 10px", color: "var(--text-low)" }} title="Eliminar" aria-label={`Eliminar ${s.title}`}>
+                          <button type="button" className="lo-btn lo-btn-ghost" onClick={() => deleteSession(s.id)} style={{ padding: "6px 10px", color: "var(--text-low)" }} title="Eliminar" aria-label={`Eliminar ${s.title}`}>
                             <Ico name="close" size={13}/>
                           </button>
                         )}

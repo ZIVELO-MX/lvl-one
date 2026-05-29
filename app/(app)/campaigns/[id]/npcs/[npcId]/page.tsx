@@ -109,18 +109,18 @@ export default function NpcDetailPage({ params }: Props) {
             <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
               {editing ? (
                 <>
-                  <button className="lo-btn lo-btn-ghost" onClick={() => { setDraft(npc); setEditing(false); }}>Cancelar</button>
-                  <button className="lo-btn lo-btn-primary" onClick={saveEdits}><Ico name="check" size={13}/> Guardar</button>
+                  <button type="button" className="lo-btn lo-btn-ghost" onClick={() => { setDraft(npc); setEditing(false); }}>Cancelar</button>
+                  <button type="button" className="lo-btn lo-btn-primary" onClick={saveEdits}><Ico name="check" size={13}/> Guardar</button>
                 </>
               ) : (
                 <>
-                  <button className="lo-btn lo-btn-ghost" onClick={() => { setDraft({ ...npc }); setEditing(true); }}>
+                  <button type="button" className="lo-btn lo-btn-ghost" onClick={() => { setDraft({ ...npc }); setEditing(true); }}>
                     <Ico name="cog" size={13}/> Editar
                   </button>
-                  <button className="lo-btn lo-btn-ghost" onClick={() => dispatch({ type: "NPC_SAVE", campaignId: campaign.id, npc: { ...npc, isAlive: !npc.isAlive } })} style={{ fontSize: 12, color: "var(--text-low)" }}>
+                  <button type="button" className="lo-btn lo-btn-ghost" onClick={() => dispatch({ type: "NPC_SAVE", campaignId: campaign.id, npc: { ...npc, isAlive: !npc.isAlive } })} style={{ fontSize: 12, color: "var(--text-low)" }}>
                     {npc.isAlive ? "Marcar muerto" : "Marcar vivo"}
                   </button>
-                  <button className="lo-btn lo-btn-ghost" onClick={deleteNpc} style={{ color: "#C28F8F", padding: "6px 10px" }} title="Eliminar NPC">
+                  <button type="button" className="lo-btn lo-btn-ghost" onClick={deleteNpc} style={{ color: "#C28F8F", padding: "6px 10px" }} title="Eliminar NPC">
                     <Ico name="trash" size={14}/>
                   </button>
                 </>
@@ -260,7 +260,7 @@ export default function NpcDetailPage({ params }: Props) {
                     ))}
                   </select>
                 )}
-                <button className="lo-btn lo-btn-primary" onClick={addMemory} disabled={!memText.trim()} style={{ whiteSpace: "nowrap" }}>
+                <button type="button" className="lo-btn lo-btn-primary" onClick={addMemory} disabled={!memText.trim()} style={{ whiteSpace: "nowrap" }}>
                   <Ico name="plus" size={12}/> Agregar
                 </button>
               </div>
@@ -290,7 +290,7 @@ export default function NpcDetailPage({ params }: Props) {
                       </div>
                     </div>
                     {isDm && (
-                      <button onClick={() => deleteMemory(mem.id)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-low)", padding: "2px 4px", flexShrink: 0 }} title="Eliminar recuerdo">
+                      <button type="button" onClick={() => deleteMemory(mem.id)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-low)", padding: "2px 4px", flexShrink: 0 }} title="Eliminar recuerdo">
                         <Ico name="trash" size={13}/>
                       </button>
                     )}

@@ -115,7 +115,7 @@ export default function CampaignPlayersPage({ params }: Props) {
                   <option value="spectator">Espectador</option>
                 </select>
               </div>
-              <button className="lo-btn lo-btn-primary" onClick={addPlayer} disabled={!newPlayerName.trim()}>
+              <button type="button" className="lo-btn lo-btn-primary" onClick={addPlayer} disabled={!newPlayerName.trim()}>
                 <Ico name="plus" size={14}/> Agregar
               </button>
             </div>
@@ -136,7 +136,7 @@ export default function CampaignPlayersPage({ params }: Props) {
                 <div className="lo-chip" style={{ fontSize: 11 }}>Personaje vinculado</div>
               )}
               {isDm && p.role !== "dm" && (
-                <button className="lo-btn lo-btn-ghost" onClick={() => removePlayer(p.id)} style={{ padding: "6px 10px", color: "var(--text-low)" }} title="Eliminar" aria-label={`Eliminar a ${p.name}`}>
+                <button type="button" className="lo-btn lo-btn-ghost" onClick={() => removePlayer(p.id)} style={{ padding: "6px 10px", color: "var(--text-low)" }} title="Eliminar" aria-label={`Eliminar a ${p.name}`}>
                   <Ico name="close" size={13}/>
                 </button>
               )}

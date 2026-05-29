@@ -29,7 +29,7 @@ export default function CharactersPage() {
               {state.characters.length} de {MAX_FREE_CHARACTERS} personajes gratuitos.
             </p>
           </div>
-          <button className={isLimit ? "lo-btn lo-btn-ghost" : "lo-btn lo-btn-primary"} onClick={startNew} disabled={isLimit}>
+          <button type="button" className={isLimit ? "lo-btn lo-btn-ghost" : "lo-btn lo-btn-primary"} onClick={startNew} disabled={isLimit}>
             <Ico name="plus" size={14}/> Nuevo personaje
           </button>
         </div>
@@ -49,7 +49,7 @@ export default function CharactersPage() {
                 Crea tu primer personaje y empieza tu aventura en D&D 5e.
               </p>
             </div>
-            <button className="lo-btn lo-btn-primary" onClick={startNew}>
+            <button type="button" className="lo-btn lo-btn-primary" onClick={startNew}>
               <Ico name="plus" size={14}/> Crear mi primer personaje
             </button>
           </div>
@@ -57,7 +57,7 @@ export default function CharactersPage() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 16 }}>
             {state.characters.map(c => <CharCard key={c.id} character={c}/>)}
             {!isLimit && (
-              <button onClick={startNew} className="lo-card" style={{ minHeight: 200, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 12, cursor: "pointer", borderStyle: "dashed" }}>
+              <button type="button" onClick={startNew} className="lo-card" style={{ minHeight: 200, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 12, cursor: "pointer", borderStyle: "dashed" }}>
                 <div style={{ width: 44, height: 44, borderRadius: 999, background: "rgba(214,168,79,0.10)", display: "grid", placeItems: "center" }}>
                   <Ico name="plus" size={20} color="var(--quest-gold-hi)"/>
                 </div>

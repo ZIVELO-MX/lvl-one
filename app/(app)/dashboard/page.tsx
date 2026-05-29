@@ -42,7 +42,7 @@ export default function DashboardPage() {
               {state.characters.length === 0 ? "Empieza creando un personaje o aprendiendo lo básico." : isLimit ? "Archiva un personaje para crear otro, o espera a LVL ONE Pro." : "Continúa donde lo dejaste."}
             </p>
           </div>
-          <button className={isLimit ? "lo-btn lo-btn-ghost" : "lo-btn lo-btn-primary"} onClick={startNew}>
+          <button type="button" className={isLimit ? "lo-btn lo-btn-ghost" : "lo-btn lo-btn-primary"} onClick={startNew}>
             <Ico name="plus" size={14}/> Nuevo personaje
           </button>
         </div>
@@ -70,7 +70,7 @@ export default function DashboardPage() {
               <div className="lo-chip lo-chip-gold" style={{ marginBottom: 8 }}>Pro · Próximamente</div>
               <p style={{ fontSize: 12, color: "var(--text-mid)", lineHeight: 1.5, margin: 0 }}>Personajes ilimitados, exportar PDF y campañas.</p>
             </div>
-            <button className="lo-btn lo-btn-ghost" style={{ padding: "7px 12px", fontSize: 12, marginTop: 12 }} disabled>Notificarme</button>
+            <button type="button" className="lo-btn lo-btn-ghost" style={{ padding: "7px 12px", fontSize: 12, marginTop: 12 }} disabled>Notificarme</button>
           </div>
         </div>
 
@@ -82,7 +82,7 @@ export default function DashboardPage() {
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 14, marginBottom: 32 }}>
           {state.characters.map(c => <CharCard key={c.id} character={c}/>)}
           {state.characters.length < MAX_FREE_CHARACTERS && (
-            <button onClick={startNew} className="lo-card" style={{ minHeight: 180, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 10, cursor: "pointer", borderStyle: "dashed" }}>
+            <button type="button" onClick={startNew} className="lo-card" style={{ minHeight: 180, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 10, cursor: "pointer", borderStyle: "dashed" }}>
               <div style={{ width: 40, height: 40, borderRadius: 999, background: "rgba(214,168,79,0.10)", display: "grid", placeItems: "center", color: "var(--quest-gold-hi)" }}><Ico name="plus" size={18}/></div>
               <span style={{ fontSize: 13, color: "var(--text-mid)" }}>Nuevo personaje</span>
             </button>

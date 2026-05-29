@@ -29,6 +29,7 @@ function CopyBtn({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
   return (
     <button
+      type="button"
       onClick={() => { navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 1500); }}
       className="lo-btn lo-btn-ghost" style={{ fontSize: 11, padding: "3px 8px" }}
     >
@@ -55,7 +56,7 @@ function NombresTab() {
         </select>
         <div style={{ display: "flex", gap: 4 }}>
           {(["male", "female"] as NameGender[]).map(g => (
-            <button key={g} onClick={() => setGender(g)} style={{
+            <button type="button" key={g} onClick={() => setGender(g)} style={{
               padding: "6px 14px", borderRadius: 6, border: "none", cursor: "pointer", fontSize: 12,
               background: gender === g ? "rgba(163,194,143,0.15)" : "rgba(255,255,255,0.04)",
               outline: gender === g ? "1px solid #A3C28F" : "1px solid transparent",
@@ -65,14 +66,14 @@ function NombresTab() {
             </button>
           ))}
         </div>
-        <button onClick={generate} className="lo-btn lo-btn-ghost" style={{ fontSize: 13 }}>
+        <button type="button" onClick={generate} className="lo-btn lo-btn-ghost" style={{ fontSize: 13 }}>
           <Ico name="dice" size={13}/> Generar
         </button>
       </div>
       {names.length > 0 && (
         <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
           {names.map((n, i) => (
-            <div key={i} className="lo-card" style={{ padding: "8px 14px", display: "flex", gap: 8, alignItems: "center" }}>
+            <div key={`${i}-${n}`} className="lo-card" style={{ padding: "8px 14px", display: "flex", gap: 8, alignItems: "center" }}>
               <span style={{ fontSize: 15, fontWeight: 600, color: "var(--text-hi)" }}>{n}</span>
               <CopyBtn text={n}/>
             </div>
@@ -90,7 +91,7 @@ function TabernasTab() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-      <button onClick={generate} className="lo-btn lo-btn-ghost" style={{ width: "fit-content", fontSize: 13 }}>
+      <button type="button" onClick={generate} className="lo-btn lo-btn-ghost" style={{ width: "fit-content", fontSize: 13 }}>
         <Ico name="dice" size={13}/> Generar taberna
       </button>
       {result && (
@@ -117,7 +118,7 @@ function NpcsTab() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-      <button onClick={generate} className="lo-btn lo-btn-ghost" style={{ width: "fit-content", fontSize: 13 }}>
+      <button type="button" onClick={generate} className="lo-btn lo-btn-ghost" style={{ width: "fit-content", fontSize: 13 }}>
         <Ico name="dice" size={13}/> Generar NPC
       </button>
       {result && (
@@ -158,12 +159,12 @@ function TesorosTab() {
         <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
           <label style={{ fontSize: 11, color: "var(--text-low)", textTransform: "uppercase", letterSpacing: "0.06em" }}>CR del monstruo</label>
           <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
-            <button onClick={() => setCr(c => Math.max(0, c - 1))} className="lo-btn lo-btn-ghost" style={{ padding: "4px 10px" }}>−</button>
+            <button type="button" onClick={() => setCr(c => Math.max(0, c - 1))} className="lo-btn lo-btn-ghost" style={{ padding: "4px 10px" }}>−</button>
             <span style={{ fontSize: 16, fontWeight: 700, color: "var(--quest-gold-hi)", minWidth: 32, textAlign: "center" }}>CR {cr}</span>
-            <button onClick={() => setCr(c => Math.min(30, c + 1))} className="lo-btn lo-btn-ghost" style={{ padding: "4px 10px" }}>+</button>
+            <button type="button" onClick={() => setCr(c => Math.min(30, c + 1))} className="lo-btn lo-btn-ghost" style={{ padding: "4px 10px" }}>+</button>
           </div>
         </div>
-        <button onClick={generate} className="lo-btn lo-btn-ghost" style={{ fontSize: 13 }}>
+        <button type="button" onClick={generate} className="lo-btn lo-btn-ghost" style={{ fontSize: 13 }}>
           <Ico name="dice" size={13}/> Generar
         </button>
       </div>
@@ -178,7 +179,7 @@ function TesorosTab() {
           </div>
           {result.items.length > 0 && (
             <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-              {result.items.map((item, i) => <span key={i} className="lo-chip" style={{ fontSize: 12 }}>{item}</span>)}
+              {result.items.map((item, i) => <span key={`${i}-${item}`} className="lo-chip" style={{ fontSize: 12 }}>{item}</span>)}
             </div>
           )}
           {result.items.length === 0 && <p style={{ fontSize: 13, color: "var(--text-low)", margin: 0 }}>Solo monedas — sin objetos notables.</p>}
@@ -207,12 +208,12 @@ function EncuentrosTab() {
         <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
           <label style={{ fontSize: 11, color: "var(--text-low)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Nivel del grupo</label>
           <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
-            <button onClick={() => setLevel(l => Math.max(1, l - 1))} className="lo-btn lo-btn-ghost" style={{ padding: "4px 10px" }}>−</button>
+            <button type="button" onClick={() => setLevel(l => Math.max(1, l - 1))} className="lo-btn lo-btn-ghost" style={{ padding: "4px 10px" }}>−</button>
             <span style={{ fontSize: 16, fontWeight: 700, color: "var(--text-hi)", minWidth: 24, textAlign: "center" }}>{level}</span>
-            <button onClick={() => setLevel(l => Math.min(20, l + 1))} className="lo-btn lo-btn-ghost" style={{ padding: "4px 10px" }}>+</button>
+            <button type="button" onClick={() => setLevel(l => Math.min(20, l + 1))} className="lo-btn lo-btn-ghost" style={{ padding: "4px 10px" }}>+</button>
           </div>
         </div>
-        <button onClick={generate} className="lo-btn lo-btn-ghost" style={{ fontSize: 13 }}>
+        <button type="button" onClick={generate} className="lo-btn lo-btn-ghost" style={{ fontSize: 13 }}>
           <Ico name="dice" size={13}/> Generar
         </button>
       </div>
@@ -225,7 +226,7 @@ function EncuentrosTab() {
           <p style={{ fontSize: 14, color: "var(--text-hi)", lineHeight: 1.6, margin: "0 0 10px", fontWeight: 600 }}>{result.description}</p>
           {result.monsters.length > 0 && (
             <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 8 }}>
-              {result.monsters.map((m, i) => <span key={i} className="lo-chip" style={{ fontSize: 11, color: "#C28F8F" }}>{m}</span>)}
+              {result.monsters.map((m, i) => <span key={`${i}-${m}`} className="lo-chip" style={{ fontSize: 11, color: "#C28F8F" }}>{m}</span>)}
             </div>
           )}
           <p style={{ fontSize: 12, color: "var(--text-low)", margin: 0, fontStyle: "italic" }}>💡 {result.note}</p>
@@ -243,10 +244,10 @@ function RumoresTab() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       <div style={{ display: "flex", gap: 8 }}>
-        <button onClick={() => { setRumor(generateRumor()); setHook(null); }} className="lo-btn lo-btn-ghost" style={{ fontSize: 13 }}>
+        <button type="button" onClick={() => { setRumor(generateRumor()); setHook(null); }} className="lo-btn lo-btn-ghost" style={{ fontSize: 13 }}>
           <Ico name="dice" size={13}/> Rumor
         </button>
-        <button onClick={() => { setHook(generateHook()); setRumor(null); }} className="lo-btn lo-btn-ghost" style={{ fontSize: 13 }}>
+        <button type="button" onClick={() => { setHook(generateHook()); setRumor(null); }} className="lo-btn lo-btn-ghost" style={{ fontSize: 13 }}>
           <Ico name="dice" size={13}/> Gancho de aventura
         </button>
       </div>
@@ -303,7 +304,7 @@ export default function GeneratorsPage() {
         {/* Tabs */}
         <div style={{ display: "flex", gap: 4, marginBottom: 24, flexWrap: "wrap" }}>
           {TABS.map(t => (
-            <button key={t.id} onClick={() => setTab(t.id)} style={{
+            <button type="button" key={t.id} onClick={() => setTab(t.id)} style={{
               padding: "7px 14px", borderRadius: 8, border: "none", cursor: "pointer", fontSize: 13,
               background: tab === t.id ? "rgba(163,194,143,0.12)" : "rgba(255,255,255,0.04)",
               outline: tab === t.id ? "1px solid rgba(163,194,143,0.4)" : "1px solid transparent",

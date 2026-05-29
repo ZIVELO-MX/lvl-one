@@ -93,7 +93,7 @@ export default function MonstersPage() {
             </select>
           </div>
           {(search || filterType || filterCr !== "") && (
-            <button className="lo-btn lo-btn-ghost" onClick={() => { setSearch(""); setFilterType(""); setFilterCr(""); }} style={{ fontSize: 12, padding: "6px 10px" }}>
+            <button type="button" className="lo-btn lo-btn-ghost" onClick={() => { setSearch(""); setFilterType(""); setFilterCr(""); }} style={{ fontSize: 12, padding: "6px 10px" }}>
               <Ico name="x" size={12}/> Limpiar
             </button>
           )}
