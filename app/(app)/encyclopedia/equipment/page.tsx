@@ -79,7 +79,7 @@ export default function EquipmentPage() {
             </select>
           </div>
           {(search || filterCat) && (
-            <button className="lo-btn lo-btn-ghost" onClick={() => { setSearch(""); setFilterCat(""); }} style={{ fontSize: 12, padding: "6px 10px" }}>
+            <button type="button" className="lo-btn lo-btn-ghost" onClick={() => { setSearch(""); setFilterCat(""); }} style={{ fontSize: 12, padding: "6px 10px" }}>
               <Ico name="x" size={12}/> Limpiar
             </button>
           )}

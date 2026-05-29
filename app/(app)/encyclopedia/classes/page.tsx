@@ -49,6 +49,7 @@ export default function ClassesPage() {
           />
           {(["all", "caster", "noncaster"] as const).map(f => (
             <button
+              type="button"
               key={f}
               onClick={() => setSpellFilter(f)}
               style={{

@@ -46,3 +46,11 @@ next-env.d.ts
 
 # vercel
 .vercel
+
+# AI tools
+.agents/
+.claude/
+.continue/
+.qwen/
+skills/
+skills-lock.json

@@ -52,7 +52,7 @@ export default function RacesPage() {
           />
           <div style={{ display: "flex", gap: 6 }}>
             {CATEGORIES.map(c => (
-              <button
+              <button type="button"
                 key={c}
                 onClick={() => setCat(c)}
                 style={{

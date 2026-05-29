@@ -55,7 +55,7 @@ export default function RaceDetailPage({ params }: Props) {
       <TopBar crumb={["Enciclopedia", "Razas", race.name]} />
 
       <div className="lo-page-pad" style={{ padding: "24px 32px 0", maxWidth: 780, margin: "0 auto" }}>
-        <button
+        <button type="button"
           className="lo-btn lo-btn-ghost"
           style={{ fontSize: 12, marginBottom: 20 }}
           onClick={() => router.push("/encyclopedia/races")}

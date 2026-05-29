@@ -53,7 +53,7 @@ export default function SpellDetailPage({ params }: Props) {
       <TopBar crumb={["Enciclopedia", "Hechizos", spell.name]} />
 
       <div className="lo-page-pad" style={{ padding: "24px 32px 0", maxWidth: 740, margin: "0 auto" }}>
-        <button
+        <button type="button"
           className="lo-btn lo-btn-ghost"
           style={{ fontSize: 12, marginBottom: 20 }}
           onClick={() => router.push("/encyclopedia/spells")}
@@ -141,7 +141,7 @@ export default function SpellDetailPage({ params }: Props) {
             <div className="lo-label" style={{ marginBottom: 10 }}>Clases que lo usan</div>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
               {spellClasses.map(c => c && (
-                <button
+                <button type="button"
                   key={c.id}
                   className="lo-btn lo-btn-ghost"
                   style={{ fontSize: 12 }}

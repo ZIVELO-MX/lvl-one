@@ -64,7 +64,7 @@ export default function SessionDetailPage({ params }: Props) {
             <p style={{ color: "var(--text-mid)", fontSize: 13, margin: 0 }}>Campaña: {campaign.name} · Sesión #{session.number} · {session.date}</p>
           </div>
           {isDm && !editing && (
-            <button className="lo-btn lo-btn-primary" onClick={() => setEditing(true)}>
+            <button type="button" className="lo-btn lo-btn-primary" onClick={() => setEditing(true)}>
               <Ico name="pencil" size={13}/> Editar
             </button>
           )}
@@ -77,7 +77,7 @@ export default function SessionDetailPage({ params }: Props) {
                 <label style={{ display: "block", fontSize: 12, color: "var(--text-mid)", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.06em" }}>Estado</label>
                 <div style={{ display: "flex", gap: 8 }}>
                   {(["scheduled", "in-progress", "completed", "cancelled"] as SessionStatus[]).map(s => (
-                    <button key={s} onClick={() => setStatus(s)} className={`lo-btn ${status === s ? "lo-btn-primary" : "lo-btn-ghost"}`} style={{ padding: "6px 12px", fontSize: 12 }}>
+                    <button type="button" key={s} onClick={() => setStatus(s)} className={`lo-btn ${status === s ? "lo-btn-primary" : "lo-btn-ghost"}`} style={{ padding: "6px 12px", fontSize: 12 }}>
                       {s === "scheduled" ? "Planificada" : s === "in-progress" ? "En curso" : s === "completed" ? "Completada" : "Cancelada"}
                     </button>
                   ))}
@@ -101,8 +101,8 @@ export default function SessionDetailPage({ params }: Props) {
               </div>
             </div>
             <div style={{ display: "flex", gap: 10, justifyContent: "flex-end", marginTop: 16 }}>
-              <button className="lo-btn lo-btn-ghost" onClick={() => setEditing(false)}>Cancelar</button>
-              <button className="lo-btn lo-btn-primary" onClick={save}>
+              <button type="button" className="lo-btn lo-btn-ghost" onClick={() => setEditing(false)}>Cancelar</button>
+              <button type="button" className="lo-btn lo-btn-primary" onClick={save}>
                 <Ico name="save" size={14}/> Guardar cambios
               </button>
             </div>

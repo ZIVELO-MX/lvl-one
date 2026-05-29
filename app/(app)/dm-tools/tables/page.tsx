@@ -29,7 +29,7 @@ function RollTable({ title, glyph, color, table }: RollTableProps) {
     <div className="lo-card" style={{ padding: 20 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
         <h3 style={{ fontSize: 14, color, fontWeight: 700, margin: 0 }}>{glyph} {title}</h3>
-        <button onClick={roll} disabled={rolling} className="lo-btn lo-btn-ghost" style={{ fontSize: 12, padding: "5px 12px" }}>
+        <button type="button" onClick={roll} disabled={rolling} className="lo-btn lo-btn-ghost" style={{ fontSize: 12, padding: "5px 12px" }}>
           <Ico name="dice" size={12}/> {rolling ? "..." : "Tirar d20"}
         </button>
       </div>
@@ -48,7 +48,7 @@ function RollTable({ title, glyph, color, table }: RollTableProps) {
       <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
         {table.map((entry, i) => (
           <div
-            key={i}
+            key={`${i}-${entry}`}
             onClick={() => setRolled(i)}
             style={{
               display: "flex", gap: 10, padding: "5px 8px", borderRadius: 5, cursor: "pointer",

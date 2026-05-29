@@ -65,7 +65,7 @@ export default function WorldMapPage({ params }: Props) {
               <span style={{ fontSize: 13, color: "var(--quest-gold-hi)", fontWeight: 500 }}>
                 Colocando: <strong>{placing.name}</strong> — haz clic en el mapa
               </span>
-              <button className="lo-btn lo-btn-ghost" onClick={() => setPlacing(null)}>Cancelar</button>
+              <button type="button" className="lo-btn lo-btn-ghost" onClick={() => setPlacing(null)}>Cancelar</button>
             </div>
           )}
         </div>
@@ -92,7 +92,7 @@ export default function WorldMapPage({ params }: Props) {
           {/* Grid lines */}
           <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.07, pointerEvents: "none" }}>
             {Array.from({ length: 10 }, (_, i) => (
-              <g key={i}>
+              <g key={`grid-${i}`}>
                 <line x1={`${i * 10}%`} y1="0" x2={`${i * 10}%`} y2="100%" stroke="#D6A84F" strokeWidth="0.5"/>
                 <line x1="0" y1={`${i * 10}%`} x2="100%" y2={`${i * 10}%`} stroke="#D6A84F" strokeWidth="0.5"/>
               </g>
@@ -162,7 +162,7 @@ export default function WorldMapPage({ params }: Props) {
                   <Ico name={LOCATION_TYPE_ICON[loc.type]} size={13} color={PIN_COLORS[loc.type]}/>
                   <span style={{ flex: 1, fontSize: 13, color: "var(--text-hi)" }}>{loc.name}</span>
                   {isDm && (
-                    <button className="lo-btn lo-btn-ghost" onClick={() => setPlacing(loc)} style={{ fontSize: 11, padding: "3px 8px" }}>
+                    <button type="button" className="lo-btn lo-btn-ghost" onClick={() => setPlacing(loc)} style={{ fontSize: 11, padding: "3px 8px" }}>
                       <Ico name="pin" size={11}/> Colocar
                     </button>
                   )}
@@ -189,7 +189,7 @@ export default function WorldMapPage({ params }: Props) {
                   <Link href={`/campaigns/${campaign.id}/world/locations/${loc.id}`} style={{ flex: 1, fontSize: 13, color: "var(--text-hi)", textDecoration: "none" }}>{loc.name}</Link>
                   <span style={{ fontSize: 11, color: "var(--text-low)" }}>{Math.round(loc.pin!.x)}%, {Math.round(loc.pin!.y)}%</span>
                   {isDm && (
-                    <button onClick={() => removePin(loc)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-low)", padding: "2px 4px" }} title="Quitar del mapa">
+                    <button type="button" onClick={() => removePin(loc)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-low)", padding: "2px 4px" }} title="Quitar del mapa">
                       <Ico name="x" size={12}/>
                     </button>
                   )}

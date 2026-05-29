@@ -91,7 +91,7 @@ export default function ExplorePage() {
         {/* Tabs */}
         <div style={{ display: "flex", gap: 4, marginBottom: 20, borderBottom: "1px solid var(--line)", paddingBottom: 0 }}>
           {([["campaigns", "Campañas", "book"], ["characters", "Personajes", "scroll"]] as const).map(([id, label, icon]) => (
-            <button
+            <button type="button"
               key={id}
               onClick={() => setTab(id)}
               style={{
@@ -113,7 +113,7 @@ export default function ExplorePage() {
 
         {loading ? (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 14 }}>
-            {[1,2,3,4,5,6].map(i => <div key={i} className="lo-skeleton" style={{ height: 110, borderRadius: 10 }}/>)}
+            {[1,2,3,4,5,6].map(i => <div key={`skel-${i}`} className="lo-skeleton" style={{ height: 110, borderRadius: 10 }}/>)}
           </div>
         ) : tab === "campaigns" ? (
           filteredCampaigns.length === 0 ? (

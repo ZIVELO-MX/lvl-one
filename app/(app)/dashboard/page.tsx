@@ -49,6 +49,9 @@ export default function DashboardPage() {
               ? "Tu grimorio está lleno. Archiva una ficha para abrir espacio."
               : "La mesa te espera donde la dejaste."}
           </p>
+          <button type="button" className={isLimit ? "lo-btn lo-btn-ghost" : "lo-btn lo-btn-primary"} onClick={startNew} style={{ marginTop: 16 }}>
+            <Ico name="plus" size={14}/> Nuevo personaje
+          </button>
         </div>
 
         {/* Stats row — 2 columns, sin upsell mezclado */}
@@ -83,7 +86,7 @@ export default function DashboardPage() {
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 14, marginBottom: 32 }}>
           {state.characters.map(c => <CharCard key={c.id} character={c}/>)}
           {state.characters.length < MAX_FREE_CHARACTERS && (
-            <button onClick={startNew} className="lo-card lo-pressable" style={{ minHeight: 180, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 10, borderStyle: "dashed" }}>
+            <button type="button" onClick={startNew} className="lo-card lo-pressable" style={{ minHeight: 180, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 10, borderStyle: "dashed" }}>
               <div style={{ width: 40, height: 40, borderRadius: 999, background: "rgba(214,168,79,0.10)", display: "grid", placeItems: "center", color: "var(--quest-gold-hi)" }}>
                 <Ico name="plus" size={18}/>
               </div>
@@ -103,7 +106,7 @@ export default function DashboardPage() {
               <div style={{ fontSize: 12, color: "var(--text-low)" }}>Fichas ilimitadas, pergaminos PDF, campañas y AI DM Assistant.</div>
             </div>
           </div>
-          <button className="lo-btn lo-btn-ghost" style={{ padding: "6px 14px", fontSize: 12, flexShrink: 0 }} disabled>
+          <button type="button" className="lo-btn lo-btn-ghost" style={{ padding: "6px 14px", fontSize: 12, flexShrink: 0 }} disabled>
             Notificarme
           </button>
         </div>

@@ -94,7 +94,7 @@ export default function ItemsPage() {
             <option value="no">Sin attunement</option>
           </select>
           {hasFilters && (
-            <button className="lo-btn lo-btn-ghost" onClick={() => { setSearch(""); setFilterRarity(""); setFilterType(""); setFilterAttunement(""); }} style={{ fontSize: 12, padding: "6px 10px" }}>
+            <button type="button" className="lo-btn lo-btn-ghost" onClick={() => { setSearch(""); setFilterRarity(""); setFilterType(""); setFilterAttunement(""); }} style={{ fontSize: 12, padding: "6px 10px" }}>
               <Ico name="x" size={12} /> Limpiar
             </button>
           )}

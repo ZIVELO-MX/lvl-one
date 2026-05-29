@@ -35,7 +35,7 @@ export default function BackgroundsPage() {
             <input className="lo-input" value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar trasfondo..." style={{ fontSize: 13 }}/>
           </div>
           {search && (
-            <button className="lo-btn lo-btn-ghost" onClick={() => setSearch("")} style={{ fontSize: 12, padding: "6px 10px" }}>
+            <button type="button" className="lo-btn lo-btn-ghost" onClick={() => setSearch("")} style={{ fontSize: 12, padding: "6px 10px" }}>
               <Ico name="x" size={12}/> Limpiar
             </button>
           )}

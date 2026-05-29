@@ -151,7 +151,7 @@ export default function EncounterBuilderPage() {
                 <label style={{ fontSize: 12, color: "var(--text-low)" }}>Jugadores</label>
                 <div style={{ display: "flex", gap: 4 }}>
                   {[1,2,3,4,5,6,7,8].map(n => (
-                    <button key={n} onClick={() => setPartySize(n)} style={{ width: 28, height: 28, borderRadius: 6, border: `1px solid ${partySize === n ? "var(--quest-gold-hi)" : "var(--border-lo)"}`, background: partySize === n ? "rgba(214,168,79,0.15)" : "transparent", color: partySize === n ? "var(--quest-gold-hi)" : "var(--text-mid)", fontSize: 12, cursor: "pointer", fontWeight: partySize === n ? 700 : 400 }}>{n}</button>
+                    <button type="button" key={n} onClick={() => setPartySize(n)} style={{ width: 28, height: 28, borderRadius: 6, border: `1px solid ${partySize === n ? "var(--quest-gold-hi)" : "var(--border-lo)"}`, background: partySize === n ? "rgba(214,168,79,0.15)" : "transparent", color: partySize === n ? "var(--quest-gold-hi)" : "var(--text-mid)", fontSize: 12, cursor: "pointer", fontWeight: partySize === n ? 700 : 400 }}>{n}</button>
                   ))}
                 </div>
               </div>
@@ -159,7 +159,7 @@ export default function EncounterBuilderPage() {
                 <label style={{ fontSize: 12, color: "var(--text-low)" }}>Nivel</label>
                 <div style={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
                   {Array.from({ length: 20 }, (_, i) => i + 1).map(n => (
-                    <button key={n} onClick={() => setPartyLevel(n)} style={{ width: 26, height: 26, borderRadius: 5, border: `1px solid ${partyLevel === n ? "var(--arcane-blue-hi)" : "var(--border-lo)"}`, background: partyLevel === n ? "var(--arcane-blue-lo)" : "transparent", color: partyLevel === n ? "var(--arcane-blue-hi)" : "var(--text-mid)", fontSize: 11, cursor: "pointer", fontWeight: partyLevel === n ? 700 : 400 }}>{n}</button>
+                    <button type="button" key={n} onClick={() => setPartyLevel(n)} style={{ width: 26, height: 26, borderRadius: 5, border: `1px solid ${partyLevel === n ? "var(--arcane-blue-hi)" : "var(--border-lo)"}`, background: partyLevel === n ? "var(--arcane-blue-lo)" : "transparent", color: partyLevel === n ? "var(--arcane-blue-hi)" : "var(--text-mid)", fontSize: 11, cursor: "pointer", fontWeight: partyLevel === n ? 700 : 400 }}>{n}</button>
                   ))}
                 </div>
               </div>
@@ -203,7 +203,7 @@ export default function EncounterBuilderPage() {
                 </select>
               </div>
               {(search || filterCrMin !== null || filterCrMax !== null || filterType || filterEnv) && (
-                <button className="lo-btn lo-btn-ghost" onClick={() => { setSearch(""); setFilterCrMin(null); setFilterCrMax(null); setFilterType(""); setFilterEnv(""); }} style={{ fontSize: 12, padding: "6px 10px", alignSelf: "flex-end" }}>
+                <button type="button" className="lo-btn lo-btn-ghost" onClick={() => { setSearch(""); setFilterCrMin(null); setFilterCrMax(null); setFilterType(""); setFilterEnv(""); }} style={{ fontSize: 12, padding: "6px 10px", alignSelf: "flex-end" }}>
                   <Ico name="x" size={12}/> Limpiar
                 </button>
               )}
@@ -218,6 +218,7 @@ export default function EncounterBuilderPage() {
                 const inEncounter = encounter.find(e => e.monster.id === m.id);
                 return (
                   <button
+                    type="button"
                     key={m.id}
                     onClick={() => addMonster(m)}
                     style={{ display: "grid", gridTemplateColumns: "48px 1fr auto auto auto", alignItems: "center", gap: 10, padding: "10px 14px", background: inEncounter ? "rgba(214,168,79,0.06)" : "var(--card)", border: `1px solid ${inEncounter ? "rgba(214,168,79,0.3)" : "var(--border-lo)"}`, borderRadius: 8, cursor: "pointer", textAlign: "left", transition: "border-color .12s, background .12s" }}
@@ -293,18 +294,18 @@ export default function EncounterBuilderPage() {
                           <div style={{ fontSize: 11, color: "var(--text-low)" }}>CR {crLabel(entry.monster.cr)} · {(crToXp(entry.monster.cr) * entry.count).toLocaleString()} XP</div>
                         </div>
                         <div style={{ display: "flex", alignItems: "center", gap: 4, flexShrink: 0 }}>
-                          <button onClick={() => setCount(entry.monster.id, entry.count - 1)} style={{ width: 22, height: 22, borderRadius: 4, border: "1px solid var(--border-lo)", background: "transparent", color: "var(--text-mid)", fontSize: 14, cursor: "pointer", display: "grid", placeItems: "center" }}>−</button>
+                          <button type="button" onClick={() => setCount(entry.monster.id, entry.count - 1)} style={{ width: 22, height: 22, borderRadius: 4, border: "1px solid var(--border-lo)", background: "transparent", color: "var(--text-mid)", fontSize: 14, cursor: "pointer", display: "grid", placeItems: "center" }}>−</button>
                           <span style={{ fontSize: 13, fontWeight: 700, color: "var(--text-hi)", minWidth: 18, textAlign: "center" }}>{entry.count}</span>
-                          <button onClick={() => setCount(entry.monster.id, entry.count + 1)} style={{ width: 22, height: 22, borderRadius: 4, border: "1px solid var(--border-lo)", background: "transparent", color: "var(--text-mid)", fontSize: 14, cursor: "pointer", display: "grid", placeItems: "center" }}>+</button>
+                          <button type="button" onClick={() => setCount(entry.monster.id, entry.count + 1)} style={{ width: 22, height: 22, borderRadius: 4, border: "1px solid var(--border-lo)", background: "transparent", color: "var(--text-mid)", fontSize: 14, cursor: "pointer", display: "grid", placeItems: "center" }}>+</button>
                         </div>
-                        <button onClick={() => setCount(entry.monster.id, 0)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-low)", padding: 2 }}>
+                        <button type="button" onClick={() => setCount(entry.monster.id, 0)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-low)", padding: 2 }}>
                           <Ico name="x" size={13}/>
                         </button>
                       </div>
                     ))}
                   </div>
 
-                  <button className="lo-btn lo-btn-ghost" onClick={clearEncounter} style={{ width: "100%", fontSize: 12, color: "#C28F8F" }}>
+                  <button type="button" className="lo-btn lo-btn-ghost" onClick={clearEncounter} style={{ width: "100%", fontSize: 12, color: "#C28F8F" }}>
                     <Ico name="trash" size={12}/> Limpiar encuentro
                   </button>
                 </>
@@ -313,6 +314,7 @@ export default function EncounterBuilderPage() {
 
             {/* Launch to combat tracker */}
             <button
+              type="button"
               className="lo-btn lo-btn-primary"
               disabled={encounter.length === 0}
               onClick={() => {

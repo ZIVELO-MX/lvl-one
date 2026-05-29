@@ -117,12 +117,12 @@ export default function GroupDetailPage({ params }: { params: Promise<{ id: stri
               </div>
             </div>
             {!isDM && !isMember && (
-              <button onClick={handleJoin} disabled={isFull} className="lo-btn lo-btn-primary" style={{ padding: "8px 16px", fontSize: 13, flexShrink: 0 }}>
+              <button type="button" onClick={handleJoin} disabled={isFull} className="lo-btn lo-btn-primary" style={{ padding: "8px 16px", fontSize: 13, flexShrink: 0 }}>
                 <Ico name="user-plus" size={13}/> Unirse
               </button>
             )}
             {!isDM && isMember && (
-              <button onClick={handleLeave} className="lo-btn lo-btn-ghost" style={{ padding: "8px 16px", fontSize: 13, flexShrink: 0 }}>
+              <button type="button" onClick={handleLeave} className="lo-btn lo-btn-ghost" style={{ padding: "8px 16px", fontSize: 13, flexShrink: 0 }}>
                 Salir del grupo
               </button>
             )}

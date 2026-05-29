@@ -91,15 +91,15 @@ export default function LocationDetailPage({ params }: Props) {
             <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
               {editing ? (
                 <>
-                  <button className="lo-btn lo-btn-ghost" onClick={() => { setDraft(loc); setEditing(false); }}>Cancelar</button>
-                  <button className="lo-btn lo-btn-primary" onClick={save}><Ico name="check" size={13}/> Guardar</button>
+                  <button type="button" className="lo-btn lo-btn-ghost" onClick={() => { setDraft(loc); setEditing(false); }}>Cancelar</button>
+                  <button type="button" className="lo-btn lo-btn-primary" onClick={save}><Ico name="check" size={13}/> Guardar</button>
                 </>
               ) : (
                 <>
-                  <button className="lo-btn lo-btn-ghost" onClick={() => { setDraft({ ...loc }); setEditing(true); }}>
+                  <button type="button" className="lo-btn lo-btn-ghost" onClick={() => { setDraft({ ...loc }); setEditing(true); }}>
                     <Ico name="cog" size={13}/> Editar
                   </button>
-                  <button className="lo-btn lo-btn-ghost" onClick={del} style={{ color: "#C28F8F", padding: "6px 10px" }}>
+                  <button type="button" className="lo-btn lo-btn-ghost" onClick={del} style={{ color: "#C28F8F", padding: "6px 10px" }}>
                     <Ico name="trash" size={14}/>
                   </button>
                 </>

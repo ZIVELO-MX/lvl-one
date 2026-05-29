@@ -130,7 +130,7 @@ export default function CampaignNpcsPage({ params }: Props) {
                     </div>
                   )}
                   {isDm && (
-                    <button
+                    <button type="button"
                       onClick={e => { e.preventDefault(); deleteNpc(npc.id); }}
                       style={{ position: "absolute", top: 10, right: 10, background: "none", border: "none", cursor: "pointer", color: "var(--text-low)", padding: 4 }}
                       title="Eliminar NPC"

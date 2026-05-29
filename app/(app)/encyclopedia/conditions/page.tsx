@@ -205,7 +205,7 @@ export default function ConditionsPage() {
             {CONDITION_TYPES.map(ct => {
               const isActive = selected === ct;
               return (
-                <button
+                <button type="button"
                   key={ct}
                   onClick={() => setSelected(isActive ? null : ct)}
                   style={{
@@ -276,7 +276,7 @@ export default function ConditionsPage() {
                 </div>
                 <ul style={{ margin: 0, paddingLeft: 18, display: "flex", flexDirection: "column", gap: 4 }}>
                   {active.mechanical.map((m, i) => (
-                    <li key={i} style={{ fontSize: 13, color: "var(--text-mid)", lineHeight: 1.5 }}>{m}</li>
+                    <li key={`${i}-${m}`} style={{ fontSize: 13, color: "var(--text-mid)", lineHeight: 1.5 }}>{m}</li>
                   ))}
                 </ul>
               </div>

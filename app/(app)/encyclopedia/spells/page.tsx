@@ -57,7 +57,7 @@ export default function SpellsPage() {
           <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
             <span style={{ fontSize: 11, color: "var(--text-low)", alignSelf: "center", marginRight: 2 }}>Nivel:</span>
             {LEVELS.map(l => (
-              <button
+              <button type="button"
                 key={l}
                 onClick={() => setLevel(l)}
                 style={{
@@ -75,7 +75,7 @@ export default function SpellsPage() {
           <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
             <span style={{ fontSize: 11, color: "var(--text-low)", alignSelf: "center", marginRight: 2 }}>Escuela:</span>
             {SCHOOLS.map(sc => (
-              <button
+              <button type="button"
                 key={sc}
                 onClick={() => setSchool(sc)}
                 style={{
@@ -92,7 +92,7 @@ export default function SpellsPage() {
           </div>
           <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
             <span style={{ fontSize: 11, color: "var(--text-low)", alignSelf: "center", marginRight: 2 }}>Clase:</span>
-            <button
+            <button type="button"
               onClick={() => setClassFilter("all")}
               style={{
                 padding: "5px 10px", borderRadius: 6, fontSize: 11, cursor: "pointer",
@@ -105,7 +105,7 @@ export default function SpellsPage() {
               Todas
             </button>
             {casterClasses.map(c => (
-              <button
+              <button type="button"
                 key={c.id}
                 onClick={() => setClassFilter(c.id)}
                 style={{

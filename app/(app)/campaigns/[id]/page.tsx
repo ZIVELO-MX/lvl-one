@@ -70,7 +70,7 @@ export default function CampaignDetailPage({ params }: Props) {
             {campaign.description && <p style={{ color: "var(--text-low)", fontSize: 13, marginTop: 6, lineHeight: 1.5 }}>{campaign.description}</p>}
           </div>
           {isDm && (
-            <button className="lo-btn lo-btn-ghost" onClick={() => {
+            <button type="button" className="lo-btn lo-btn-ghost" onClick={() => {
               const newStatus = campaign.status === "active" ? "paused" : "active";
               dispatch({ type: "CAMPAIGN_PATCH", id: campaign.id, patch: { status: newStatus } });
               updateCampaign(campaign.id, { status: newStatus }).catch(() => {});

@@ -102,15 +102,15 @@ export default function QuestDetailPage({ params }: Props) {
             <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
               {editing ? (
                 <>
-                  <button className="lo-btn lo-btn-ghost" onClick={() => { setDraft({ ...quest }); setEditing(false); }}>Cancelar</button>
-                  <button className="lo-btn lo-btn-primary" onClick={saveEdits}><Ico name="check" size={13}/> Guardar</button>
+                  <button type="button" className="lo-btn lo-btn-ghost" onClick={() => { setDraft({ ...quest }); setEditing(false); }}>Cancelar</button>
+                  <button type="button" className="lo-btn lo-btn-primary" onClick={saveEdits}><Ico name="check" size={13}/> Guardar</button>
                 </>
               ) : (
                 <>
-                  <button className="lo-btn lo-btn-ghost" onClick={() => { setDraft({ ...quest }); setEditing(true); }}>
+                  <button type="button" className="lo-btn lo-btn-ghost" onClick={() => { setDraft({ ...quest }); setEditing(true); }}>
                     <Ico name="cog" size={13}/> Editar
                   </button>
-                  <button className="lo-btn lo-btn-ghost" onClick={deleteQuest} style={{ color: "#C28F8F", padding: "6px 10px" }} title="Eliminar quest">
+                  <button type="button" className="lo-btn lo-btn-ghost" onClick={deleteQuest} style={{ color: "#C28F8F", padding: "6px 10px" }} title="Eliminar quest">
                     <Ico name="trash" size={14}/>
                   </button>
                 </>
@@ -124,7 +124,7 @@ export default function QuestDetailPage({ params }: Props) {
           <div className="lo-card" style={{ padding: "10px 16px", marginBottom: 20, display: "flex", gap: 8, alignItems: "center" }}>
             <span style={{ fontSize: 12, color: "var(--text-low)", marginRight: 4 }}>Estado:</span>
             {STATUS_OPTIONS.map(s => (
-              <button key={s.value} onClick={() => setStatus(s.value)} style={{ fontSize: 11, padding: "4px 12px", borderRadius: 20, border: `1px solid ${s.value === quest.status ? s.color : "rgba(244,231,197,0.1)"}`, background: s.value === quest.status ? `${s.color}22` : "transparent", color: s.value === quest.status ? s.color : "var(--text-low)", cursor: "pointer", transition: "all .12s" }}>
+              <button type="button" key={s.value} onClick={() => setStatus(s.value)} style={{ fontSize: 11, padding: "4px 12px", borderRadius: 20, border: `1px solid ${s.value === quest.status ? s.color : "rgba(244,231,197,0.1)"}`, background: s.value === quest.status ? `${s.color}22` : "transparent", color: s.value === quest.status ? s.color : "var(--text-low)", cursor: "pointer", transition: "all .12s" }}>
                 {s.label}
               </button>
             ))}

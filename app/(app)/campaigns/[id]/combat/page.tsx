@@ -235,23 +235,23 @@ export default function CampaignCombatPage({ params }: Props) {
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20, flexWrap: "wrap" }}>
           <div style={{ fontVariantNumeric: "tabular-nums", fontSize: 20, fontWeight: 800, color: "var(--quest-gold-hi)", minWidth: 90 }}>Ronda {combat.round}</div>
           <div style={{ display: "flex", gap: 6, flex: 1, justifyContent: "center", flexWrap: "wrap" }}>
-            <button className="lo-btn lo-btn-ghost" onClick={prevTurn} disabled={!combat.isRunning || combat.combatants.length === 0} style={{ padding: "6px 12px" }}>
+            <button type="button" className="lo-btn lo-btn-ghost" onClick={prevTurn} disabled={!combat.isRunning || combat.combatants.length === 0} style={{ padding: "6px 12px" }}>
               <Ico name="arrowLeft" size={13}/> Prev
             </button>
             {!combat.isRunning ? (
-              <button className="lo-btn lo-btn-primary" onClick={startCombat} disabled={combat.combatants.length === 0}>
+              <button type="button" className="lo-btn lo-btn-primary" onClick={startCombat} disabled={combat.combatants.length === 0}>
                 <Ico name="sword" size={13}/> Iniciar combate
               </button>
             ) : (
-              <button className="lo-btn lo-btn-primary" onClick={nextTurn} style={{ minWidth: 150 }}>
+              <button type="button" className="lo-btn lo-btn-primary" onClick={nextTurn} style={{ minWidth: 150 }}>
                 Siguiente turno <Ico name="arrow" size={13}/>
               </button>
             )}
-            <button className="lo-btn lo-btn-ghost" onClick={endCombat} style={{ color: "#C28F8F", padding: "6px 12px" }}>
+            <button type="button" className="lo-btn lo-btn-ghost" onClick={endCombat} style={{ color: "#C28F8F", padding: "6px 12px" }}>
               <Ico name="x" size={13}/> Terminar
             </button>
           </div>
-          <button className="lo-btn lo-btn-ghost" onClick={() => setShowAdd(true)} style={{ flexShrink: 0 }}>
+          <button type="button" className="lo-btn lo-btn-ghost" onClick={() => setShowAdd(true)} style={{ flexShrink: 0 }}>
             <Ico name="plus" size={13}/> Añadir
           </button>
         </div>
@@ -271,7 +271,7 @@ export default function CampaignCombatPage({ params }: Props) {
           <div className="lo-card" style={{ padding: 40, textAlign: "center" }}>
             <Ico name="sword" size={32} color="var(--text-low)"/>
             <p style={{ color: "var(--text-mid)", margin: "14px 0 20px" }}>Sin combatientes. Importa los personajes de la campaña para empezar.</p>
-            <button className="lo-btn lo-btn-primary" onClick={() => { setAddTab("import"); setShowAdd(true); }}>
+            <button type="button" className="lo-btn lo-btn-primary" onClick={() => { setAddTab("import"); setShowAdd(true); }}>
               <Ico name="users" size={13}/> Importar personajes
             </button>
           </div>
@@ -308,7 +308,7 @@ export default function CampaignCombatPage({ params }: Props) {
                       {c.conditions.length > 0 && (
                         <div style={{ display: "flex", flexWrap: "wrap", gap: 3, marginTop: 4 }}>
                           {c.conditions.map(cond => (
-                            <button key={cond.type} onClick={() => toggleCondition(c.id, cond.type)} style={{ fontSize: 9, padding: "1px 5px", borderRadius: 3, border: `1px solid ${CONDITION_COLOR[cond.type]}66`, background: `${CONDITION_COLOR[cond.type]}20`, color: CONDITION_COLOR[cond.type], cursor: "pointer", display: "flex", alignItems: "center", gap: 2 }}>
+                            <button type="button" key={cond.type} onClick={() => toggleCondition(c.id, cond.type)} style={{ fontSize: 9, padding: "1px 5px", borderRadius: 3, border: `1px solid ${CONDITION_COLOR[cond.type]}66`, background: `${CONDITION_COLOR[cond.type]}20`, color: CONDITION_COLOR[cond.type], cursor: "pointer", display: "flex", alignItems: "center", gap: 2 }}>
                               <Ico name={CONDITION_ICON[cond.type]} size={8}/> {CONDITION_LABEL[cond.type]} ×
                             </button>
                           ))}
@@ -320,7 +320,7 @@ export default function CampaignCombatPage({ params }: Props) {
                             <div key={key} style={{ display: "flex", alignItems: "center", gap: 4 }}>
                               <span style={{ fontSize: 9, color: key === "successes" ? "#A3C28F" : "#C28F8F" }}>{key === "successes" ? "Éxitos" : "Fallos"}:</span>
                               {[1, 2, 3].map(n => (
-                                <button key={n} onClick={() => updateDeathSave(c.id, key, c.deathSaves[key] >= n ? n - 1 : n)} style={{ width: 13, height: 13, borderRadius: "50%", border: `1px solid ${key === "successes" ? "#A3C28F" : "#C28F8F"}`, background: c.deathSaves[key] >= n ? (key === "successes" ? "#A3C28F" : "#C28F8F") : "transparent", cursor: "pointer" }}/>
+                                <button type="button" key={n} onClick={() => updateDeathSave(c.id, key, c.deathSaves[key] >= n ? n - 1 : n)} style={{ width: 13, height: 13, borderRadius: "50%", border: `1px solid ${key === "successes" ? "#A3C28F" : "#C28F8F"}`, background: c.deathSaves[key] >= n ? (key === "successes" ? "#A3C28F" : "#C28F8F") : "transparent", cursor: "pointer" }}/>
                               ))}
                             </div>
                           ))}
@@ -334,15 +334,15 @@ export default function CampaignCombatPage({ params }: Props) {
                     {c.isAlive && (
                       <div style={{ display: "flex", alignItems: "center", gap: 4, flexShrink: 0 }}>
                         <input type="number" min="0" value={dmgInputs[c.id] ?? ""} onChange={e => setDmgInputs(p => ({ ...p, [c.id]: e.target.value }))} placeholder="0" style={{ width: 44, background: "var(--input-bg, rgba(255,255,255,0.05))", border: "1px solid var(--border-lo)", borderRadius: 5, padding: "3px 5px", color: "var(--text-hi)", fontSize: 12, textAlign: "center" }}/>
-                        <button onClick={() => handleDmgInput(c.id, true)} style={{ padding: "4px 7px", borderRadius: 5, border: "1px solid rgba(194,143,143,0.5)", background: "rgba(194,143,143,0.1)", color: "#C28F8F", cursor: "pointer", fontSize: 11, fontWeight: 700 }}>-HP</button>
-                        <button onClick={() => handleDmgInput(c.id, false)} style={{ padding: "4px 7px", borderRadius: 5, border: "1px solid rgba(163,194,143,0.5)", background: "rgba(163,194,143,0.1)", color: "#A3C28F", cursor: "pointer", fontSize: 11, fontWeight: 700 }}>+HP</button>
+                        <button type="button" onClick={() => handleDmgInput(c.id, true)} style={{ padding: "4px 7px", borderRadius: 5, border: "1px solid rgba(194,143,143,0.5)", background: "rgba(194,143,143,0.1)", color: "#C28F8F", cursor: "pointer", fontSize: 11, fontWeight: 700 }}>-HP</button>
+                        <button type="button" onClick={() => handleDmgInput(c.id, false)} style={{ padding: "4px 7px", borderRadius: 5, border: "1px solid rgba(163,194,143,0.5)", background: "rgba(163,194,143,0.1)", color: "#A3C28F", cursor: "pointer", fontSize: 11, fontWeight: 700 }}>+HP</button>
                       </div>
                     )}
                     <div style={{ display: "flex", gap: 3, flexShrink: 0 }}>
-                      <button onClick={() => setCondOpen(condOpen === c.id ? null : c.id)} style={{ padding: "4px 7px", borderRadius: 5, border: "1px solid var(--border-lo)", background: condOpen === c.id ? "rgba(214,168,79,0.12)" : "transparent", color: condOpen === c.id ? "var(--quest-gold-hi)" : "var(--text-low)", cursor: "pointer" }}>
+                      <button type="button" onClick={() => setCondOpen(condOpen === c.id ? null : c.id)} style={{ padding: "4px 7px", borderRadius: 5, border: "1px solid var(--border-lo)", background: condOpen === c.id ? "rgba(214,168,79,0.12)" : "transparent", color: condOpen === c.id ? "var(--quest-gold-hi)" : "var(--text-low)", cursor: "pointer" }}>
                         <Ico name="zap" size={12}/>
                       </button>
-                      <button onClick={() => removeCombatant(c.id)} style={{ padding: "4px 5px", background: "none", border: "none", color: "var(--text-low)", cursor: "pointer" }}>
+                      <button type="button" onClick={() => removeCombatant(c.id)} style={{ padding: "4px 5px", background: "none", border: "none", color: "var(--text-low)", cursor: "pointer" }}>
                         <Ico name="x" size={12}/>
                       </button>
                     </div>
@@ -352,7 +352,7 @@ export default function CampaignCombatPage({ params }: Props) {
                       {CONDITION_TYPES.map(type => {
                         const has = c.conditions.some(cd => cd.type === type);
                         return (
-                          <button key={type} onClick={() => toggleCondition(c.id, type)} style={{ fontSize: 10, padding: "2px 8px", borderRadius: 4, border: `1px solid ${has ? CONDITION_COLOR[type] : "var(--border-lo)"}`, background: has ? `${CONDITION_COLOR[type]}22` : "transparent", color: has ? CONDITION_COLOR[type] : "var(--text-low)", cursor: "pointer" }}>
+                          <button type="button" key={type} onClick={() => toggleCondition(c.id, type)} style={{ fontSize: 10, padding: "2px 8px", borderRadius: 4, border: `1px solid ${has ? CONDITION_COLOR[type] : "var(--border-lo)"}`, background: has ? `${CONDITION_COLOR[type]}22` : "transparent", color: has ? CONDITION_COLOR[type] : "var(--text-low)", cursor: "pointer" }}>
                             {CONDITION_LABEL[type]}
                           </button>
                         );
@@ -368,12 +368,12 @@ export default function CampaignCombatPage({ params }: Props) {
         {/* Log */}
         {combat.log.length > 0 && (
           <div className="lo-card" style={{ padding: 14, marginTop: 16 }}>
-            <button onClick={() => setLogOpen(v => !v)} style={{ display: "flex", alignItems: "center", gap: 6, background: "none", border: "none", cursor: "pointer", color: "var(--text-low)", fontSize: 12, width: "100%" }}>
+            <button type="button" onClick={() => setLogOpen(v => !v)} style={{ display: "flex", alignItems: "center", gap: 6, background: "none", border: "none", cursor: "pointer", color: "var(--text-low)", fontSize: 12, width: "100%" }}>
               <Ico name="scroll" size={13}/> Registro ({combat.log.length})<span style={{ marginLeft: "auto" }}>{logOpen ? "▲" : "▼"}</span>
             </button>
             {logOpen && (
               <div style={{ marginTop: 10, maxHeight: 160, overflowY: "auto" }}>
-                {combat.log.map((entry, i) => <div key={i} style={{ fontSize: 11, color: "var(--text-mid)", padding: "3px 0", borderBottom: "1px solid var(--border-lo)" }}>{entry}</div>)}
+                {combat.log.map((entry, i) => <div key={`${i}-${entry}`} style={{ fontSize: 11, color: "var(--text-mid)", padding: "3px 0", borderBottom: "1px solid var(--border-lo)" }}>{entry}</div>)}
               </div>
             )}
           </div>
@@ -386,11 +386,11 @@ export default function CampaignCombatPage({ params }: Props) {
           <div className="lo-card" style={{ padding: 24, width: "100%", maxWidth: 520, maxHeight: "88vh", overflowY: "auto" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
               <h3 style={{ margin: 0, fontSize: 16 }}>Añadir combatiente</h3>
-              <button onClick={() => setShowAdd(false)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-low)" }}><Ico name="x" size={16}/></button>
+              <button type="button" onClick={() => setShowAdd(false)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-low)" }}><Ico name="x" size={16}/></button>
             </div>
             <div style={{ display: "flex", gap: 4, marginBottom: 16 }}>
               {(["import", "manual", "monster"] as const).map(tab => (
-                <button key={tab} onClick={() => setAddTab(tab)} className={addTab === tab ? "lo-btn lo-btn-primary" : "lo-btn lo-btn-ghost"} style={{ flex: 1, fontSize: 11 }}>
+                <button type="button" key={tab} onClick={() => setAddTab(tab)} className={addTab === tab ? "lo-btn lo-btn-primary" : "lo-btn lo-btn-ghost"} style={{ flex: 1, fontSize: 11 }}>
                   {tab === "import" ? "Campaña" : tab === "manual" ? "Manual" : "Bestiario"}
                 </button>
               ))}
@@ -410,7 +410,7 @@ export default function CampaignCombatPage({ params }: Props) {
                             <div style={{ fontSize: 13, fontWeight: 600, color: "var(--text-hi)" }}>{draft?.name || p.name}</div>
                             {draft && <div style={{ fontSize: 11, color: "var(--text-low)" }}>Nivel {draft.level} {draft.classId}</div>}
                           </div>
-                          <button className="lo-btn lo-btn-ghost" onClick={() => { importCharacter(p); }} disabled={alreadyIn} style={{ fontSize: 11, opacity: alreadyIn ? 0.4 : 1 }}>
+                          <button type="button" className="lo-btn lo-btn-ghost" onClick={() => { importCharacter(p); }} disabled={alreadyIn} style={{ fontSize: 11, opacity: alreadyIn ? 0.4 : 1 }}>
                             {alreadyIn ? "En combate" : <><Ico name="plus" size={12}/> Añadir</>}
                           </button>
                         </div>
@@ -429,7 +429,7 @@ export default function CampaignCombatPage({ params }: Props) {
                             <div style={{ fontSize: 13, fontWeight: 600, color: "var(--text-hi)" }}>{npc.name}</div>
                             {npc.hitPoints && <div style={{ fontSize: 11, color: "var(--text-low)" }}>HP {npc.hitPoints} · CA {npc.armorClass ?? "?"}</div>}
                           </div>
-                          <button className="lo-btn lo-btn-ghost" onClick={() => { importNpc(npc); }} disabled={alreadyIn} style={{ fontSize: 11, opacity: alreadyIn ? 0.4 : 1 }}>
+                          <button type="button" className="lo-btn lo-btn-ghost" onClick={() => { importNpc(npc); }} disabled={alreadyIn} style={{ fontSize: 11, opacity: alreadyIn ? 0.4 : 1 }}>
                             {alreadyIn ? "En combate" : <><Ico name="plus" size={12}/> Añadir</>}
                           </button>
                         </div>
@@ -466,7 +466,7 @@ export default function CampaignCombatPage({ params }: Props) {
                     <option value="custom">Personalizado</option>
                   </select>
                 </div>
-                <button className="lo-btn lo-btn-primary" onClick={addManual} disabled={!manualForm.name.trim()}>
+                <button type="button" className="lo-btn lo-btn-primary" onClick={addManual} disabled={!manualForm.name.trim()}>
                   <Ico name="plus" size={13}/> Añadir al combate
                 </button>
               </div>
@@ -477,7 +477,7 @@ export default function CampaignCombatPage({ params }: Props) {
                 <input className="lo-input" value={monsterSearch} onChange={e => setMonsterSearch(e.target.value)} placeholder="Buscar monstruo..." autoFocus/>
                 <div style={{ maxHeight: 320, overflowY: "auto", display: "flex", flexDirection: "column", gap: 4 }}>
                   {filteredMonsters.map(m => (
-                    <button key={m.id} onClick={() => addMonsterEntry(m)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 12px", background: "var(--card)", border: "1px solid var(--border-lo)", borderRadius: 8, cursor: "pointer", textAlign: "left" }}>
+                    <button type="button" key={m.id} onClick={() => addMonsterEntry(m)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 12px", background: "var(--card)", border: "1px solid var(--border-lo)", borderRadius: 8, cursor: "pointer", textAlign: "left" }}>
                       <div style={{ minWidth: 38 }}>
                         <div style={{ fontSize: 11, fontWeight: 700, color: "var(--quest-gold-hi)" }}>CR {crLabel(m.cr)}</div>
                         <div style={{ fontSize: 9, color: "var(--text-low)" }}>{m.xp} XP</div>

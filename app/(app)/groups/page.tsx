@@ -94,6 +94,7 @@ export default function GroupsPage() {
             <p style={{ color: "var(--text-low)", fontSize: 14, margin: 0 }}>Encuentra o crea tu grupo de D&D.</p>
           </div>
           <button
+            type="button"
             onClick={() => setShowForm(f => !f)}
             className="lo-btn lo-btn-primary"
           >
@@ -178,7 +179,7 @@ export default function GroupsPage() {
         {/* Groups list */}
         {loading ? (
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {[1,2,3].map(i => <div key={i} className="lo-skeleton" style={{ height: 80, borderRadius: 10 }}/>)}
+            {[1,2,3].map(i => <div key={`skel-${i}`} className="lo-skeleton" style={{ height: 80, borderRadius: 10 }}/>)}
           </div>
         ) : filtered.length === 0 ? (
           <div style={{ padding: "40px 0", textAlign: "center", color: "var(--text-low)" }}>
@@ -220,6 +221,7 @@ export default function GroupsPage() {
                     </Link>
                     {!isDM && !isMine && (
                       <button
+                        type="button"
                         onClick={() => joinGroup(g.id)}
                         disabled={isFull}
                         className="lo-btn lo-btn-primary"
@@ -230,6 +232,7 @@ export default function GroupsPage() {
                     )}
                     {isMine && !isDM && (
                       <button
+                        type="button"
                         onClick={() => leaveGroup(g.id)}
                         className="lo-btn lo-btn-ghost"
                         style={{ padding: "7px 14px", fontSize: 12 }}

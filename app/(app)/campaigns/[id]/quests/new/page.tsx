@@ -93,17 +93,17 @@ export default function NewQuestPage({ params }: Props) {
             <label style={{ display: "block", fontSize: 11, color: "var(--text-mid)", marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.06em" }}>Objetivos</label>
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
               {objectives.map((obj, i) => (
-                <div key={i} style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                <div key={`obj-${i}`} style={{ display: "flex", gap: 8, alignItems: "center" }}>
                   <span style={{ color: "var(--text-low)", fontSize: 13, width: 20, textAlign: "right" }}>{i + 1}.</span>
                   <input className="lo-input" value={obj} onChange={e => updateObjective(i, e.target.value)} placeholder={`Objetivo ${i + 1}`} style={{ flex: 1 }}/>
                   {objectives.length > 1 && (
-                    <button onClick={() => removeObjective(i)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-low)", padding: 4 }} aria-label="Eliminar objetivo">
+                    <button type="button" onClick={() => removeObjective(i)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-low)", padding: 4 }} aria-label="Eliminar objetivo">
                       <Ico name="close" size={12}/>
                     </button>
                   )}
                 </div>
               ))}
-              <button className="lo-btn lo-btn-ghost" onClick={addObjective} style={{ alignSelf: "flex-start", fontSize: 12 }}>
+              <button type="button" className="lo-btn lo-btn-ghost" onClick={addObjective} style={{ alignSelf: "flex-start", fontSize: 12 }}>
                 <Ico name="plus" size={12}/> Agregar objetivo
               </button>
             </div>
@@ -120,7 +120,7 @@ export default function NewQuestPage({ params }: Props) {
 
           <div style={{ display: "flex", gap: 10, justifyContent: "flex-end", marginTop: 8 }}>
             <Link href={`/campaigns/${campaign.id}/quests`} className="lo-btn lo-btn-ghost">Cancelar</Link>
-            <button className="lo-btn lo-btn-primary" onClick={save} disabled={!title.trim()}>
+            <button type="button" className="lo-btn lo-btn-primary" onClick={save} disabled={!title.trim()}>
               <Ico name="plus" size={14}/> Crear quest
             </button>
           </div>

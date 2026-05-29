@@ -55,7 +55,7 @@ export default function GlossaryPage() {
         {/* Category filter */}
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 24 }}>
           {visibleCats.map(c => (
-            <button
+            <button type="button"
               key={c}
               onClick={() => setCat(c)}
               style={{
@@ -85,7 +85,7 @@ export default function GlossaryPage() {
                 className="lo-card-elev"
                 style={{ border: "1px solid var(--line-strong)", overflow: "hidden" }}
               >
-                <button
+                <button type="button"
                   onClick={() => setExpanded(isOpen ? null : term.id)}
                   style={{
                     width: "100%", padding: "14px 18px", textAlign: "left", cursor: "pointer",
@@ -125,7 +125,7 @@ export default function GlossaryPage() {
                         {term.relates.map(r => {
                           const rel = GLOSSARY_TERMS.find(t => t.t === r || t.id === r);
                           return (
-                            <button
+                            <button type="button"
                               key={r}
                               onClick={() => rel && setExpanded(rel.id)}
                               style={{

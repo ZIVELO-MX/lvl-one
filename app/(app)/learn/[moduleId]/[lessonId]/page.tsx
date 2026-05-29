@@ -35,6 +35,7 @@ function D20({ onRoll }: { onRoll: (n: number) => void }) {
   return (
     <div style={{ textAlign: "center" }}>
       <button
+        type="button"
         onClick={roll}
         style={{
           width: 96, height: 96, borderRadius: "50%", cursor: "pointer",
@@ -207,7 +208,8 @@ export default function LessonPage({ params }: Props) {
 
                 return (
                   <button
-                    key={i}
+                    type="button"
+                    key={`option-${i}`}
                     onClick={() => !submitted && setSelectedOption(i)}
                     style={{
                       padding: "11px 14px", borderRadius: 8, border, background: bg,
@@ -224,6 +226,7 @@ export default function LessonPage({ params }: Props) {
             </div>
             {!submitted ? (
               <button
+                type="button"
                 className="lo-btn lo-btn-primary"
                 style={{ marginTop: 14, fontSize: 13 }}
                 disabled={selectedOption === null}
@@ -247,6 +250,7 @@ export default function LessonPage({ params }: Props) {
         {/* Navigation */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
           <button
+            type="button"
             className="lo-btn lo-btn-ghost"
             style={{ fontSize: 13 }}
             onClick={() => prevLesson
@@ -258,6 +262,7 @@ export default function LessonPage({ params }: Props) {
 
           {isCompleted ? (
             <button
+              type="button"
               className="lo-btn lo-btn-ghost"
               style={{ fontSize: 13, color: "var(--quest-gold-hi)" }}
               onClick={() => nextLesson
@@ -269,7 +274,7 @@ export default function LessonPage({ params }: Props) {
               {nextLesson ? `${nextLesson.title} →` : nextModule ? `${nextModule.title} →` : "Ver índice"}
             </button>
           ) : (
-            <button className="lo-btn lo-btn-primary" style={{ fontSize: 13 }} onClick={markComplete}>
+            <button type="button" className="lo-btn lo-btn-primary" style={{ fontSize: 13 }} onClick={markComplete}>
               Marcar como completado →
             </button>
           )}
