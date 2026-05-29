@@ -11,7 +11,7 @@ export async function GET() {
       .select("*")
       .eq("user_id", session.user.id);
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (error) return NextResponse.json({ error: "Database error" }, { status: 500 });
 
     // Convert to moduleId-keyed object
     const progress: Record<string, { pct: number; completedLessons: string[] }> = {};
@@ -49,7 +49,7 @@ export async function PATCH(req: Request) {
       .select()
       .single();
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (error) return NextResponse.json({ error: "Database error" }, { status: 500 });
     return NextResponse.json(data);
   } catch {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

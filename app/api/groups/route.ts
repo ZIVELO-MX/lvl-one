@@ -14,7 +14,7 @@ export async function GET(req: Request) {
       .eq("is_public", true)
       .order("created_at", { ascending: false });
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (error) return NextResponse.json({ error: "Database error" }, { status: 500 });
 
     const groups = (data || []).map((g: Record<string, unknown>) => ({
       ...g,
@@ -40,7 +40,7 @@ export async function POST(req: Request) {
       .select()
       .single();
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (error) return NextResponse.json({ error: "Database error" }, { status: 500 });
 
     await supabase
       .from("group_members")
