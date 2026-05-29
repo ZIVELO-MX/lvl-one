@@ -30,7 +30,7 @@ export async function GET(req: Request) {
 
     const { data, error } = await query;
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (error) return NextResponse.json({ error: "Database error" }, { status: 500 });
 
     const nextCursor = data && data.length === limit ? data[data.length - 1].created_at : null;
 

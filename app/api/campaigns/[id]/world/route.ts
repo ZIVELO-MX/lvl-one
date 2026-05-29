@@ -78,7 +78,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       return NextResponse.json({ error: "Invalid type" }, { status: 400 });
     }
 
-    if (result.error) return NextResponse.json({ error: result.error.message }, { status: 500 });
+    if (result.error) return NextResponse.json({ error: "Database error" }, { status: 500 });
     return NextResponse.json(result.data, { status: 201 });
   } catch {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
