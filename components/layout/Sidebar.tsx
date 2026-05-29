@@ -14,7 +14,6 @@ const NAV = [
   { href: "/encyclopedia", label: "Enciclopedia", icon: "eye"     },
   { href: "/glossary",          label: "Glosario",    icon: "search"  },
   { href: "/groups",            label: "Grupos",      icon: "users"   },
-  { href: "/encounter-builder", label: "Encuentros",  icon: "sword"   },
   { href: "/dice",             label: "Dados",        icon: "d20"     },
   { href: "/dm-tools",         label: "DM Tools",     icon: "wand"    },
 ];
