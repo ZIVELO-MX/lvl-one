@@ -25,19 +25,8 @@ export default function LandingPage() {
   return (
     <main className="lo lo-darkframe lo-landing-page" style={{ position: "relative", minHeight: "100vh", overflowX: "hidden" }}>
       <div className="lo-grain" style={{ position: "absolute", inset: 0, pointerEvents: "none" }}></div>
-      <style>{`
-        :root {
-          --lo-skeleton-base: rgba(214,168,79,0.08);
-          --lo-skeleton-shine: rgba(214,168,79,0.25);
-        }
-        @keyframes loShimmer {
-          0% { background-position: 200% 0; }
-          100% { background-position: -200% 0; }
-        }
-      `}</style>
-
       {/* Nav */}
-      <header style={{ position: "sticky", top: 0, zIndex: 10, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 48px", borderBottom: "1px solid var(--line)", background: "rgba(15,13,11,0.85)", backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}>
+      <header className="lo-landing-header" style={{ position: "sticky", top: 0, zIndex: 10, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 48px", borderBottom: "1px solid var(--line)" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <LvlLogo size={26}/>
           <span style={{ fontFamily: "var(--font-display)", fontSize: 15, color: "var(--text-hi)", letterSpacing: "0.18em" }}>LVL ONE</span>
@@ -64,6 +53,7 @@ export default function LandingPage() {
 
       {/* Hero */}
       <section style={{ position: "relative", padding: "80px 56px 60px" }}>
+        <div className="lo-hero-glow" aria-hidden="true" />
         <div className="lo-landing-hero-grid">
           <div>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 20 }}>
@@ -283,7 +273,7 @@ export default function LandingPage() {
       <section style={{ padding: "70px 56px", borderTop: "1px solid var(--line)", maxWidth: 760, margin: "0 auto" }}>
         <div className="lo-reveal lo-chip lo-chip-gold" style={{ marginBottom: 16 }}>FAQ</div>
         <h2 className="lo-reveal lo-stagger-1" style={{ fontSize: 32, marginBottom: 32 }}>Preguntas frecuentes.</h2>
-        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {[
             { q: "¿Es gratuito?", a: "Sí. En la beta puedes crear hasta 2 personajes, acceder a toda la encyclopedia, los 15 módulos de aprendizaje, usar los dados, las herramientas de DM y unirte a grupos de juego — sin coste." },
             { q: "¿Necesito saber jugar D&D?", a: "No. LVL ONE está diseñado para principiantes. Cada pantalla explica lo que estás eligiendo y por qué importa." },
@@ -292,10 +282,12 @@ export default function LandingPage() {
             { q: "¿Es oficial de Wizards of the Coast?", a: "No. LVL ONE es un producto independiente. No está afiliado con Wizards of the Coast." },
             { q: "¿Qué diferencia a LVL ONE de D&D Beyond?", a: "D&D Beyond está en inglés y asume que ya conoces las reglas. LVL ONE explica todo en español y te guía paso a paso." },
           ].map((item, i) => (
-            <div key={item.q} className={`lo-reveal lo-stagger-${(i % 4) + 1} lo-card`} style={{ padding: 18 }}>
-              <h3 style={{ fontSize: 15, color: "var(--text-hi)", marginBottom: 6 }}>{item.q}</h3>
-              <p style={{ color: "var(--text-mid)", fontSize: 13, lineHeight: 1.6, margin: 0 }}>{item.a}</p>
-            </div>
+            <details key={item.q} className={`lo-faq-item lo-reveal lo-stagger-${(i % 4) + 1}`}>
+              <summary className="lo-faq-summary">{item.q}</summary>
+              <div className="lo-faq-body-grid">
+                <p className="lo-faq-body-text">{item.a}</p>
+              </div>
+            </details>
           ))}
         </div>
       </section>
@@ -348,7 +340,7 @@ export default function LandingPage() {
             <div className="lo-card-elev" style={{ padding: 28, textAlign: "left", borderColor: "var(--line-gold)" }}>
               <div className="lo-chip lo-chip-gold" style={{ marginBottom: 14 }}>Pro · Próximamente</div>
               <div style={{ fontFamily: "var(--font-display)", fontSize: 40, color: "var(--quest-gold-hi)", marginBottom: 4, display: "flex", alignItems: "center", gap: 10 }}>
-                <span className="lo-skeleton" style={{ display: "inline-block", width: 70, height: 32, borderRadius: 6, background: "linear-gradient(90deg, var(--lo-skeleton-base) 25%, var(--lo-skeleton-shine) 50%, var(--lo-skeleton-base) 75%)", backgroundSize: "200% 100%", animation: "loShimmer 1.5s infinite" }} />
+                <span className="lo-skeleton" style={{ width: 70, height: 32 }} />
               </div>
               <p style={{ color: "var(--text-low)", fontSize: 12, marginBottom: 20, opacity: 0.5 }}>por determinar</p>
               <ul style={{ listStyle: "none", padding: 0, margin: "0 0 24px", display: "flex", flexDirection: "column", gap: 10 }}>

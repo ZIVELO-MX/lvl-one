@@ -75,9 +75,14 @@
   /* Grain */
   --grain-url: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.95  0 0 0 0 0.9  0 0 0 0 0.77  0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
 
-  /* Easing */
-  --ease-out:    cubic-bezier(0.23, 1, 0.32, 1);
-  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  /* Easing curves */
+  --ease-out:         cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out:      cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-float:       cubic-bezier(0.45, 0, 0.55, 1);
+
+  /* Skeleton shimmer */
+  --lo-skeleton-base:  rgba(214,168,79,0.08);
+  --lo-skeleton-shine: rgba(214,168,79,0.25);
 }
 
 /* ── Tailwind v4 theme tokens ─────────────────────────── */
@@ -324,7 +329,7 @@ button { font-family: var(--font-body); cursor: pointer; border: 0; background: 
   to   { opacity: 1; transform: scale(1); }
 }
 
-.lo-animate-float { animation: lo-float 6s ease-in-out infinite; }
+.lo-animate-float { animation: lo-float 6s var(--ease-float) infinite; }
 .lo-animate-glow  { animation: lo-glow-pulse 3s ease-in-out infinite; }
 
 .lo-reveal {
@@ -405,13 +410,157 @@ button { font-family: var(--font-body); cursor: pointer; border: 0; background: 
 
 /* ── Card hover lift ──────────────────────────────────── */
 .lo-card-elev {
-  transition: border-color 150ms var(--ease-out), box-shadow 150ms var(--ease-out);
+  transition: border-color 150ms var(--ease-out), box-shadow 150ms var(--ease-out), transform 150ms var(--ease-out);
 }
 @media (hover: hover) and (pointer: fine) {
   .lo-card-elev:hover {
     border-color: rgba(244,231,197,0.28);
     box-shadow: 0 1px 0 rgba(255,247,227,0.05) inset, 0 12px 32px -8px rgba(0,0,0,0.8);
   }
+}
+
+/* ── Skeleton shimmer ─────────────────────────────────── */
+@keyframes loShimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.lo-skeleton {
+  display: inline-block;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--lo-skeleton-base) 25%, var(--lo-skeleton-shine) 50%, var(--lo-skeleton-base) 75%);
+  background-size: 200% 100%;
+  animation: loShimmer 1.5s infinite;
+}
+
+/* ── Scroll-driven animation overrides ───────────────── */
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    .lo-reveal,
+    .lo-reveal-left,
+    .lo-reveal-right {
+      transition: none;
+    }
+    .lo-reveal {
+      animation: lo-reveal auto var(--ease-out) both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 40%;
+    }
+    .lo-reveal-left {
+      animation: lo-reveal-left auto var(--ease-out) both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 40%;
+    }
+    .lo-reveal-right {
+      animation: lo-reveal-right auto var(--ease-out) both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 40%;
+    }
+  }
+}
+
+/* ── Landing header — scroll-driven nav fill ──────────── */
+.lo-landing-header {
+  background: rgba(15,13,11,0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.lo-landing-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(15,13,11,0.5);
+  opacity: 0;
+  z-index: -1;
+  animation: lo-nav-fill linear both;
+  animation-timeline: scroll(root block);
+  animation-range: 0px 96px;
+}
+@keyframes lo-nav-fill {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Hero breathing glow ──────────────────────────────── */
+@property --lo-hero-glow-size {
+  syntax: '<percentage>';
+  initial-value: 35%;
+  inherits: false;
+}
+.lo-hero-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse var(--lo-hero-glow-size) 50% at 70% 50%,
+    rgba(214,168,79,0.09),
+    transparent
+  );
+  animation: lo-hero-glow-breathe 9s var(--ease-float) infinite alternate;
+}
+@keyframes lo-hero-glow-breathe {
+  to { --lo-hero-glow-size: 58%; }
+}
+
+/* ── FAQ accordion ────────────────────────────────────── */
+.lo-faq-item {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-2);
+  overflow: hidden;
+  transition: border-color 150ms var(--ease-out);
+}
+.lo-faq-item[open] {
+  border-color: var(--line-strong);
+}
+.lo-faq-summary {
+  padding: 18px;
+  font-size: 15px;
+  font-family: var(--font-display);
+  color: var(--text-hi);
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  transition: color 150ms var(--ease-out);
+  user-select: none;
+}
+.lo-faq-summary::-webkit-details-marker { display: none; }
+.lo-faq-summary::after {
+  content: "+";
+  font-size: 20px;
+  font-family: var(--font-body);
+  font-weight: 300;
+  color: var(--quest-gold-hi);
+  flex-shrink: 0;
+  transition: transform 260ms var(--ease-out), color 150ms;
+  line-height: 1;
+}
+.lo-faq-item[open] .lo-faq-summary::after {
+  transform: rotate(45deg);
+}
+@media (hover: hover) and (pointer: fine) {
+  .lo-faq-summary:hover { color: var(--quest-gold-hi); }
+}
+.lo-faq-body-grid {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 280ms var(--ease-out);
+}
+.lo-faq-item[open] .lo-faq-body-grid {
+  grid-template-rows: 1fr;
+}
+.lo-faq-body-text {
+  overflow: hidden;
+  min-height: 0;
+  padding: 0 18px 16px;
+  color: var(--text-mid);
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0;
 }
 
 /* ── Reduced motion ───────────────────────────────────── */
