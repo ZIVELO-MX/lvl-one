@@ -32,7 +32,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       if (error.code === "23505") {
         return NextResponse.json({ error: "Already a member" }, { status: 409 });
       }
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      return NextResponse.json({ error: "Database error" }, { status: 500 });
     }
 
     return NextResponse.json({ success: true }, { status: 201 });
@@ -67,7 +67,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
       .eq("group_id", id)
       .eq("user_id", targetUserId);
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (error) return NextResponse.json({ error: "Database error" }, { status: 500 });
 
     return NextResponse.json({ success: true });
   } catch {

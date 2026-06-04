@@ -66,9 +66,9 @@ function LimitModal() {
         <div style={{ width: 48, height: 48, borderRadius: 999, background: "rgba(180,58,46,0.15)", border: "1px solid rgba(180,58,46,0.4)", display: "grid", placeItems: "center", margin: "0 auto 16px", color: "var(--dragon-red)" }}>
           <Ico name="lock" size={20}/>
         </div>
-        <h3 style={{ fontSize: 22, marginBottom: 8 }}>Límite gratuito alcanzado</h3>
+        <h3 style={{ fontSize: 22, marginBottom: 8 }}>Cofre de fichas lleno</h3>
         <p style={{ color: "var(--text-mid)", fontSize: 13, marginBottom: 24, lineHeight: 1.6 }}>
-          Ya tienes 2 personajes activos — el máximo del plan gratuito. Archiva uno o espera a LVL ONE Pro para crear más.
+          Tu grimorio ya contiene 2 aventureros — el límite del plan gratuito. Archiva uno para abrir espacio, o desbloquea fichas ilimitadas con LVL ONE Pro.
         </p>
         <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
           <button className="lo-btn lo-btn-ghost" onClick={() => dispatch({ type: "LIMIT_CLOSE" })}>Entendido</button>

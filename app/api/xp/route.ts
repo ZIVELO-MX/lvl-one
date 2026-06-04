@@ -62,13 +62,13 @@ export async function POST(req: Request) {
         .update({ total: existing.total + amount, updated_at: new Date().toISOString() })
         .eq("user_id", session.user.id);
 
-      if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+      if (error) return NextResponse.json({ error: "Database error" }, { status: 500 });
     } else {
       const { error } = await supabase
         .from("user_xp")
         .insert({ user_id: session.user.id, total: amount });
 
-      if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+      if (error) return NextResponse.json({ error: "Database error" }, { status: 500 });
     }
 
     const { data: updated } = await supabase

@@ -178,28 +178,29 @@ button { font-family: var(--font-body); cursor: pointer; border: 0; background: 
   font-weight: 600;
   font-size: 14px;
   letter-spacing: 0.01em;
-  transition: transform 140ms var(--ease-out), box-shadow 140ms var(--ease-out), background 140ms var(--ease-out);
+  transition: transform 140ms var(--ease-out), box-shadow 140ms var(--ease-out);
   white-space: nowrap;
   cursor: pointer;
   border: 0;
 }
+.lo-btn:active { transform: scale(0.97); }
+
 @media (hover: hover) and (pointer: fine) {
   .lo-btn:hover { transform: translateY(-1px); }
+  .lo-btn-primary:hover { box-shadow: 0 1px 0 rgba(255,255,255,0.45) inset, 0 10px 24px -6px rgba(214,168,79,0.7); }
+  .lo-btn-ghost:hover { background: rgba(244,231,197,0.06); }
 }
-.lo-btn:active { transform: scale(0.97); }
 
 .lo-btn-primary {
   background: linear-gradient(180deg, var(--quest-gold-hi), var(--quest-gold));
   color: var(--text-on-gold);
   box-shadow: 0 1px 0 rgba(255,255,255,0.4) inset, 0 6px 18px -6px rgba(214,168,79,0.55);
 }
-.lo-btn-primary:hover { box-shadow: 0 1px 0 rgba(255,255,255,0.45) inset, 0 10px 24px -6px rgba(214,168,79,0.7); }
 .lo-btn-ghost {
   background: transparent;
   border: 1px solid var(--line-strong);
   color: var(--text-hi);
 }
-.lo-btn-ghost:hover { background: rgba(244,231,197,0.06); }
 .lo-btn-danger { background: var(--dragon-red); color: var(--soft-bone); }
 .lo-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
@@ -251,7 +252,7 @@ button { font-family: var(--font-body); cursor: pointer; border: 0; background: 
   border-radius: var(--r-md);
   font-size: 13px;
   outline: none;
-  transition: border .12s, box-shadow .12s;
+  transition: border 120ms var(--ease-out), box-shadow 120ms var(--ease-out);
   font-family: var(--font-body);
 }
 .lo-input:focus { border-color: var(--quest-gold); box-shadow: 0 0 0 3px rgba(214,168,79,0.18); }
@@ -269,20 +270,20 @@ button { font-family: var(--font-body); cursor: pointer; border: 0; background: 
   background: linear-gradient(90deg, var(--quest-gold-lo), var(--quest-gold-hi));
   border-radius: inherit;
   box-shadow: 0 0 12px -2px var(--quest-gold);
-  transition: width 0.4s ease;
+  transition: width 0.4s var(--ease-out);
 }
 
 /* ── Animations ───────────────────────────────────────── */
 @keyframes lo-toast {
-  from { opacity: 0; transform: translate(-50%, 12px); }
-  to   { opacity: 1; transform: translate(-50%, 0); }
+  from { opacity: 0; transform: translate(-50%, 8px) scale(0.97); }
+  to   { opacity: 1; transform: translate(-50%, 0) scale(1); }
 }
 @keyframes lo-pop {
-  from { opacity: 0; transform: scale(0.94); }
+  from { opacity: 0; transform: scale(0.96); }
   to   { opacity: 1; transform: scale(1); }
 }
 @keyframes lo-fade {
-  from { opacity: 0; transform: translateY(6px); }
+  from { opacity: 0; transform: translateY(4px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 @keyframes lo-spin {
@@ -312,19 +313,19 @@ button { font-family: var(--font-body); cursor: pointer; border: 0; background: 
   50% { box-shadow: 0 1px 0 rgba(255,255,255,0.45) inset, 0 10px 28px -6px rgba(214,168,79,0.75); }
 }
 @keyframes lo-reveal {
-  from { opacity: 0; transform: translateY(30px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(12px) scale(0.99); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 @keyframes lo-reveal-left {
-  from { opacity: 0; transform: translateX(-20px); }
+  from { opacity: 0; transform: translateX(-10px); }
   to   { opacity: 1; transform: translateX(0); }
 }
 @keyframes lo-reveal-right {
-  from { opacity: 0; transform: translateX(20px); }
+  from { opacity: 0; transform: translateX(10px); }
   to   { opacity: 1; transform: translateX(0); }
 }
 @keyframes lo-scale-in {
-  from { opacity: 0; transform: scale(0.92); }
+  from { opacity: 0; transform: scale(0.95); }
   to   { opacity: 1; transform: scale(1); }
 }
 
@@ -333,18 +334,18 @@ button { font-family: var(--font-body); cursor: pointer; border: 0; background: 
 
 .lo-reveal {
   opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: translateY(12px) scale(0.99);
+  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
 }
 .lo-reveal.is-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 
 .lo-reveal-left {
   opacity: 0;
-  transform: translateX(-20px);
-  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: translateX(-10px);
+  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
 }
 .lo-reveal-left.is-visible {
   opacity: 1;
@@ -353,23 +354,23 @@ button { font-family: var(--font-body); cursor: pointer; border: 0; background: 
 
 .lo-reveal-right {
   opacity: 0;
-  transform: translateX(20px);
-  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: translateX(10px);
+  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
 }
 .lo-reveal-right.is-visible {
   opacity: 1;
   transform: translateX(0);
 }
 
-/* Stagger delays */
-.lo-stagger-1 { transition-delay: 0.05s; }
-.lo-stagger-2 { transition-delay: 0.10s; }
-.lo-stagger-3 { transition-delay: 0.15s; }
-.lo-stagger-4 { transition-delay: 0.20s; }
-.lo-stagger-5 { transition-delay: 0.25s; }
-.lo-stagger-6 { transition-delay: 0.30s; }
-.lo-stagger-7 { transition-delay: 0.35s; }
-.lo-stagger-8 { transition-delay: 0.40s; }
+/* Stagger delays — 30ms increments, max 240ms */
+.lo-stagger-1 { transition-delay: 30ms; }
+.lo-stagger-2 { transition-delay: 60ms; }
+.lo-stagger-3 { transition-delay: 90ms; }
+.lo-stagger-4 { transition-delay: 120ms; }
+.lo-stagger-5 { transition-delay: 150ms; }
+.lo-stagger-6 { transition-delay: 180ms; }
+.lo-stagger-7 { transition-delay: 210ms; }
+.lo-stagger-8 { transition-delay: 240ms; }
 
 /* Hero entrance animations */
 @keyframes lo-hero-title {
@@ -381,7 +382,7 @@ button { font-family: var(--font-body); cursor: pointer; border: 0; background: 
   to   { opacity: 1; transform: translateY(0); }
 }
 @keyframes lo-hero-card {
-  from { opacity: 0; transform: translateX(30px) scale(0.96); }
+  from { opacity: 0; transform: translateX(16px) scale(0.97); }
   to   { opacity: 1; transform: translateX(0) scale(1); }
 }
 
@@ -391,6 +392,21 @@ button { font-family: var(--font-body); cursor: pointer; border: 0; background: 
 .lo-hero-btns   { animation: lo-hero-body 0.5s 0.55s both cubic-bezier(0.22, 1, 0.36, 1); }
 .lo-hero-tags   { animation: lo-hero-body 0.5s 0.7s both cubic-bezier(0.22, 1, 0.36, 1); }
 .lo-hero-card   { animation: lo-hero-card 0.8s 0.3s both cubic-bezier(0.22, 1, 0.36, 1); }
+
+/* ── Pressable (non-button elements that need :active feedback) ── */
+.lo-pressable {
+  transition: transform 140ms var(--ease-out);
+  cursor: pointer;
+}
+.lo-pressable:active { transform: scale(0.97); }
+
+/* ── Discord link hover (CSS-only, respects prefers-reduced-motion) ── */
+.lo-discord-link {
+  transition: color 140ms var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .lo-discord-link:hover { color: #5865F2 !important; }
+}
 
 /* ── Card hover lift ──────────────────────────────────── */
 .lo-card-elev {

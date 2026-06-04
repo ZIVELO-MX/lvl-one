@@ -24,7 +24,7 @@ export async function GET(req: Request) {
       .eq("campaign_id", campaignId)
       .order("created_at", { ascending: true });
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (error) return NextResponse.json({ error: "Database error" }, { status: 500 });
     return NextResponse.json(data || []);
   } catch {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -46,7 +46,7 @@ export async function POST(req: Request) {
       `)
       .single();
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (error) return NextResponse.json({ error: "Database error" }, { status: 500 });
 
     return NextResponse.json(data, { status: 201 });
   } catch {

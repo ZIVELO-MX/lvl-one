@@ -33,9 +33,7 @@ export default function LandingPage() {
           <span style={{ fontSize: 10, color: "var(--text-low)", border: "1px solid var(--line-strong)", padding: "2px 7px", borderRadius: 999, marginLeft: 4 }}>BETA</span>
         </div>
         <nav className="lo-landing-nav-links">
-          <a href="#problem">El problema</a>
           <a href="#features">Funcionalidades</a>
-          <a href="#audience">Para quién</a>
           <a href="#pricing">Precios</a>
         </nav>
         <div style={{ display: "flex", gap: 8 }}>
@@ -67,9 +65,9 @@ export default function LandingPage() {
               </div>
             </div>
             <h1 className="lo-hero-title lo-landing-hero-title">
-              Tu primera<br/>
-              <span className="lo-gradient-text">aventura</span> empieza<br/>
-              en LVL ONE.
+              D&D 5e<br/>
+              en <span className="lo-gradient-text">español</span>.<br/>
+              Sin los manuales.
             </h1>
             <p className="lo-hero-desc" style={{ fontSize: 17, color: "var(--text-mid)", maxWidth: 520, marginBottom: 28, lineHeight: 1.6 }}>
               Crea personajes, aprende las reglas y guarda tu progreso — todo en español, diseñado para quienes se sienten perdidos en D&D.
@@ -82,12 +80,22 @@ export default function LandingPage() {
                 <Ico name="eye" size={15}/> Ver el problema
               </a>
             </div>
-            <div className="lo-hero-tags" style={{ display: "flex", gap: 20, color: "var(--text-low)", fontSize: 12 }}>
-              {["Sin tarjeta", "2 personajes gratis", "Sin manuales", "En español"].map(t => (
-                <span key={t} style={{ display: "inline-flex", alignItems: "center", gap: 5 }}>
-                  <Ico name="check" size={13} color="var(--quest-gold-hi)"/> {t}
-                </span>
-              ))}
+            <div className="lo-hero-tags" style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, color: "var(--text-low)", fontSize: 12 }}>
+                <div style={{ display: "flex" }}>
+                  {[35, 50, 42, 28, 38].map((l, i) => (
+                    <div key={i} style={{ width: 26, height: 26, borderRadius: 999, background: `hsl(${l}, 45%, 38%)`, border: "2px solid var(--obsidian)", marginLeft: i > 0 ? -9 : 0, zIndex: 5 - i }} />
+                  ))}
+                </div>
+                <span>Beta activa — únete a los primeros aventureros</span>
+              </div>
+              <div style={{ display: "flex", gap: 20, color: "var(--text-low)", fontSize: 12 }}>
+                {["Sin tarjeta", "2 personajes gratis", "Sin manuales", "En español"].map(t => (
+                  <span key={t} style={{ display: "inline-flex", alignItems: "center", gap: 5 }}>
+                    <Ico name="check" size={13} color="var(--quest-gold-hi)"/> {t}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -125,22 +133,18 @@ export default function LandingPage() {
       </section>
 
       {/* Problem / Pain */}
-      <section id="problem" style={{ padding: "70px 56px", borderTop: "1px solid var(--line)", maxWidth: 1200, margin: "0 auto" }}>
+      <section id="problem" style={{ padding: "70px 56px", borderTop: "1px solid var(--line)", maxWidth: 960, margin: "0 auto" }}>
         <div className="lo-reveal lo-chip lo-chip-gold" style={{ marginBottom: 16 }}>El problema</div>
-        <h2 className="lo-reveal lo-stagger-1" style={{ fontSize: 40, marginBottom: 14 }}>Querías jugar D&D, pero...</h2>
-        <p className="lo-reveal lo-stagger-2" style={{ color: "var(--text-mid)", marginBottom: 48, maxWidth: 600, fontSize: 15 }}>
-          El Manual del Jugador tiene 600 páginas. D&D Beyond está en inglés. Crear un personaje lleva horas. Y cuando por fin lo logras, no sabes qué hacer en la mesa.
+        <h2 className="lo-reveal lo-stagger-1" style={{ fontSize: 40, marginBottom: 14 }}>Lo que todos sienten al empezar.</h2>
+        <p className="lo-reveal lo-stagger-2" style={{ color: "var(--text-mid)", marginBottom: 48, maxWidth: 560, fontSize: 15 }}>
+          600 páginas. Todo en inglés. Y la sensación de que hay algo que nunca vas a entender. LVL ONE existe para que eso no pase.
         </p>
         <div className="lo-landing-2col">
           {[
-            { icon: "x", t: "Sin LVL ONE", d: "Abres el manual. Hay 12 clases, 40 razas y 300 hechizos. ¿Por dónde empiezo? Te atasques en la primera decisión." },
-            { icon: "check", t: "Con LVL ONE", d: "Un wizard de 8 pasos te guía paso a paso. Cada pantalla explica qué estás eligiendo y por qué importa. Personaje listo en 15 minutos." },
-            { icon: "x", t: "Sin LVL ONE", d: "Creas tu personaje en una hoja de PDF. Lo pierdes. No recuerdas qué elegiste ni por qué. Empiezas de cero cada vez." },
-            { icon: "check", t: "Con LVL ONE", d: "Tu personaje se guarda automáticamente. Edita stats, equipamiento y hechizos cuando quieras. Imprime la hoja o consulta desde el móvil." },
-            { icon: "x", t: "Sin LVL ONE", d: "Buscas \"hechizo rayo\" en Google. Encuentras 5 versiones distintas. ¿Cuál es la oficial? ¿Funciona con mi clase? Te rindes." },
-            { icon: "check", t: "Con LVL ONE", d: "Encyclopedia filtrada por clase: solo ves los hechizos que puedes lanzar. Con descripciones claras, no jargon legal. En español." },
-            { icon: "x", t: "Sin LVL ONE", d: "Tu grupo quiere jugar pero nadie sabe qué personaje elegir ni cómo empezar. La planificación previa consume toda la energía." },
-            { icon: "check", t: "Con LVL ONE", d: "Crea tu grupo, encuentra otros jugadores y comparte fichas. Todos llegan a la mesa con su personaje listo y las reglas claras." },
+            { icon: "x", t: "Sin LVL ONE", d: "Abres el manual. Hay 12 clases, 40 razas y 300 hechizos. ¿Por dónde empiezo? Te atascas en la primera decisión y cierras la pestaña." },
+            { icon: "check", t: "Con LVL ONE", d: "Un wizard de 8 pasos te guía por cada decisión. Cada pantalla explica qué estás eligiendo y por qué importa. Personaje listo en 15 minutos." },
+            { icon: "x", t: "Sin LVL ONE", d: "Buscas \"hechizo rayo\" en Google. Encuentras 5 versiones distintas. ¿Cuál es la oficial? ¿Funciona con mi clase? No hay forma de saberlo." },
+            { icon: "check", t: "Con LVL ONE", d: "Encyclopedia filtrada por clase: solo ves los hechizos que puedes lanzar, con descripciones claras en español — sin jargon legal ni wikis desactualizadas." },
           ].map((item, i) => (
             <div key={i} className={`lo-card ${i % 2 === 0 ? 'lo-reveal-left' : 'lo-reveal-right'} lo-stagger-${(i % 4) + 1}`} style={{ padding: 22, borderColor: item.icon === "check" ? "rgba(91,122,74,0.3)" : "rgba(142,44,36,0.3)" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
@@ -156,11 +160,10 @@ export default function LandingPage() {
       </section>
 
       {/* Features */}
-      <section id="features" style={{ padding: "70px 56px", borderTop: "1px solid var(--line)", maxWidth: 1200, margin: "0 auto" }}>
-        <div className="lo-reveal lo-chip lo-chip-gold" style={{ marginBottom: 16 }}>Funcionalidades</div>
-        <h2 className="lo-reveal lo-stagger-1" style={{ fontSize: 40, marginBottom: 14 }}>Todo lo que necesitas para jugar D&D 5e.</h2>
-        <p className="lo-reveal lo-stagger-2" style={{ color: "var(--text-mid)", marginBottom: 48, maxWidth: 620, fontSize: 15 }}>
-          Todo lo que necesitas para crear personajes, aprender las reglas y jugar con tu grupo — disponible ahora en beta.
+      <section id="features" style={{ padding: "70px 56px", borderTop: "1px solid var(--line)", maxWidth: 960, margin: "0 auto" }}>
+        <h2 className="lo-reveal" style={{ fontSize: 44, marginBottom: 12 }}>Disponible ahora en beta.</h2>
+        <p className="lo-reveal lo-stagger-1" style={{ color: "var(--text-mid)", marginBottom: 48, maxWidth: 560, fontSize: 15 }}>
+          Crea personajes, aprende las reglas y juega con tu grupo — sin manuales, sin inglés, sin fricciones.
         </p>
         <div className="lo-landing-3col">
           {[
@@ -186,11 +189,11 @@ export default function LandingPage() {
       </section>
 
       {/* Audience */}
-      <section id="audience" style={{ padding: "70px 56px", borderTop: "1px solid var(--line)", maxWidth: 1200, margin: "0 auto" }}>
+      <section id="audience" style={{ padding: "70px 56px", borderTop: "1px solid var(--line)", maxWidth: 960, margin: "0 auto" }}>
         <div className="lo-reveal lo-chip lo-chip-gold" style={{ marginBottom: 16 }}>Para quién es</div>
-        <h2 className="lo-reveal lo-stagger-1" style={{ fontSize: 40, marginBottom: 14 }}>No importa tu experiencia.</h2>
-        <p className="lo-reveal lo-stagger-2" style={{ color: "var(--text-mid)", marginBottom: 48, maxWidth: 580, fontSize: 15 }}>
-          LVL ONE está diseñado para tres perfiles distintos. Todos empiezan en el mismo lugar.
+        <h2 className="lo-reveal lo-stagger-1" style={{ fontSize: 40, marginBottom: 14 }}>Para los tres tipos de aventurero.</h2>
+        <p className="lo-reveal lo-stagger-2" style={{ color: "var(--text-mid)", marginBottom: 48, maxWidth: 560, fontSize: 15 }}>
+          Seas el que nunca ha tirado un dado, el que quiere dirigir, o el grupo que lleva meses sin arrancar — LVL ONE es el punto de partida.
         </p>
         <div className="lo-landing-3col-lg">
           {[
@@ -210,10 +213,10 @@ export default function LandingPage() {
       </section>
 
       {/* How it works */}
-      <section id="how" style={{ padding: "70px 56px", borderTop: "1px solid var(--line)", maxWidth: 1200, margin: "0 auto" }}>
+      <section id="how" style={{ padding: "70px 56px", borderTop: "1px solid var(--line)", maxWidth: 960, margin: "0 auto", textAlign: "center" }}>
         <div className="lo-reveal lo-chip lo-chip-gold" style={{ marginBottom: 16 }}>Cómo funciona</div>
         <h2 className="lo-reveal lo-stagger-1" style={{ fontSize: 40, marginBottom: 14 }}>De cero a aventurero en tres pasos.</h2>
-        <p className="lo-reveal lo-stagger-2" style={{ color: "var(--text-mid)", marginBottom: 48, maxWidth: 580, fontSize: 15 }}>Sin descargar nada. Sin leer manuales. Solo seguir el flujo.</p>
+        <p className="lo-reveal lo-stagger-2" style={{ color: "var(--text-mid)", marginBottom: 48, maxWidth: 480, fontSize: 15, margin: "0 auto 48px" }}>Sin descargar nada. Sin leer manuales. Solo seguir el flujo.</p>
         <div className="lo-landing-3col-lg">
           {[
             { n: "01", icon: "user", t: "Crea tu personaje", d: "Un wizard de 8 pasos te lleva por raza, clase, estadísticas y trasfondo. Con explicaciones en cada decisión." },
@@ -234,34 +237,40 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Social proof / testimonials placeholder */}
-      <section style={{ padding: "70px 56px", borderTop: "1px solid var(--line)", maxWidth: 1000, margin: "0 auto", textAlign: "center" }}>
-        <div className="lo-reveal lo-chip lo-chip-gold" style={{ marginBottom: 16 }}>Comunidad</div>
-        <h2 className="lo-reveal lo-stagger-1" style={{ fontSize: 32, marginBottom: 32 }}>Ya están jugando.</h2>
-        <div className="lo-landing-3col">
-          {[
-            { name: "Laura M.", role: "Jugadora nueva", q: "Nunca había jugado D&D. En 20 minutos tenía mi personaje listo y entendía qué hacía cada stat." },
-            { name: "Carlos R.", role: "DM primerizo", q: "Llevo 3 campañas activas con mis amigos. Las notas del DM y el timeline de sesiones me salvaron la vida." },
-            { name: "Ana & grupo", role: "Grupo de 5", q: "Antes nos perdíamos en PDFs y wikis. Ahora todos creamos personaje desde el móvil y jugamos el finde." },
-          ].map((t, i) => (
-            <div key={t.name} className={`lo-reveal lo-stagger-${i + 1} lo-card`} style={{ padding: 22, textAlign: "left" }}>
-              <p style={{ color: "var(--text-mid)", fontSize: 14, lineHeight: 1.6, margin: "0 0 16px", fontStyle: "italic" }}>&quot;{t.q}&quot;</p>
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <div style={{ width: 32, height: 32, borderRadius: 999, background: "linear-gradient(135deg, var(--arcane-blue), var(--quest-gold-lo))", display: "grid", placeItems: "center", fontFamily: "var(--font-display)", fontSize: 14, color: "white" }}>
-                  {t.name[0]}
-                </div>
-                <div>
-                  <div style={{ fontSize: 13, color: "var(--text-hi)" }}>{t.name}</div>
-                  <div style={{ fontSize: 11, color: "var(--text-low)" }}>{t.role}</div>
-                </div>
+      {/* Beta stats + community */}
+      <section style={{ padding: "70px 56px", borderTop: "1px solid var(--line)" }}>
+        <div style={{ maxWidth: 960, margin: "0 auto" }}>
+          <div className="lo-reveal" style={{ textAlign: "center", marginBottom: 48 }}>
+            <h2 style={{ fontSize: 36, marginBottom: 10 }}>Lo que te espera en la beta.</h2>
+            <p style={{ color: "var(--text-mid)", fontSize: 15, maxWidth: 480, margin: "0 auto" }}>Acceso gratuito. Sin lista de espera. Empieza hoy mismo.</p>
+          </div>
+          <div className="lo-reveal lo-stagger-1" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", borderRadius: 14, overflow: "hidden", border: "1px solid var(--line-strong)" }}>
+            {[
+              { n: "2", label: "personajes gratis", sub: "sin tarjeta de crédito" },
+              { n: "15", label: "módulos de aprendizaje", sub: "desde absoluto cero" },
+              { n: "100%", label: "en español", sub: "razas, clases, hechizos" },
+              { n: "0", label: "manuales necesarios", sub: "todo está explicado" },
+            ].map((s, i) => (
+              <div key={i} style={{ padding: "32px 20px", textAlign: "center", background: "var(--bg-elev-1)", borderRight: i < 3 ? "1px solid var(--line-strong)" : "none" }}>
+                <div style={{ fontFamily: "var(--font-display)", fontSize: 44, color: "var(--quest-gold-hi)", fontWeight: 700, lineHeight: 1, marginBottom: 8 }}>{s.n}</div>
+                <div style={{ fontSize: 13, color: "var(--text-hi)", marginBottom: 4 }}>{s.label}</div>
+                <div style={{ fontSize: 11, color: "var(--text-low)" }}>{s.sub}</div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+          <div className="lo-reveal lo-stagger-2" style={{ display: "flex", gap: 14, justifyContent: "center", marginTop: 40, flexWrap: "wrap" }}>
+            <Link href="/register" className="lo-btn lo-btn-primary" style={{ padding: "13px 24px", fontSize: 15 }}>
+              Unirme a la beta — es gratis <Ico name="arrow" size={15}/>
+            </Link>
+            <a href="https://discord.gg/nwQ8pPVc6f" target="_blank" rel="noopener noreferrer" className="lo-btn lo-btn-ghost" style={{ padding: "13px 24px", fontSize: 15 }}>
+              <Ico name="discord" size={15}/> Comunidad en Discord
+            </a>
+          </div>
         </div>
       </section>
 
       {/* FAQ */}
-      <section style={{ padding: "70px 56px", borderTop: "1px solid var(--line)", maxWidth: 800, margin: "0 auto" }}>
+      <section style={{ padding: "70px 56px", borderTop: "1px solid var(--line)", maxWidth: 760, margin: "0 auto" }}>
         <div className="lo-reveal lo-chip lo-chip-gold" style={{ marginBottom: 16 }}>FAQ</div>
         <h2 className="lo-reveal lo-stagger-1" style={{ fontSize: 32, marginBottom: 32 }}>Preguntas frecuentes.</h2>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -284,14 +293,19 @@ export default function LandingPage() {
       </section>
 
       {/* Final CTA */}
-      <section className="lo-reveal" style={{ padding: "70px 56px", borderTop: "1px solid var(--line)", textAlign: "center", maxWidth: 700, margin: "0 auto" }}>
-        <h2 style={{ fontSize: 36, marginBottom: 12 }}>Tu aventura te espera.</h2>
+      <section className="lo-reveal" style={{ padding: "70px 56px", borderTop: "1px solid var(--line)", textAlign: "center", maxWidth: 680, margin: "0 auto" }}>
+        <h2 style={{ fontSize: 40, marginBottom: 12 }}>Empieza esta semana.</h2>
         <p style={{ color: "var(--text-mid)", fontSize: 16, marginBottom: 28, lineHeight: 1.6 }}>
-          No necesitas leerte 600 páginas. No necesitas saber qué es un &quot;modifier&quot;. Solo necesitas 15 minutos y curiosidad.
+          No necesitas saber nada de D&D. No necesitas tarjeta. Solo 15 minutos y querer jugar.
         </p>
-        <Link href="/register" className="lo-btn lo-btn-primary lo-animate-glow" style={{ padding: "14px 28px", fontSize: 16 }}>
-          Crear mi primer personaje <Ico name="arrow" size={16}/>
-        </Link>
+        <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+          <Link href="/register" className="lo-btn lo-btn-primary lo-animate-glow" style={{ padding: "14px 28px", fontSize: 16 }}>
+            Crear mi primer personaje <Ico name="arrow" size={16}/>
+          </Link>
+          <a href="https://discord.gg/nwQ8pPVc6f" target="_blank" rel="noopener noreferrer" className="lo-btn lo-btn-ghost" style={{ padding: "14px 24px", fontSize: 15 }}>
+            <Ico name="discord" size={15}/> Discord
+          </a>
+        </div>
         <p style={{ color: "var(--text-low)", fontSize: 12, marginTop: 16 }}>Sin tarjeta de crédito. Sin compromiso.</p>
       </section>
 
@@ -352,13 +366,18 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="lo-landing-footer" style={{ borderTop: "1px solid var(--line)", padding: "28px 56px", display: "flex", justifyContent: "space-between", alignItems: "center", color: "var(--text-low)", fontSize: 12 }}>
+      <footer className="lo-landing-footer" style={{ borderTop: "1px solid var(--line)", padding: "28px 56px", display: "flex", justifyContent: "space-between", alignItems: "center", color: "var(--text-low)", fontSize: 12, flexWrap: "wrap", gap: 16 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <LvlLogo size={20}/>
           <span>LVL ONE © 2026 · ZIVELO</span>
         </div>
-        <p style={{ margin: 0, maxWidth: 480, textAlign: "right", lineHeight: 1.5 }}>
-          LVL ONE es un producto no oficial no afiliado con Wizards of the Coast. D&D 5e es propiedad de Wizards of the Coast LLC.
+        <div style={{ display: "flex", gap: 20, alignItems: "center" }}>
+          <a href="#features" style={{ color: "var(--text-low)", textDecoration: "none" }}>Funcionalidades</a>
+          <a href="#pricing" style={{ color: "var(--text-low)", textDecoration: "none" }}>Precios</a>
+          <a href="https://discord.gg/nwQ8pPVc6f" target="_blank" rel="noopener noreferrer" style={{ color: "var(--text-low)", textDecoration: "none" }}>Discord</a>
+        </div>
+        <p style={{ margin: 0, maxWidth: 400, textAlign: "right", lineHeight: 1.5 }}>
+          Producto no oficial. D&D 5e es propiedad de Wizards of the Coast LLC.
         </p>
       </footer>
     </main>
