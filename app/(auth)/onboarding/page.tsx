@@ -43,7 +43,7 @@ export default function OnboardingPage() {
         <h2 style={{ fontSize: 26, marginBottom: 24, lineHeight: 1.2 }}>{cur.t}</h2>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {cur.opts.map((o, i) => (
-            <button key={i} onClick={() => choose(i)} className="lo-card" style={{
+            <button type="button" key={i} onClick={() => choose(i)} className="lo-card" style={{
               padding: "14px 18px", textAlign: "left", fontSize: 14, cursor: "pointer",
               color: "var(--text-hi)", transition: "background .12s, border-color .12s",
               border: answers[cur.id] === i ? "1px solid var(--quest-gold)" : undefined,
