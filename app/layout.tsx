@@ -24,9 +24,41 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "LVL ONE — Tu primera aventura en D&D 5e",
+  metadataBase: new URL("https://lvlone.app"),
+  title: {
+    default: "LVL ONE — D&D 5e en español, sin manuales",
+    template: "%s | LVL ONE",
+  },
   description:
-    "Crea personajes 5e, aprende las reglas básicas y guarda tu progreso — sin perderte entre manuales de 600 páginas.",
+    "Crea personajes D&D 5e, aprende las reglas y juega con tu grupo — todo en español, diseñado para principiantes. Sin manuales de 600 páginas.",
+  keywords: ["D&D 5e español", "Dungeons and Dragons", "principiantes", "crear personaje", "character creator", "D&D en español"],
+  authors: [{ name: "ZIVELO" }],
+  robots: { index: true, follow: true },
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    locale: "es_ES",
+    url: "https://lvlone.app",
+    siteName: "LVL ONE",
+    title: "LVL ONE — D&D 5e en español, sin manuales",
+    description:
+      "Crea personajes D&D 5e, aprende las reglas y juega con tu grupo — todo en español, sin manuales de 600 páginas.",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "LVL ONE — D&D 5e en español",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "LVL ONE — D&D 5e en español, sin manuales",
+    description:
+      "Crea personajes D&D 5e, aprende las reglas y juega con tu grupo — todo en español.",
+    images: ["/og-image.png"],
+  },
   icons: {
     icon: [
       { url: "/favicon.svg", type: "image/svg+xml" },
