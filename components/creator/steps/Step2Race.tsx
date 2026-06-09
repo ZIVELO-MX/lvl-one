@@ -31,7 +31,7 @@ function GenderToggle({ gender, onChange }: { gender: Gender; onChange: (g: Gend
   return (
     <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
       {(["male", "female"] as Gender[]).map(g => (
-        <button key={g} onClick={() => onChange(g)} style={{
+        <button type="button" key={g} onClick={() => onChange(g)} style={{
           padding: "4px 10px", borderRadius: 6, fontSize: 11, cursor: "pointer",
           border: gender === g ? "1px solid var(--quest-gold)" : "1px solid var(--line-strong)",
           background: gender === g ? "rgba(214,168,79,0.15)" : "rgba(244,231,197,0.03)",
@@ -90,7 +90,7 @@ export function Step2Race({ draft, id }: { draft: CharacterDraft; id: string }) 
 
       <div style={{ display: "flex", gap: 6, marginBottom: 16 }}>
         {(["standard", "dm"] as Tab[]).map(t => (
-          <button key={t} onClick={() => setTab(t)} style={{
+          <button type="button" key={t} onClick={() => setTab(t)} style={{
             padding: "6px 14px", borderRadius: 20, fontSize: 12, cursor: "pointer",
             background: tab === t ? "rgba(214,168,79,0.15)" : "transparent",
             border: tab === t ? "1px solid var(--quest-gold)" : "1px solid var(--line-strong)",
@@ -109,7 +109,7 @@ export function Step2Race({ draft, id }: { draft: CharacterDraft; id: string }) 
         {filtered.map(r => {
           const picked = draft.raceId === r.id;
           return (
-            <button key={r.id} onClick={() => pickRace(r.id)} style={{
+            <button type="button" key={r.id} onClick={() => pickRace(r.id)} style={{
               padding: "14px 12px", borderRadius: 10, textAlign: "left", cursor: "pointer",
               border: picked ? "1px solid var(--quest-gold)" : "1px solid var(--line-strong)",
               background: picked ? "rgba(214,168,79,0.10)" : "rgba(244,231,197,0.03)" }}>
@@ -185,7 +185,7 @@ export function Step2Race({ draft, id }: { draft: CharacterDraft; id: string }) 
               const picked = draft.subraceId === s.id;
               const subSrc = subracePortrait(s.id, gender);
               return (
-                <button key={s.id} onClick={() => up({ subraceId: s.id })} style={{
+                <button type="button" key={s.id} onClick={() => up({ subraceId: s.id })} style={{
                   padding: "12px 10px", borderRadius: 8, textAlign: "left", cursor: "pointer",
                   border: picked ? "1px solid var(--quest-gold)" : "1px solid var(--line-strong)",
                   background: picked ? "rgba(214,168,79,0.10)" : "rgba(244,231,197,0.03)" }}>

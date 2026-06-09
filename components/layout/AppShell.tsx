@@ -44,7 +44,7 @@ export function TopBar({ crumb }: { crumb: string[] }) {
     <div className="lo-topbar" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 32px 0" }}>
       <div style={{ display: "flex", alignItems: "center", gap: 7, color: "var(--text-low)", fontSize: 12 }}>
         {crumb.map((c, i) => (
-          <span key={i} style={{ display: "flex", alignItems: "center", gap: 7 }}>
+          <span key={`${i}-${c}`} style={{ display: "flex", alignItems: "center", gap: 7 }}>
             {i > 0 && <Ico name="chevron" size={12}/>}
             <span style={{ color: i === crumb.length - 1 ? "var(--text-hi)" : undefined }}>{c}</span>
           </span>
@@ -71,8 +71,8 @@ function LimitModal() {
           Tu grimorio ya contiene 2 aventureros — el límite del plan gratuito. Archiva uno para abrir espacio, o desbloquea fichas ilimitadas con LVL ONE Pro.
         </p>
         <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
-          <button className="lo-btn lo-btn-ghost" onClick={() => dispatch({ type: "LIMIT_CLOSE" })}>Entendido</button>
-          <button className="lo-btn lo-btn-primary" onClick={() => dispatch({ type: "LIMIT_CLOSE" })}>Ver Pro <Ico name="arrow" size={13}/></button>
+          <button type="button" className="lo-btn lo-btn-ghost" onClick={() => dispatch({ type: "LIMIT_CLOSE" })}>Entendido</button>
+          <button type="button" className="lo-btn lo-btn-primary" onClick={() => dispatch({ type: "LIMIT_CLOSE" })}>Ver Pro <Ico name="arrow" size={13}/></button>
         </div>
       </div>
     </div>

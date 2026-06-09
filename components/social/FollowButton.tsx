@@ -32,6 +32,7 @@ export function FollowButton({ targetUserId, initialFollowing = false, onToggle 
 
   return (
     <button
+      type="button"
       onClick={toggle}
       disabled={loading}
       className={following ? "lo-btn lo-btn-ghost" : "lo-btn lo-btn-primary"}

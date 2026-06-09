@@ -35,7 +35,7 @@ function rollD20(bonus = 0) { return Math.floor(Math.random() * 20) + 1 + bonus;
 
 // ── Component ─────────────────────────────────────────────────
 export default function CombatTrackerPage() {
-  const [combat, setCombat] = useState<CombatState>(newCombatState());
+  const [combat, setCombat] = useState<CombatState>(newCombatState);
   const [showAdd, setShowAdd] = useState(false);
   const [addTab, setAddTab] = useState<"manual" | "monster">("manual");
   const [manualForm, setManualForm] = useState({ name: "", initiative: "", hp: "", ac: "10", type: "custom" as CombatantType });

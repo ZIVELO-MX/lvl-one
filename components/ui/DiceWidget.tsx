@@ -29,6 +29,7 @@ export function DiceWidget() {
     <>
       {/* Floating button */}
       <button
+        type="button"
         onClick={() => setOpen(o => !o)}
         style={{
           position: "fixed", bottom: 20, right: 20, zIndex: 40,
@@ -55,12 +56,12 @@ export function DiceWidget() {
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
             <span style={{ fontSize: 12, fontWeight: 700, color: "var(--quest-gold-hi)" }}>Dado rápido</span>
-            <button onClick={() => setOpen(false)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-low)", fontSize: 16, lineHeight: 1, padding: 2 }}>×</button>
+            <button type="button" onClick={() => setOpen(false)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-low)", fontSize: 16, lineHeight: 1, padding: 2 }}>×</button>
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 5, marginBottom: 10 }}>
             {QUICK_DICE.map(d => (
-              <button key={d} onClick={() => quickRoll(d)} disabled={rolling} style={{
+              <button type="button" key={d} onClick={() => quickRoll(d)} disabled={rolling} style={{
                 padding: "7px 4px", borderRadius: 6, border: "none", cursor: "pointer",
                 background: "rgba(255,255,255,0.04)", color: "var(--text-mid)",
                 fontSize: 13, fontWeight: 700, transition: "background .1s",
@@ -73,10 +74,10 @@ export function DiceWidget() {
           {/* Modifier */}
           <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
             <span style={{ fontSize: 11, color: "var(--text-low)" }}>Mod</span>
-            <button onClick={() => setMod(m => m - 1)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-mid)", fontSize: 14 }}>−</button>
+            <button type="button" onClick={() => setMod(m => m - 1)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-mid)", fontSize: 14 }}>−</button>
             <span style={{ fontSize: 13, fontWeight: 700, color: mod >= 0 ? "#A3C28F" : "#C28F8F", minWidth: 28, textAlign: "center" }}>{mod >= 0 ? `+${mod}` : mod}</span>
-            <button onClick={() => setMod(m => m + 1)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-mid)", fontSize: 14 }}>+</button>
-            {mod !== 0 && <button onClick={() => setMod(0)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-low)", fontSize: 10, marginLeft: "auto" }}>reset</button>}
+            <button type="button" onClick={() => setMod(m => m + 1)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-mid)", fontSize: 14 }}>+</button>
+            {mod !== 0 && <button type="button" onClick={() => setMod(0)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-low)", fontSize: 10, marginLeft: "auto" }}>reset</button>}
           </div>
 
           {/* Last result */}

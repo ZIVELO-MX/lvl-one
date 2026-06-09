@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { TopBar } from "@/components/layout/AppShell";
 import { Ico } from "@/components/ui/icons";
+import Image from "next/image";
 import { useApp } from "@/lib/store";
 
 interface MemberProfile {
@@ -155,7 +156,7 @@ export default function GroupDetailPage({ params }: { params: Promise<{ id: stri
                     onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(214,168,79,0.35)")}
                     onMouseLeave={e => (e.currentTarget.style.borderColor = "var(--line)")}>
                     {m.profile?.avatar_url ? (
-                      <img src={m.profile.avatar_url} alt={username} width={38} height={38} style={{ borderRadius: 999, objectFit: "cover", flexShrink: 0 }}/>
+                      <Image src={m.profile.avatar_url} alt={username} width={38} height={38} style={{ borderRadius: 999, objectFit: "cover", flexShrink: 0 }}/>
                     ) : (
                       <div style={{ width: 38, height: 38, borderRadius: 999, background: "linear-gradient(135deg, var(--quest-gold-lo), var(--arcane-blue))", display: "grid", placeItems: "center", fontSize: 16, fontWeight: 700, color: "var(--text-hi)", flexShrink: 0 }}>
                         {initial}

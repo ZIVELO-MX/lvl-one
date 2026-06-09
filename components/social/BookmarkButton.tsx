@@ -34,6 +34,7 @@ export function BookmarkButton({ targetType, targetId, initialBookmarked = false
 
   return (
     <button
+      type="button"
       onClick={toggle}
       disabled={loading}
       title={bookmarked ? "Quitar de favoritos" : "Guardar en favoritos"}

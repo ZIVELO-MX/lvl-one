@@ -33,7 +33,7 @@ export default function CampaignSessionsPage({ params }: Props) {
   const campaign = state.campaigns.find(c => c.id === id);
   const [showNew, setShowNew] = useState(false);
   const [newTitle, setNewTitle] = useState("");
-  const [newDate, setNewDate] = useState(new Date().toISOString().slice(0, 10));
+  const [newDate, setNewDate] = useState(() => new Date().toISOString().slice(0, 10));
 
   if (!campaign) {
     return (
@@ -49,7 +49,7 @@ export default function CampaignSessionsPage({ params }: Props) {
 
   const isDm = campaign.dmId === (state.user?.email ?? "local-user");
   const nextNumber = campaign.sessions.length > 0 ? Math.max(...campaign.sessions.map(s => s.number)) + 1 : 1;
-  const sorted = [...campaign.sessions].sort((a, b) => a.number - b.number);
+  const sorted = campaign.sessions.toSorted((a, b) => a.number - b.number);
 
   const createSession = () => {
     if (!newTitle.trim()) return;

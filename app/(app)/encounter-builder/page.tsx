@@ -52,9 +52,9 @@ const TYPE_LABEL: Record<MonsterType, string> = {
   "inmortal":      "Inmortal",
 };
 
-const ALL_ENVS = [...new Set(MONSTERS.flatMap(m => m.environment))].sort();
-const ALL_TYPES = [...new Set(MONSTERS.map(m => m.type))].sort() as MonsterType[];
-const ALL_CRS   = [...new Set(MONSTERS.map(m => m.cr))].sort((a, b) => a - b);
+const ALL_ENVS = [...new Set(MONSTERS.flatMap(m => m.environment))].toSorted();
+const ALL_TYPES = [...new Set(MONSTERS.map(m => m.type))].toSorted() as MonsterType[];
+const ALL_CRS   = [...new Set(MONSTERS.map(m => m.cr))].toSorted((a, b) => a - b);
 
 interface EncounterEntry { monster: Monster; count: number; }
 

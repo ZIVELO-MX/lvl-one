@@ -57,7 +57,7 @@ export default function CampaignNotesPage({ params }: Props) {
   };
 
   const visibleNotes = isDm ? campaign.notes : campaign.notes.filter(n => !n.isDmOnly);
-  const sortedNotes = [...visibleNotes].sort((a, b) => b.updatedAt - a.updatedAt);
+  const sortedNotes = visibleNotes.toSorted((a, b) => b.updatedAt - a.updatedAt);
 
   const tabs = [
     { href: `/campaigns/${campaign.id}`, label: "Resumen", icon: "book" as const },

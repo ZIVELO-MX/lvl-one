@@ -85,6 +85,7 @@ export function CommentThread({ campaignId }: Props) {
                 </div>
                 {(state.user?.id === c.userId) && (
                   <button
+                    type="button"
                     onClick={() => deleteComment(c.id)}
                     style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-low)", padding: 4 }}
                   >

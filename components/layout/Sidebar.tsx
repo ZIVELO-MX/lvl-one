@@ -118,7 +118,7 @@ export function Sidebar() {
               >
                 <Ico name="discord" size={12}/> Discord
               </a>
-              <button onClick={() => setConfirmLogout(true)} style={{ fontSize: 11, color: "var(--text-low)", cursor: "pointer", padding: 0, background: "none", border: "none" }}>
+              <button type="button" onClick={() => setConfirmLogout(true)} style={{ fontSize: 11, color: "var(--text-low)", cursor: "pointer", padding: 0, background: "none", border: "none" }}>
                 Cerrar sesión
               </button>
             </div>
@@ -148,6 +148,7 @@ export function Sidebar() {
             </div>
             <div style={{ display: "flex", gap: 8 }}>
               <button
+                type="button"
                 onClick={() => setConfirmLogout(false)}
                 className="lo-btn lo-btn-ghost"
                 style={{ flex: 1, justifyContent: "center" }}
@@ -155,6 +156,7 @@ export function Sidebar() {
                 Cancelar
               </button>
               <button
+                type="button"
                 onClick={handleLogout}
                 className="lo-btn"
                 style={{ flex: 1, justifyContent: "center", background: "rgba(180,58,46,0.2)", color: "#E8847A", border: "1px solid rgba(180,58,46,0.35)" }}

@@ -28,7 +28,7 @@ export function WizardShell({ id, step, title, sub, children, preview, canProcee
             <span style={{ fontSize: 11, color: "var(--text-low)", display: "inline-flex", alignItems: "center", gap: 6 }}>
               <span style={{ width: 6, height: 6, borderRadius: 999, background: "var(--moss-green)" }}/> Guardado automático
             </span>
-            <button className="lo-btn lo-btn-ghost" style={{ padding: "6px 12px", fontSize: 12 }} onClick={() => router.push("/characters")}>Salir</button>
+            <button type="button" className="lo-btn lo-btn-ghost" style={{ padding: "6px 12px", fontSize: 12 }} onClick={() => router.push("/characters")}>Salir</button>
           </div>
         </div>
 
@@ -39,7 +39,7 @@ export function WizardShell({ id, step, title, sub, children, preview, canProcee
             const done = n < step; const cur = n === step;
             return (
               <div key={l} style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <button onClick={() => done && router.push(`/characters/${id}/edit/${n}`)}
+                <button type="button" onClick={() => done && router.push(`/characters/${id}/edit/${n}`)}
                   style={{ display: "flex", alignItems: "center", gap: 6, background: "none", border: "none", cursor: done ? "pointer" : "default", padding: 0 }}>
                   <span style={{ width: 22, height: 22, borderRadius: 999, fontSize: 10, fontWeight: 600, display: "grid", placeItems: "center",
                     background: done ? "var(--quest-gold)" : cur ? "rgba(214,168,79,0.2)" : "rgba(244,231,197,0.06)",
@@ -69,9 +69,9 @@ export function WizardShell({ id, step, title, sub, children, preview, canProcee
           display: "flex", justifyContent: "space-between", alignItems: "center",
           padding: "14px 18px", background: "rgba(15,13,11,0.92)", backdropFilter: "blur(10px)",
           border: "1px solid var(--line-strong)", borderRadius: 12 }}>
-          <button className="lo-btn lo-btn-ghost" onClick={back}><Ico name="arrowLeft" size={14}/> Atrás</button>
+          <button type="button" className="lo-btn lo-btn-ghost" onClick={back}><Ico name="arrowLeft" size={14}/> Atrás</button>
           <span style={{ fontSize: 11, color: "var(--text-low)" }}>Puedes volver sin perder lo elegido.</span>
-          <button className="lo-btn lo-btn-primary" onClick={next} disabled={!canProceed} style={{ opacity: canProceed ? 1 : 0.4 }}>
+          <button type="button" className="lo-btn lo-btn-primary" onClick={next} disabled={!canProceed} style={{ opacity: canProceed ? 1 : 0.4 }}>
             {step < 8 ? <>Continuar a {LABELS[step]} <Ico name="arrow" size={14}/></> : <>Guardar personaje <Ico name="check" size={14}/></>}
           </button>
         </div>

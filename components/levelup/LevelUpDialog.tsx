@@ -38,7 +38,7 @@ export function LevelUpDialog({ character, onClose, onConfirm }: Props) {
         <div className="levelup-card" style={{ padding: 28, maxWidth: 400, width: "90%" }} onClick={e => e.stopPropagation()}>
           <h3 style={{ fontSize: 20, marginBottom: 8 }}>Nivel máximo alcanzado</h3>
           <p style={{ fontSize: 13, color: "var(--text-mid)" }}>Este personaje ya está en nivel {maxLevel}, el máximo disponible en LVL ONE.</p>
-          <button className="lo-btn lo-btn-primary" style={{ marginTop: 16, width: "100%" }} onClick={onClose}>Entendido</button>
+          <button type="button" className="lo-btn lo-btn-primary" style={{ marginTop: 16, width: "100%" }} onClick={onClose}>Entendido</button>
         </div>
       </div>
     );
@@ -194,7 +194,7 @@ export function LevelUpDialog({ character, onClose, onConfirm }: Props) {
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               {availableSubclasses.map(sub => (
-                <button key={sub.id} onClick={() => setSelectedSubclass(sub.id)} style={{
+                <button type="button" key={sub.id} onClick={() => setSelectedSubclass(sub.id)} style={{
                   padding: "10px 12px", borderRadius: 8, textAlign: "left",
                   border: selectedSubclass === sub.id ? "1px solid var(--dragon-red)" : "1px solid var(--line-strong)",
                   background: selectedSubclass === sub.id ? "rgba(139,26,16,0.12)" : "transparent",
@@ -273,7 +273,7 @@ export function LevelUpDialog({ character, onClose, onConfirm }: Props) {
             </p>
 
             <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
-              <button onClick={() => { setAsiMode("plus2"); setAsiPlus1a(null); setAsiPlus1b(null); }} style={{
+              <button type="button" onClick={() => { setAsiMode("plus2"); setAsiPlus1a(null); setAsiPlus1b(null); }} style={{
                 flex: 1, padding: "10px 12px", borderRadius: 8,
                 border: asiMode === "plus2" ? "1px solid var(--arcane-blue)" : "1px solid var(--line-strong)",
                 background: asiMode === "plus2" ? "rgba(92,122,184,0.12)" : "transparent",
@@ -282,7 +282,7 @@ export function LevelUpDialog({ character, onClose, onConfirm }: Props) {
                 <div style={{ fontWeight: 600, marginBottom: 2 }}>+2 a una</div>
                 <div style={{ fontSize: 11, color: "var(--text-low)" }}>Subir una característica +2</div>
               </button>
-              <button onClick={() => { setAsiMode("plus1plus1"); setAsiPlus2(null); }} style={{
+              <button type="button" onClick={() => { setAsiMode("plus1plus1"); setAsiPlus2(null); }} style={{
                 flex: 1, padding: "10px 12px", borderRadius: 8,
                 border: asiMode === "plus1plus1" ? "1px solid var(--arcane-blue)" : "1px solid var(--line-strong)",
                 background: asiMode === "plus1plus1" ? "rgba(92,122,184,0.12)" : "transparent",
@@ -302,7 +302,7 @@ export function LevelUpDialog({ character, onClose, onConfirm }: Props) {
                     const wouldBe = currentTotal + 2;
                     const disabled = wouldBe > 20;
                     return (
-                      <button key={k} onClick={() => setAsiPlus2(k)} disabled={disabled} style={{
+                      <button type="button" key={k} onClick={() => setAsiPlus2(k)} disabled={disabled} style={{
                         padding: "6px 12px", borderRadius: 6,
                         border: asiPlus2 === k ? "1px solid var(--arcane-blue)" : "1px solid var(--line-strong)",
                         background: asiPlus2 === k ? "rgba(92,122,184,0.15)" : disabled ? "rgba(0,0,0,0.2)" : "transparent",
@@ -325,7 +325,7 @@ export function LevelUpDialog({ character, onClose, onConfirm }: Props) {
                     const currentTotal = (character.stats?.[k] ?? 10) + (character.asiBonuses?.[k] ?? 0);
                     const disabled = currentTotal >= 20;
                     return (
-                      <button key={k} onClick={() => {
+                      <button type="button" key={k} onClick={() => {
                         if (asiPlus1a === k) { setAsiPlus1a(null); return; }
                         if (asiPlus1b === k) { setAsiPlus1b(null); return; }
                         if (!asiPlus1a) setAsiPlus1a(k);
@@ -354,8 +354,8 @@ export function LevelUpDialog({ character, onClose, onConfirm }: Props) {
 
         {/* Actions */}
         <div style={{ display: "flex", gap: 10, justifyContent: "flex-end" }}>
-          <button className="lo-btn lo-btn-ghost" onClick={onClose}>Cancelar</button>
-          <button className="lo-btn lo-btn-primary" onClick={handleConfirm} disabled={!canConfirm} style={{ opacity: canConfirm ? 1 : 0.4 }}>
+          <button type="button" className="lo-btn lo-btn-ghost" onClick={onClose}>Cancelar</button>
+          <button type="button" className="lo-btn lo-btn-primary" onClick={handleConfirm} disabled={!canConfirm} style={{ opacity: canConfirm ? 1 : 0.4 }}>
             Confirmar: Nivel {nextLevel} <Ico name="check" size={12}/>
           </button>
         </div>

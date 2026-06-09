@@ -24,13 +24,12 @@ export function Step6Equipment({ draft, id }: { draft: CharacterDraft; id: strin
   const cls = CLASSES.find(c => c.id === draft.classId);
   const eq = draft.classId ? startingEquipmentForClass(draft.classId) : undefined;
 
-  const canUse = (itemId: string, choice: EquipmentChoice): boolean => {
-    if (!choice.requires || !choice.requires[itemId]) return true;
-    return choice.requires[itemId].includes(draft.subclassId ?? "");
-  };
-
-  const { mandatory, choiceDefaults } = useMemo(() => {
-    if (!eq) return { mandatory: [], choiceDefaults: {} as Record<number, string> };
+  const { mandatory, choiceDefaults, canUse } = useMemo(() => {
+    const canUse = (itemId: string, choice: EquipmentChoice): boolean => {
+      if (!choice.requires || !choice.requires[itemId]) return true;
+      return choice.requires[itemId].includes(draft.subclassId ?? "");
+    };
+    if (!eq) return { mandatory: [], choiceDefaults: {} as Record<number, string>, canUse };
     const inChoices = new Set(eq.choices.flatMap(c => c.from));
     const mandatory = eq.beginnerLoadout.filter(item => !inChoices.has(item));
     const choiceDefaults: Record<number, string> = {};
@@ -40,7 +39,7 @@ export function Step6Equipment({ draft, id }: { draft: CharacterDraft; id: strin
       choiceDefaults[ci] = found ?? choice.from.find(item => canUse(item, choice)) ?? choice.from[0];
       if (found) taken.add(found);
     });
-    return { mandatory, choiceDefaults };
+    return { mandatory, choiceDefaults, canUse };
   }, [eq, draft.subclassId]);
 
   const [selections, setSelections] = useState<Record<number, string>>(() => choiceDefaults);
@@ -82,7 +81,7 @@ export function Step6Equipment({ draft, id }: { draft: CharacterDraft; id: strin
                 const active = selections[ci] === optId;
                 const usable = canUse(optId, choice);
                 return (
-                  <button key={optId} onClick={() => {
+                  <button type="button" key={optId} onClick={() => {
                     if (usable) setSelections(prev => ({ ...prev, [ci]: optId }));
                   }} style={{
                     padding: "8px 14px", borderRadius: 8, cursor: usable ? "pointer" : "not-allowed", fontSize: 12,

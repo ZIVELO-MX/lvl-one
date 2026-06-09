@@ -72,7 +72,7 @@ export function Step3Class({ draft, id }: { draft: CharacterDraft; id: string })
       {/* filter */}
       <div style={{ display: "flex", gap: 6, marginBottom: 16 }}>
         {(["all","magic","nomagic"] as const).map(f => (
-          <button key={f} onClick={() => setFilter(f)} style={{
+          <button type="button" key={f} onClick={() => setFilter(f)} style={{
             padding: "6px 14px", borderRadius: 20, fontSize: 12, cursor: "pointer",
             background: filter === f ? "rgba(214,168,79,0.15)" : "transparent",
             border: filter === f ? "1px solid var(--quest-gold)" : "1px solid var(--line-strong)",
@@ -113,7 +113,7 @@ export function Step3Class({ draft, id }: { draft: CharacterDraft; id: string })
         {filtered.map(c => {
           const picked = draft.classId === c.id;
           return (
-              <button key={c.id} onClick={() => up({ classId: c.id, subclassId: null })} style={{
+              <button type="button" key={c.id} onClick={() => up({ classId: c.id, subclassId: null })} style={{
                 padding: "14px 12px", borderRadius: 10, textAlign: "left", cursor: "pointer",
                 border: picked ? "1px solid var(--quest-gold)" : raceSyn?.bestFor.includes(c.name) ? "1px solid var(--arcane-blue)" : "1px solid var(--line-strong)",
                 background: picked ? "rgba(214,168,79,0.10)" : raceSyn?.bestFor.includes(c.name) ? "rgba(92,122,184,0.06)" : "rgba(244,231,197,0.03)" }}>
@@ -228,7 +228,7 @@ export function Step3Class({ draft, id }: { draft: CharacterDraft; id: string })
                 {level1Subclasses.map(sc => {
                   const picked = draft.subclassId === sc.id;
                   return (
-                    <button key={sc.id} onClick={() => up({ subclassId: sc.id })}
+                    <button type="button" key={sc.id} onClick={() => up({ subclassId: sc.id })}
                       style={{
                         padding: "12px 16px", borderRadius: 10, cursor: "pointer", fontSize: 13, textAlign: "left",
                         border: picked ? "1px solid var(--quest-gold)" : "1px solid var(--line-strong)",
