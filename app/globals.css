@@ -330,36 +330,44 @@ button { font-family: var(--font-body); cursor: pointer; border: 0; background: 
 }
 
 .lo-animate-float { animation: lo-float 6s var(--ease-float) infinite; }
-.lo-animate-glow  { animation: lo-glow-pulse 3s ease-in-out infinite; }
 
-.lo-reveal {
-  opacity: 0;
-  transform: translateY(12px) scale(0.99);
-  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+/* CTA glow — solo on hover, no pulse infinito (Emil: los usuarios lo ven en cada visita) */
+.lo-btn-cta {
+  transition: transform 160ms var(--ease-out), box-shadow 200ms var(--ease-out);
 }
-.lo-reveal.is-visible {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-.lo-reveal-left {
-  opacity: 0;
-  transform: translateX(-10px);
-  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
-}
-.lo-reveal-left.is-visible {
-  opacity: 1;
-  transform: translateX(0);
+@media (hover: hover) and (pointer: fine) {
+  .lo-btn-cta:hover {
+    box-shadow: 0 1px 0 rgba(255,255,255,0.45) inset, 0 12px 32px -6px rgba(214,168,79,0.8);
+  }
 }
 
+/* Reveals — default visible (sin JS, sin flash of invisible content) */
+.lo-reveal,
+.lo-reveal-left,
 .lo-reveal-right {
-  opacity: 0;
-  transform: translateX(10px);
-  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
-}
-.lo-reveal-right.is-visible {
   opacity: 1;
-  transform: translateX(0);
+  transform: none;
+}
+
+/* Progressive enhancement: scroll-driven reveals en browsers modernos */
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    .lo-reveal {
+      animation: lo-reveal auto var(--ease-out) both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 40%;
+    }
+    .lo-reveal-left {
+      animation: lo-reveal-left auto var(--ease-out) both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 40%;
+    }
+    .lo-reveal-right {
+      animation: lo-reveal-right auto var(--ease-out) both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 40%;
+    }
+  }
 }
 
 /* Stagger delays — 30ms increments, max 240ms */
@@ -432,31 +440,6 @@ button { font-family: var(--font-body); cursor: pointer; border: 0; background: 
   animation: loShimmer 1.5s infinite;
 }
 
-/* ── Scroll-driven animation overrides ───────────────── */
-@media (prefers-reduced-motion: no-preference) {
-  @supports ((animation-timeline: view()) and (animation-range: entry)) {
-    .lo-reveal,
-    .lo-reveal-left,
-    .lo-reveal-right {
-      transition: none;
-    }
-    .lo-reveal {
-      animation: lo-reveal auto var(--ease-out) both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 40%;
-    }
-    .lo-reveal-left {
-      animation: lo-reveal-left auto var(--ease-out) both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 40%;
-    }
-    .lo-reveal-right {
-      animation: lo-reveal-right auto var(--ease-out) both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 40%;
-    }
-  }
-}
 
 /* ── Landing header — scroll-driven nav fill ──────────── */
 .lo-landing-header {

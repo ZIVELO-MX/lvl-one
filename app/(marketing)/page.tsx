@@ -1,27 +1,7 @@
-"use client";
 import Link from "next/link";
-import { useEffect } from "react";
 import { Ico, LvlLogo } from "@/components/ui/icons";
 
 export default function LandingPage() {
-  useEffect(() => {
-    // Always start at the top of the page
-    window.scrollTo(0, 0);
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-          }
-        });
-      },
-      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
-    );
-    document.querySelectorAll(".lo-reveal, .lo-reveal-left, .lo-reveal-right").forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <main className="lo lo-darkframe lo-landing-page" style={{ position: "relative", minHeight: "100vh", overflowX: "hidden" }}>
       <div className="lo-grain" style={{ position: "absolute", inset: 0, pointerEvents: "none" }}></div>
@@ -299,7 +279,7 @@ export default function LandingPage() {
           No necesitas saber nada de D&D. No necesitas tarjeta. Solo 15 minutos y querer jugar.
         </p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-          <Link href="/register" className="lo-btn lo-btn-primary lo-animate-glow" style={{ padding: "14px 28px", fontSize: 16 }}>
+          <Link href="/register" className="lo-btn lo-btn-primary lo-btn-cta" style={{ padding: "14px 28px", fontSize: 16 }}>
             Crear mi primer personaje <Ico name="arrow" size={16}/>
           </Link>
           <a href="https://discord.gg/nwQ8pPVc6f" target="_blank" rel="noopener noreferrer" className="lo-btn lo-btn-ghost" style={{ padding: "14px 24px", fontSize: 15 }}>
@@ -359,7 +339,7 @@ export default function LandingPage() {
                   </li>
                 ))}
               </ul>
-              <button className="lo-btn lo-btn-primary" style={{ width: "100%", justifyContent: "center" }} disabled>Próximamente</button>
+              <button type="button" className="lo-btn lo-btn-primary" style={{ width: "100%", justifyContent: "center" }} disabled>Próximamente</button>
             </div>
           </div>
         </div>

@@ -41,7 +41,7 @@ export function Step5Background({ draft, id }: { draft: CharacterDraft; id: stri
             {BACKGROUNDS.map(bg => {
               const picked = draft.backgroundId === bg.id;
               return (
-                <button key={bg.id} onClick={() => up({ backgroundId: bg.id })} style={{
+                <button type="button" key={bg.id} onClick={() => up({ backgroundId: bg.id })} style={{
                   padding: "14px 16px", borderRadius: 10, textAlign: "left", cursor: "pointer",
                   border: picked ? "1px solid var(--quest-gold)" : "1px solid var(--line-strong)",
                   background: picked ? "rgba(214,168,79,0.10)" : "rgba(244,231,197,0.03)" }}>
@@ -81,7 +81,7 @@ export function Step5Background({ draft, id }: { draft: CharacterDraft; id: stri
               const isPicked = draft.selectedSkills.includes(skill);
               const disabled = isFromBg;
               return (
-                <button key={skill} onClick={() => !disabled && toggleSkill(skill)} style={{
+                <button type="button" key={skill} onClick={() => !disabled && toggleSkill(skill)} style={{
                   padding: "9px 14px", borderRadius: 8, textAlign: "left", cursor: disabled ? "default" : "pointer",
                   border: isPicked || isFromBg ? "1px solid var(--quest-gold)" : "1px solid var(--line-strong)",
                   background: isPicked || isFromBg ? "rgba(214,168,79,0.08)" : "transparent",

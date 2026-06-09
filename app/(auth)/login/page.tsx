@@ -17,7 +17,6 @@ export default function LoginPage() {
   const [pwd, setPwd] = useState("");
   const [err, setErr] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [resetSent, setResetSent] = useState(false);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -30,8 +29,8 @@ export default function LoginPage() {
       const supabase = createClient();
       const { data, error } = await supabase.auth.signInWithPassword({ email, password: pwd });
       if (error) {
-        if (error.message?.toLowerCase().includes("email not confirmed")) {
-          setErr("Cuenta no confirmada. Revisa tu correo y haz clic en el enlace de activación.");
+        if (error.message?.toLowerCase().includes("invalid login credentials")) {
+          setErr("Credenciales incorrectas. Verifica el email y la contraseña de acceso que recibiste.");
         } else {
           setErr(error.message);
         }
@@ -40,6 +39,13 @@ export default function LoginPage() {
       }
       const user = data.user;
       if (!user) { setErr("Error al iniciar sesión."); setLoading(false); return; }
+
+      // Primera vez: usuario con acceso provisional — redirigir a setup
+      if (user.user_metadata?.needs_setup === true) {
+        router.push("/setup");
+        return;
+      }
+
       const username = user.user_metadata?.username ?? email.split("@")[0];
       dispatch({ type: "LOGIN", user: { id: user.id, username, email } });
       setLoading(false);
@@ -50,74 +56,86 @@ export default function LoginPage() {
     }
   }
 
-  async function handleForgotPassword() {
-    if (!EMAIL_RE.test(email)) { setErr("Introduce un email válido primero."); return; }
-    setLoading(true);
-    try {
-      const client = createClient();
-      const { error } = await client.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/login`,
-      });
-      if (error) { setErr(error.message); setLoading(false); return; }
-      setResetSent(true);
-      setLoading(false);
-    } catch {
-      setErr("Error de conexión.");
-      setLoading(false);
-    }
-  }
-
   return (
     <div className="lo lo-darkframe" style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: 32, position: "relative" }}>
       <div className="lo-grain" style={{ position: "absolute", inset: 0, pointerEvents: "none" }}/>
       <Link href="/" style={{ position: "absolute", top: 24, left: 32, display: "flex", alignItems: "center", gap: 8, color: "var(--text-mid)", fontSize: 13, textDecoration: "none" }}>
         <Ico name="arrowLeft" size={14}/> Volver
       </Link>
-      {resetSent ? (
-        <div className="lo-card-elev" style={{ width: 420, padding: 36, textAlign: "center" }}>
-          <h2 style={{ fontSize: 22, marginBottom: 10 }}>Revisa tu correo</h2>
-          <p style={{ color: "var(--text-mid)", fontSize: 14, lineHeight: 1.6, marginBottom: 4 }}>
-            Te enviamos un enlace para restablecer tu contraseña a <strong style={{ color: "var(--text-hi)" }}>{email}</strong>.
-          </p>
-          <p style={{ color: "var(--text-low)", fontSize: 13, lineHeight: 1.6, marginBottom: 24 }}>
-            Haz clic en el enlace para crear una nueva contraseña.
-          </p>
-          <button onClick={() => setResetSent(false)} className="lo-btn lo-btn-ghost" style={{ padding: "10px 20px", justifyContent: "center" }}>
-            Volver a iniciar sesión
-          </button>
-        </div>
-      ) : (
+
       <form onSubmit={submit} className="lo-card-elev" style={{ width: 420, padding: 36, position: "relative" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
-          <LvlLogo size={22}/> <span style={{ fontFamily: "var(--font-display)", letterSpacing: "0.18em", fontSize: 13 }}>LVL ONE</span>
+          <LvlLogo size={22}/>
+          <span style={{ fontFamily: "var(--font-display)", letterSpacing: "0.18em", fontSize: 13 }}>LVL ONE</span>
         </div>
-        <h2 style={{ fontSize: 24, marginBottom: 6 }}>Iniciar sesión</h2>
-        <p style={{ color: "var(--text-mid)", fontSize: 13, marginBottom: 24 }}>Vuelve a tu cuenta y continúa tu progreso.</p>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 16 }}>
+        <div className="lo-chip lo-chip-gold" style={{ marginBottom: 16, fontSize: 11, display: "inline-flex", alignItems: "center", gap: 6 }}>
+          <Ico name="shield" size={11}/> Beta cerrada · Solo por invitación
+        </div>
+
+        <h2 style={{ fontSize: 24, marginBottom: 6 }}>Acceso de invitado</h2>
+        <p style={{ color: "var(--text-mid)", fontSize: 13, marginBottom: 24, lineHeight: 1.5 }}>
+          Usa el email y la contraseña provisional que recibiste para entrar.
+        </p>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 20 }}>
           <div>
             <label htmlFor="login-email" className="lo-label" style={{ marginBottom: 6 }}>Email</label>
-            <input id="login-email" className="lo-input" type="email" autoComplete="email" placeholder="tu@email.com" value={email} onChange={e => { setEmail(e.target.value); setErr(null); }} maxLength={MAX_EMAIL} autoFocus/>
+            <input
+              id="login-email"
+              className="lo-input"
+              type="email"
+              autoComplete="email"
+              placeholder="tu@email.com"
+              value={email}
+              onChange={e => { setEmail(e.target.value); setErr(null); }}
+              maxLength={MAX_EMAIL}
+              autoFocus
+            />
           </div>
           <div>
-            <label htmlFor="login-pwd" className="lo-label" style={{ marginBottom: 6 }}>Contraseña</label>
-            <input id="login-pwd" className="lo-input" type="password" autoComplete="current-password" placeholder="••••••••" value={pwd} onChange={e => { setPwd(e.target.value); setErr(null); }} maxLength={MAX_PWD}/>
+            <label htmlFor="login-pwd" className="lo-label" style={{ marginBottom: 6 }}>Contraseña provisional</label>
+            <input
+              id="login-pwd"
+              className="lo-input"
+              type="password"
+              autoComplete="current-password"
+              placeholder="••••••••"
+              value={pwd}
+              onChange={e => { setPwd(e.target.value); setErr(null); }}
+              maxLength={MAX_PWD}
+            />
           </div>
         </div>
-        <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 10 }}>
-          <button type="button" onClick={handleForgotPassword} disabled={loading} style={{ background: "none", border: "none", padding: 0, color: "var(--quest-gold-hi)", fontSize: 12, cursor: "pointer", textDecoration: "underline" }}>
-            ¿Olvidaste tu contraseña?
-          </button>
-        </div>
-        {err && <p style={{ color: "#E8847A", fontSize: 12, marginBottom: 10 }}>{err}</p>}
-        <button type="submit" disabled={loading} className="lo-btn lo-btn-primary" style={{ width: "100%", padding: 12, justifyContent: "center", marginBottom: 12 }}>
-          {loading ? "Espera…" : <> Entrar <Ico name="arrow" size={14}/></>}
+
+        {err && (
+          <p style={{ color: "#E8847A", fontSize: 12, marginBottom: 14, lineHeight: 1.4 }}>{err}</p>
+        )}
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="lo-btn lo-btn-primary"
+          style={{ width: "100%", padding: 12, justifyContent: "center", marginBottom: 16 }}
+        >
+          {loading ? "Verificando…" : <> Entrar <Ico name="arrow" size={14}/></>}
         </button>
-        <p style={{ fontSize: 12, color: "var(--text-low)", textAlign: "center" }}>
-          ¿Nuevo aquí? <Link href="/register" style={{ color: "var(--quest-gold-hi)" }}>Crear cuenta gratis</Link>
-        </p>
+
+        <div style={{ borderTop: "1px solid var(--line)", paddingTop: 16, textAlign: "center" }}>
+          <p style={{ fontSize: 12, color: "var(--text-low)", lineHeight: 1.5 }}>
+            ¿No tienes acceso todavía?{" "}
+            <a
+              href="https://discord.gg/nwQ8pPVc6f"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "var(--quest-gold-hi)" }}
+            >
+              Únete al Discord
+            </a>{" "}
+            para solicitar una invitación.
+          </p>
+        </div>
       </form>
-      )}
     </div>
   );
 }

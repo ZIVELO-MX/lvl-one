@@ -269,7 +269,7 @@ export function tickConditionDurations(combatant: Combatant): Combatant {
 }
 
 export function sortCombatantsByInitiative(combatants: Combatant[]): Combatant[] {
-  return [...combatants].sort((a, b) => {
+  return combatants.toSorted((a, b) => {
     if (b.initiative !== a.initiative) return b.initiative - a.initiative;
     return a.name.localeCompare(b.name, "es");
   });

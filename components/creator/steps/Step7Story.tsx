@@ -99,7 +99,7 @@ export function Step7Story({ draft, id }: { draft: CharacterDraft; id: string })
                   const inGroupCount = selectedCantrips.length;
                   const disabled = !picked && inGroupCount >= limits.cantrips;
                   return (
-                    <button key={spell.id} onClick={() => !disabled && toggleSpell(spell.id, "cantrip")}
+                    <button type="button" key={spell.id} onClick={() => !disabled && toggleSpell(spell.id, "cantrip")}
                       style={{
                         padding: "12px 10px", borderRadius: 10, textAlign: "left",
                         cursor: disabled ? "default" : "pointer",
@@ -149,7 +149,7 @@ export function Step7Story({ draft, id }: { draft: CharacterDraft; id: string })
                   const inGroupCount = selectedL1.length;
                   const disabled = !picked && inGroupCount >= limits.spells;
                   return (
-                    <button key={spell.id} onClick={() => !disabled && toggleSpell(spell.id, "spell")}
+                    <button type="button" key={spell.id} onClick={() => !disabled && toggleSpell(spell.id, "spell")}
                       style={{
                         padding: "12px 10px", borderRadius: 10, textAlign: "left",
                         cursor: disabled ? "default" : "pointer",
@@ -209,7 +209,7 @@ export function Step7Story({ draft, id }: { draft: CharacterDraft; id: string })
             {ALIGNMENTS.map(([code, label]) => {
               const picked = draft.alignment === code;
               return (
-                <button key={code} onClick={() => up({ alignment: code })} style={{
+                <button type="button" key={code} onClick={() => up({ alignment: code })} style={{
                   padding: "10px 6px", borderRadius: 8, fontSize: 11, cursor: "pointer", textAlign: "center",
                   border: picked ? "1px solid var(--quest-gold)" : "1px solid var(--line-strong)",
                   background: picked ? "rgba(214,168,79,0.10)" : "transparent",

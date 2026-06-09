@@ -36,7 +36,7 @@ export default function CampaignCombatPage({ params }: Props) {
   const { state } = useApp();
   const campaign = state.campaigns.find(c => c.id === id);
 
-  const [combat, setCombat] = useState<CombatState>(newCombatState());
+  const [combat, setCombat] = useState<CombatState>(newCombatState);
   const [showAdd, setShowAdd] = useState(false);
   const [addTab, setAddTab] = useState<"manual" | "monster" | "import">("import");
   const [manualForm, setManualForm] = useState({ name: "", initiative: "", hp: "", ac: "10", type: "player" as CombatantType });

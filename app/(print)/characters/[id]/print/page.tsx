@@ -153,10 +153,10 @@ export default function CharacterPrintPage({ params }: Props) {
 
       {/* Controls */}
       <div className="np" style={{ position: "fixed", top: 16, right: 16, display: "flex", gap: 8, zIndex: 200, background: "#1A120A", padding: "10px 14px", borderRadius: 10, border: "1px solid rgba(214,168,79,0.3)" }}>
-        <button onClick={() => window.print()} style={{ padding: "8px 18px", borderRadius: 6, background: "#D6A84F", color: "#0F0D0B", fontSize: 13, fontWeight: 700, cursor: "pointer", border: "none" }}>
+        <button type="button" onClick={() => window.print()} style={{ padding: "8px 18px", borderRadius: 6, background: "#D6A84F", color: "#0F0D0B", fontSize: 13, fontWeight: 700, cursor: "pointer", border: "none" }}>
           Imprimir / PDF
         </button>
-        <button onClick={() => router.back()} style={{ padding: "8px 14px", borderRadius: 6, background: "transparent", color: "#D6A84F", fontSize: 13, cursor: "pointer", border: "1px solid rgba(214,168,79,0.5)" }}>
+        <button type="button" onClick={() => router.back()} style={{ padding: "8px 14px", borderRadius: 6, background: "transparent", color: "#D6A84F", fontSize: 13, cursor: "pointer", border: "1px solid rgba(214,168,79,0.5)" }}>
           ← Volver
         </button>
       </div>

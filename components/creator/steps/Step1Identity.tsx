@@ -76,7 +76,7 @@ export function Step1Identity({ draft, id }: { draft: CharacterDraft; id: string
               <div>
                 <div style={{ display: "flex", gap: 6 }}>
                   {[1,2,3].map(n => (
-                    <button key={n} onClick={() => up({ level: n })} style={{
+                    <button type="button" key={n} onClick={() => up({ level: n })} style={{
                       padding: "8px 14px", borderRadius: 8,
                       border: draft.level === n ? "1px solid var(--quest-gold)" : "1px solid var(--line-strong)",
                       background: draft.level === n ? "rgba(214,168,79,0.10)" : "transparent",
@@ -86,7 +86,7 @@ export function Step1Identity({ draft, id }: { draft: CharacterDraft; id: string
                     </button>
                   ))}
                   {[4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].map(n => (
-                    <button key={n} disabled style={{
+                    <button type="button" key={n} disabled style={{
                       padding: "8px 10px", borderRadius: 8, border: "1px solid var(--line)",
                       background: "transparent", color: "var(--text-low)",
                       fontFamily: "var(--font-display)", fontSize: 12, cursor: "not-allowed", opacity: 0.4
@@ -108,7 +108,7 @@ export function Step1Identity({ draft, id }: { draft: CharacterDraft; id: string
           <p style={{ fontSize: 12, color: "var(--text-low)", marginBottom: 12 }}>Elige un concepto. Te rellenaremos automáticamente raza, clase y trasfondo. Puedes cambiarlos después.</p>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
             {CONCEPTS.map(c => (
-              <button key={c.id} onClick={() => applyConcept(c.id)} style={{
+              <button type="button" key={c.id} onClick={() => applyConcept(c.id)} style={{
                 padding: 12, borderRadius: 10, textAlign: "left",
                 border: draft.conceptId === c.id ? "1px solid var(--quest-gold)" : "1px solid var(--line-strong)",
                 background: draft.conceptId === c.id ? "rgba(214,168,79,0.10)" : "rgba(244,231,197,0.03)",

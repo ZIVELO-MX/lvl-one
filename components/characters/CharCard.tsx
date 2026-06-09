@@ -102,13 +102,13 @@ export function CharCard({ character, compact }: { character: CharacterDraft; co
         </div>
       </div>
       <div style={{ display: "flex", gap: 8 }}>
-        <button className="lo-btn lo-btn-primary" onClick={open} style={{ flex: 1, justifyContent: "center", padding: "8px 0", fontSize: 13 }}>
+        <button type="button" className="lo-btn lo-btn-primary" onClick={open} style={{ flex: 1, justifyContent: "center", padding: "8px 0", fontSize: 13 }}>
           {isDraft ? "Continuar" : "Ver ficha"} <Ico name="arrow" size={13}/>
         </button>
-        <button className="lo-btn lo-btn-ghost" onClick={dup} style={{ padding: "8px 10px" }} title="Duplicar" aria-label="Duplicar personaje">
+        <button type="button" className="lo-btn lo-btn-ghost" onClick={dup} style={{ padding: "8px 10px" }} title="Duplicar" aria-label="Duplicar personaje">
           <Ico name="plus" size={13}/>
         </button>
-        <button className="lo-btn lo-btn-ghost" onClick={del} style={{ padding: "8px 10px", color: "var(--text-low)" }} title="Eliminar" aria-label="Eliminar personaje">
+        <button type="button" className="lo-btn lo-btn-ghost" onClick={del} style={{ padding: "8px 10px", color: "var(--text-low)" }} title="Eliminar" aria-label="Eliminar personaje">
           <Ico name="close" size={13}/>
         </button>
       </div>

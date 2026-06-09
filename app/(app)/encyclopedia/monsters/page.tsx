@@ -35,8 +35,8 @@ const TYPE_LABEL: Record<MonsterType, string> = {
   "demonio": "Demonio", "monstruosidad": "Monstruosidad", "limo": "Limo",
   "planta": "Planta", "gigante": "Gigante", "inmortal": "Inmortal",
 };
-const ALL_TYPES = [...new Set(MONSTERS.map(m => m.type))].sort() as MonsterType[];
-const ALL_CRS = [...new Set(MONSTERS.map(m => m.cr))].sort((a, b) => a - b);
+const ALL_TYPES = [...new Set(MONSTERS.map(m => m.type))].toSorted() as MonsterType[];
+const ALL_CRS = [...new Set(MONSTERS.map(m => m.cr))].toSorted((a, b) => a - b);
 
 export default function MonstersPage() {
   const [search, setSearch] = useState("");

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { TopBar } from "@/components/layout/AppShell";
 import { Ico } from "@/components/ui/icons";
 import { useApp } from "@/lib/store";
+import Image from "next/image";
 import { createClient } from "@/lib/supabaseClient";
 
 const MIN_PWD = 8;
@@ -103,7 +104,7 @@ export default function AccountPage() {
 
         <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 28, padding: "16px 20px", borderRadius: 12, background: "var(--ink-2)", border: "1px solid var(--line)" }}>
           {avatarUrl ? (
-            <img src={avatarUrl} alt="" style={{ width: 52, height: 52, borderRadius: 999, objectFit: "cover", flexShrink: 0 }} />
+            <Image src={avatarUrl} alt="" width={52} height={52} style={{ borderRadius: 999, objectFit: "cover", flexShrink: 0 }} />
           ) : (
             <div style={{ width: 52, height: 52, borderRadius: 999, background: "linear-gradient(135deg, var(--quest-gold-lo), var(--arcane-blue))", display: "grid", placeItems: "center", fontSize: 22, fontWeight: 700, color: "var(--text-hi)", flexShrink: 0 }}>
               {username[0]?.toUpperCase() ?? "?"}

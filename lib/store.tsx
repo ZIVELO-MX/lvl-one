@@ -556,7 +556,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       }
     });
     return () => { resolved = true; subscription.unsubscribe(); };
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // dispatch is stable (useReducer)
 
   useEffect(() => { save(state); }, [state]);
 
@@ -564,7 +565,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     if (!state.ui.toast) return;
     const t = setTimeout(() => dispatch({ type: "TOAST_CLEAR" }), 2800);
     return () => clearTimeout(t);
-  }, [state.ui.toast]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.ui.toast]); // dispatch is stable (useReducer)
 
   // Fetch all user data when session is established
   useEffect(() => {
@@ -592,7 +594,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       .then(p => { if (!cancelled) dispatch({ type: "PROGRESS_LOADED", progress: p }); })
       .catch(() => dispatch({ type: "TOAST", toast: "Error al cargar progreso." }));
     return () => { cancelled = true; };
-  }, [state.user?.id]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.user?.id]); // dispatch is stable; intentional narrow dep to avoid re-fetch on non-id updates
 
   const prevRef = useRef("");
   useEffect(() => {
@@ -681,7 +684,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     } catch { /* noop */ }
   }, [state.progress, state.user]);
 
-  const value = useMemo(() => ({ state, dispatch }), [state]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const value = useMemo(() => ({ state, dispatch }), [state]); // dispatch is stable (useReducer)
   return <AppCtx.Provider value={value}>{children}</AppCtx.Provider>;
 }
 
