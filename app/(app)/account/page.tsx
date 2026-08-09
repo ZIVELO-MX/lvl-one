@@ -7,6 +7,7 @@ import { Ico } from "@/components/ui/icons";
 import { useApp } from "@/lib/store";
 import Image from "next/image";
 import { createClient } from "@/lib/supabaseClient";
+import { checkUsername } from "@/lib/username";
 
 const MIN_PWD = 8;
 
@@ -46,9 +47,13 @@ export default function AccountPage() {
     setSaving(true);
     setMsg(null);
     try {
+      const nameErr = await checkUsername(username);
+      if (nameErr) { setMsg({ text: nameErr, ok: false }); return; }
+
       const supabase = createClient();
+      const emailChanged = email !== user?.email;
       const updates: Record<string, string> = {};
-      if (email !== user?.email) updates.email = email;
+      if (emailChanged) updates.email = email;
       if (Object.keys(updates).length > 0 || username !== user?.username) {
         const { error } = await supabase.auth.updateUser({
           ...updates,
@@ -56,15 +61,19 @@ export default function AccountPage() {
         });
         if (error) throw error;
       }
+      // username y email los propaga a profiles el trigger on_auth_user_updated.
+      // Escribirlos aquí daría por bueno un email que aún no está confirmado.
       if (user?.id) {
-        await supabase.from("profiles").update({
-          username: username.trim(),
-          email,
-          is_public: isPublic,
-        }).eq("id", user.id);
+        const { error } = await supabase.from("profiles").update({ is_public: isPublic }).eq("id", user.id);
+        if (error) throw error;
       }
       dispatch({ type: "LOGIN", user: { id: user!.id, username: username.trim(), email } });
-      setMsg({ text: "Perfil actualizado.", ok: true });
+      setMsg({
+        text: emailChanged
+          ? "Perfil actualizado. Revisa tu correo para confirmar el email nuevo."
+          : "Perfil actualizado.",
+        ok: true,
+      });
     } catch (e: unknown) {
       setMsg({ text: e instanceof Error ? e.message : "Error al guardar.", ok: false });
     } finally { setSaving(false); }

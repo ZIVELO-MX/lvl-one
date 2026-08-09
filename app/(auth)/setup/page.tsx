@@ -4,8 +4,9 @@ import { useRouter } from "next/navigation";
 import { LvlLogo, Ico } from "@/components/ui/icons";
 import { useApp } from "@/lib/store";
 import { createClient } from "@/lib/supabaseClient";
+import { checkUsername, MAX_USERNAME } from "@/lib/username";
 
-const MAX_NAME = 50;
+const MAX_NAME = MAX_USERNAME;
 const MAX_PWD = 128;
 
 export default function SetupPage() {
@@ -40,14 +41,15 @@ export default function SetupPage() {
     setErr(null);
 
     const trimmed = name.trim();
-    if (trimmed.length < 2) { setErr("El nombre debe tener al menos 2 caracteres."); return; }
-    if (trimmed.length > MAX_NAME) { setErr("Nombre demasiado largo."); return; }
     if (pwd.length < 8) { setErr("La contraseña debe tener al menos 8 caracteres."); return; }
     if (pwd.length > MAX_PWD) { setErr("Contraseña demasiado larga."); return; }
     if (pwd !== confirmPwd) { setErr("Las contraseñas no coinciden."); return; }
 
     setLoading(true);
     try {
+      const nameErr = await checkUsername(trimmed);
+      if (nameErr) { setErr(nameErr); setLoading(false); return; }
+
       const supabase = createClient();
       const { data, error } = await supabase.auth.updateUser({
         password: pwd,

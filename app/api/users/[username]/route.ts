@@ -3,17 +3,23 @@ import { createServerSupabase, requireAuth } from "@/lib/supabaseServer";
 
 export async function GET(_req: Request, { params }: { params: Promise<{ username: string }> }) {
   try {
-    await requireAuth();
+    const session = await requireAuth();
     const supabase = await createServerSupabase();
     const { username } = await params;
 
+    // Sin email: es la única columna de profiles que no puede leer otro usuario.
     const { data: profile, error: profileError } = await supabase
       .from("profiles")
-      .select("id, username, email, plan, avatar_url, created_at")
+      .select("id, username, plan, avatar_url, is_public, created_at")
       .eq("username", username)
       .single();
 
     if (!profile || profileError) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    // El interruptor "perfil público" de /account tiene que valer de algo.
+    if (!profile.is_public && profile.id !== session.user.id) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
@@ -41,7 +47,6 @@ export async function GET(_req: Request, { params }: { params: Promise<{ usernam
       .select("*", { count: "exact", head: true })
       .eq("follower_id", profile.id);
 
-    const session = await requireAuth();
     const { data: isFollowing } = await supabase
       .from("follows")
       .select("follower_id")

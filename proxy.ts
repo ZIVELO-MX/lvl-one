@@ -4,8 +4,10 @@ import { NextResponse, type NextRequest } from "next/server";
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Skip middleware for public routes
-  const publicRoutes = ["/", "/login", "/register"];
+  // Skip middleware for public routes.
+  // /forgot y /reset tienen que entrar aquí: quien recupera la contraseña
+  // llega sin sesión, y la sesión de recuperación se canjea en el cliente.
+  const publicRoutes = ["/", "/login", "/register", "/forgot", "/reset"];
   const isStatic = pathname.startsWith("/_next") || pathname.startsWith("/favicon") || pathname.includes(".");
   if (publicRoutes.includes(pathname) || isStatic) {
     return NextResponse.next();
