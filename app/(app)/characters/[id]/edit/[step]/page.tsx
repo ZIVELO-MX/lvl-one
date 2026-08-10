@@ -11,6 +11,8 @@ import { Step6Equipment } from "@/components/creator/steps/Step6Equipment";
 import { Step7Story } from "@/components/creator/steps/Step7Story";
 import { Step8Review } from "@/components/creator/steps/Step8Review";
 
+const STEPS = [Step1Identity, Step2Race, Step3Class, Step4Stats, Step5Background, Step6Equipment, Step7Story, Step8Review];
+
 interface Props {
   params: Promise<{ id: string; step: string }>;
 }
@@ -49,7 +51,6 @@ export default function EditPage({ params }: Props) {
     return null;
   }
 
-  const STEPS = [Step1Identity, Step2Race, Step3Class, Step4Stats, Step5Background, Step6Equipment, Step7Story, Step8Review];
   const StepComponent = STEPS[step - 1];
 
   return <StepComponent draft={draft} id={id}/>;

@@ -10,6 +10,15 @@ const MAX_PWD = 128;
 
 type Status = "checking" | "invalid" | "ready" | "done";
 
+function Frame({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="lo lo-darkframe" style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: 32, position: "relative" }}>
+      <div className="lo-grain" style={{ position: "absolute", inset: 0, pointerEvents: "none" }}/>
+      {children}
+    </div>
+  );
+}
+
 export default function ResetPage() {
   const router = useRouter();
   const [status, setStatus] = useState<Status>("checking");
@@ -25,6 +34,7 @@ export default function ResetPage() {
   // La primera hay que montarla a mano con setSession: @supabase/ssr fuerza
   // flowType pkce y no reconoce el fragmento del flujo implícito.
   useEffect(() => {
+    let cancelled = false;
     (async () => {
       const hash = new URLSearchParams(window.location.hash.slice(1));
       const accessToken = hash.get("access_token");
@@ -44,12 +54,15 @@ export default function ResetPage() {
           access_token: accessToken,
           refresh_token: refreshToken,
         });
+        if (cancelled) return;
         if (error) { setStatus("invalid"); return; }
       } else if (tokenHash) {
         const { error } = await supabase.auth.verifyOtp({ type: "recovery", token_hash: tokenHash });
+        if (cancelled) return;
         if (error) { setStatus("invalid"); return; }
       } else {
         const { data } = await supabase.auth.getSession();
+        if (cancelled) return;
         if (!data.session) { setStatus("invalid"); return; }
       }
 
@@ -58,6 +71,7 @@ export default function ResetPage() {
       if (accessToken || tokenHash) router.replace("/reset");
       setStatus("ready");
     })();
+    return () => { cancelled = true; };
   }, [router]);
 
   async function submit(e: React.FormEvent) {
@@ -84,19 +98,13 @@ export default function ResetPage() {
     }
   }
 
-  const frame = (children: React.ReactNode) => (
-    <div className="lo lo-darkframe" style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: 32, position: "relative" }}>
-      <div className="lo-grain" style={{ position: "absolute", inset: 0, pointerEvents: "none" }}/>
-      {children}
-    </div>
-  );
-
   if (status === "checking") {
-    return frame(<div style={{ color: "var(--text-low)", fontSize: 13 }}>Verificando enlace…</div>);
+    return <Frame><div style={{ color: "var(--text-low)", fontSize: 13 }}>Verificando enlace…</div></Frame>;
   }
 
   if (status === "invalid") {
-    return frame(
+    return (
+      <Frame>
       <div className="lo-card-elev" style={{ width: 420, padding: 36, textAlign: "center" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 24 }}>
           <LvlLogo size={22}/>
@@ -112,12 +120,14 @@ export default function ResetPage() {
         <Link href="/forgot" className="lo-btn lo-btn-primary" style={{ padding: "12px 24px", justifyContent: "center", width: "100%" }}>
           Pedir enlace nuevo <Ico name="arrow" size={14}/>
         </Link>
-      </div>,
+      </div>
+      </Frame>
     );
   }
 
   if (status === "done") {
-    return frame(
+    return (
+      <Frame>
       <div className="lo-card-elev" style={{ width: 420, padding: 36, textAlign: "center" }}>
         <div style={{ width: 52, height: 52, borderRadius: 14, background: "rgba(214,168,79,0.12)", display: "grid", placeItems: "center", margin: "0 auto 20px" }}>
           <Ico name="check" size={24} color="var(--quest-gold-hi)"/>
@@ -129,11 +139,13 @@ export default function ResetPage() {
         <Link href="/login" className="lo-btn lo-btn-primary" style={{ padding: "12px 24px", justifyContent: "center", width: "100%" }}>
           Iniciar sesión <Ico name="arrow" size={14}/>
         </Link>
-      </div>,
+      </div>
+      </Frame>
     );
   }
 
-  return frame(
+  return (
+    <Frame>
     <form onSubmit={submit} className="lo-card-elev" style={{ width: 420, padding: 36, position: "relative" }}>
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
         <LvlLogo size={22}/>
@@ -162,7 +174,6 @@ export default function ResetPage() {
             value={pwd}
             onChange={e => { setPwd(e.target.value); setErr(null); }}
             maxLength={MAX_PWD}
-            autoFocus
           />
         </div>
         <div>
@@ -192,6 +203,7 @@ export default function ResetPage() {
       >
         {loading ? "Guardando…" : <> Guardar contraseña <Ico name="arrow" size={14}/></>}
       </button>
-    </form>,
+    </form>
+    </Frame>
   );
 }

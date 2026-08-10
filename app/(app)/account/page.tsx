@@ -28,17 +28,19 @@ export default function AccountPage() {
 
   useEffect(() => {
     if (!user) return;
+    let cancelled = false;
     const supabase = createClient();
     (async () => {
       try {
         const { data } = await supabase.from("profiles").select("avatar_url, is_public").eq("id", user.id).single();
-        if (data) {
+        if (data && !cancelled) {
           setAvatarUrl(data.avatar_url ?? "");
           setIsPublic(data.is_public ?? false);
         }
       } catch { /* noop */ }
-      setLoadingProfile(false);
+      if (!cancelled) setLoadingProfile(false);
     })();
+    return () => { cancelled = true; };
   }, [user]);
 
   async function saveProfile(e: React.FormEvent) {
@@ -135,12 +137,12 @@ export default function AccountPage() {
           <h2 style={{ fontSize: 15, fontWeight: 700, marginBottom: 16 }}>Información del perfil</h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 18 }}>
             <div>
-              <div className="lo-label" style={{ marginBottom: 6 }}>Nombre de jugador</div>
-              <input className="lo-input" value={username} onChange={e => setUsername(e.target.value)} placeholder="Tu nombre" style={{ fontSize: 14 }} maxLength={50} />
+              <label htmlFor="account-username" className="lo-label" style={{ display: "block", marginBottom: 6 }}>Nombre de jugador</label>
+              <input id="account-username" className="lo-input" value={username} onChange={e => setUsername(e.target.value)} placeholder="Tu nombre" style={{ fontSize: 14 }} maxLength={50} />
             </div>
             <div>
-              <div className="lo-label" style={{ marginBottom: 6 }}>Email</div>
-              <input className="lo-input" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="tu@email.com" style={{ fontSize: 14 }} maxLength={254} />
+              <label htmlFor="account-email" className="lo-label" style={{ display: "block", marginBottom: 6 }}>Email</label>
+              <input id="account-email" className="lo-input" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="tu@email.com" style={{ fontSize: 14 }} maxLength={254} />
               {email !== user?.email && <p style={{ fontSize: 11, color: "var(--text-low)", marginTop: 4 }}>Recibirás un email de confirmación al nuevo correo.</p>}
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 14px", borderRadius: 8, background: "rgba(255,255,255,0.03)", border: "1px solid var(--line)" }}>
@@ -170,12 +172,12 @@ export default function AccountPage() {
           <h2 style={{ fontSize: 15, fontWeight: 700, marginBottom: 16 }}>Cambiar contraseña</h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 18 }}>
             <div>
-              <div className="lo-label" style={{ marginBottom: 6 }}>Nueva contraseña</div>
-              <input className="lo-input" type="password" value={pwd} onChange={e => setPwd(e.target.value)} placeholder={`Mínimo ${MIN_PWD} caracteres`} style={{ fontSize: 14 }} maxLength={128} />
+              <label htmlFor="account-new-password" className="lo-label" style={{ display: "block", marginBottom: 6 }}>Nueva contraseña</label>
+              <input id="account-new-password" className="lo-input" type="password" value={pwd} onChange={e => setPwd(e.target.value)} placeholder={`Mínimo ${MIN_PWD} caracteres`} style={{ fontSize: 14 }} maxLength={128} />
             </div>
             <div>
-              <div className="lo-label" style={{ marginBottom: 6 }}>Confirmar contraseña</div>
-              <input className="lo-input" type="password" value={pwdConfirm} onChange={e => setPwdConfirm(e.target.value)} placeholder="Repite la contraseña" style={{ fontSize: 14 }} maxLength={128} />
+              <label htmlFor="account-confirm-password" className="lo-label" style={{ display: "block", marginBottom: 6 }}>Confirmar contraseña</label>
+              <input id="account-confirm-password" className="lo-input" type="password" value={pwdConfirm} onChange={e => setPwdConfirm(e.target.value)} placeholder="Repite la contraseña" style={{ fontSize: 14 }} maxLength={128} />
             </div>
           </div>
           <button type="submit" disabled={saving || !pwd} className="lo-btn lo-btn-ghost" style={{ padding: "9px 20px" }}>

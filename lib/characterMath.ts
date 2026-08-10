@@ -23,7 +23,6 @@ export const SKILLS_BY_STAT: Record<StatKey, string[]> = {
   CAR: ["Actuación", "Engaño", "Intimidación", "Persuasión"],
 };
 
-export const ALL_SKILLS = Object.values(SKILLS_BY_STAT).flat();
 
 export function modOf(score: number): number {
   return Math.floor((score - 10) / 2);

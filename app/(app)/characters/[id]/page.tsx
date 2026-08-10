@@ -212,10 +212,10 @@ export default function CharacterSheetPage({ params }: Props) {
           <div style={{ flex: "0 0 auto", paddingRight: 28, borderRight: "1px solid var(--line-strong)", marginRight: 28 }}>
             <div className="lo-label" style={{ marginBottom: 8 }}>Puntos de golpe</div>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-              <button type="button" onClick={() => patchAndSync({ hpCurrent: Math.max(0, hpCurrent - 1) })}
+              <button type="button" aria-label="Restar un punto de golpe" onClick={() => patchAndSync({ hpCurrent: Math.max(0, hpCurrent - 1) })}
                 className="lo-btn lo-btn-ghost" style={{ padding: "4px 12px", fontSize: 16, lineHeight: 1 }}>−</button>
               <div style={{ fontSize: 32, fontFamily: "var(--font-display)", color: hpColor, lineHeight: 1, padding: "0 4px" }}>{hpCurrent}</div>
-              <button type="button" onClick={() => patchAndSync({ hpCurrent: Math.min(maxHp, hpCurrent + 1) })}
+              <button type="button" aria-label="Sumar un punto de golpe" onClick={() => patchAndSync({ hpCurrent: Math.min(maxHp, hpCurrent + 1) })}
                 className="lo-btn lo-btn-ghost" style={{ padding: "4px 12px", fontSize: 16, lineHeight: 1 }}>+</button>
               <span style={{ fontSize: 11, color: "var(--text-low)", marginLeft: 4 }}>/ {maxHp}</span>
             </div>

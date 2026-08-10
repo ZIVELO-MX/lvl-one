@@ -53,24 +53,24 @@ export default function NewFactionPage({ params }: Props) {
 
         <div className="lo-card" style={{ padding: 24, display: "flex", flexDirection: "column", gap: 16 }}>
           <div>
-            <label style={{ fontSize: 12, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Nombre *</label>
-            <input className="lo-input" value={form.name} onChange={set("name")} placeholder="Ej: La Orden del Fénix" autoFocus/>
+            <label htmlFor="faction-name" style={{ fontSize: 12, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Nombre *</label>
+            <input id="faction-name" className="lo-input" value={form.name} onChange={set("name")} placeholder="Ej: La Orden del Fénix"/>
           </div>
           <div>
-            <label style={{ fontSize: 12, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Descripción</label>
-            <textarea className="lo-input" rows={3} value={form.description} onChange={set("description")} placeholder="¿Quiénes son? ¿Qué representan?" style={{ resize: "vertical" }}/>
+            <label htmlFor="faction-description" style={{ fontSize: 12, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Descripción</label>
+            <textarea id="faction-description" className="lo-input" rows={3} value={form.description} onChange={set("description")} placeholder="¿Quiénes son? ¿Qué representan?" style={{ resize: "vertical" }}/>
           </div>
           <div>
-            <label style={{ fontSize: 12, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Objetivos</label>
-            <textarea className="lo-input" rows={2} value={form.goals} onChange={set("goals")} placeholder="¿Qué quieren lograr?" style={{ resize: "vertical" }}/>
+            <label htmlFor="faction-goals" style={{ fontSize: 12, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Objetivos</label>
+            <textarea id="faction-goals" className="lo-input" rows={2} value={form.goals} onChange={set("goals")} placeholder="¿Qué quieren lograr?" style={{ resize: "vertical" }}/>
           </div>
           <div>
-            <label style={{ fontSize: 12, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Símbolo / Emblema</label>
-            <input className="lo-input" value={form.symbol} onChange={set("symbol")} placeholder="Descripción del símbolo visual"/>
+            <label htmlFor="faction-symbol" style={{ fontSize: 12, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Símbolo / Emblema</label>
+            <input id="faction-symbol" className="lo-input" value={form.symbol} onChange={set("symbol")} placeholder="Descripción del símbolo visual"/>
           </div>
           <div>
-            <label style={{ fontSize: 12, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Etiquetas (separadas por coma)</label>
-            <input className="lo-input" value={form.tags} onChange={set("tags")} placeholder="Ej: gremio, comercio, secreta"/>
+            <label htmlFor="faction-tags" style={{ fontSize: 12, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Etiquetas (separadas por coma)</label>
+            <input id="faction-tags" className="lo-input" value={form.tags} onChange={set("tags")} placeholder="Ej: gremio, comercio, secreta"/>
           </div>
         </div>
 

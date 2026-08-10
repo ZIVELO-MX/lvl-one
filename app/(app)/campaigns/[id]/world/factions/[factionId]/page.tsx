@@ -42,8 +42,10 @@ export default function FactionDetailPage({ params }: Props) {
 
   const isDm = campaign.dmId === (state.user?.email ?? "local-user");
   const rep = repLabel(faction.playerReputation);
-  const linkedNpcs = (campaign.npcs ?? []).filter(n => faction.npcIds.includes(n.id));
+  const factionNpcIds = new Set(faction.npcIds);
+  const linkedNpcs = (campaign.npcs ?? []).filter(n => factionNpcIds.has(n.id));
   const otherFactions = (campaign.factions ?? []).filter(f => f.id !== faction.id);
+  const relatedFactionIds = new Set(faction.relations.map(r => r.targetFactionId));
 
   const save = () => {
     dispatch({ type: "FACTION_SAVE", campaignId: campaign.id, faction: draft });
@@ -93,7 +95,7 @@ export default function FactionDetailPage({ params }: Props) {
             </div>
             <div style={{ flex: 1 }}>
               {editing
-                ? <input className="lo-input" value={draft.name} onChange={e => setDraft(d => d ? { ...d, name: e.target.value } : d)} style={{ fontSize: 20, fontWeight: 700, marginBottom: 4 }}/>
+                ? <input className="lo-input" aria-label="Nombre de la facción" value={draft.name} onChange={e => setDraft(d => d ? { ...d, name: e.target.value } : d)} style={{ fontSize: 20, fontWeight: 700, marginBottom: 4 }}/>
                 : <h1 style={{ fontSize: 22, margin: "0 0 4px" }}>{faction.name || "Sin nombre"}</h1>
               }
               {faction.symbol && <p style={{ fontSize: 12, color: "var(--text-low)", margin: 0 }}>Símbolo: {faction.symbol}</p>}
@@ -122,14 +124,14 @@ export default function FactionDetailPage({ params }: Props) {
             <div className="lo-card" style={{ padding: 18 }}>
               <h3 style={{ fontSize: 12, color: "var(--text-low)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 10 }}>Descripción</h3>
               {editing
-                ? <textarea className="lo-input" rows={4} value={draft.description} onChange={e => setDraft(d => d ? { ...d, description: e.target.value } : d)} style={{ resize: "vertical" }}/>
+                ? <textarea className="lo-input" aria-label="Descripción" rows={4} value={draft.description} onChange={e => setDraft(d => d ? { ...d, description: e.target.value } : d)} style={{ resize: "vertical" }}/>
                 : <p style={{ fontSize: 14, color: "var(--text-mid)", margin: 0, lineHeight: 1.6 }}>{faction.description || "Sin descripción."}</p>
               }
             </div>
             <div className="lo-card" style={{ padding: 18 }}>
               <h3 style={{ fontSize: 12, color: "var(--text-low)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 10 }}>Objetivos</h3>
               {editing
-                ? <textarea className="lo-input" rows={3} value={draft.goals ?? ""} onChange={e => setDraft(d => d ? { ...d, goals: e.target.value } : d)} style={{ resize: "vertical" }}/>
+                ? <textarea className="lo-input" aria-label="Objetivos" rows={3} value={draft.goals ?? ""} onChange={e => setDraft(d => d ? { ...d, goals: e.target.value } : d)} style={{ resize: "vertical" }}/>
                 : <p style={{ fontSize: 14, color: "var(--text-mid)", margin: 0, lineHeight: 1.5 }}>{faction.goals || "Sin objetivos definidos."}</p>
               }
             </div>
@@ -159,7 +161,7 @@ export default function FactionDetailPage({ params }: Props) {
                   <Ico name="lock" size={12}/> Secretos (solo DM)
                 </h3>
                 {editing
-                  ? <textarea className="lo-input" rows={3} value={draft.secrets ?? ""} onChange={e => setDraft(d => d ? { ...d, secrets: e.target.value } : d)} style={{ resize: "vertical" }}/>
+                  ? <textarea className="lo-input" aria-label="Secretos (solo DM)" rows={3} value={draft.secrets ?? ""} onChange={e => setDraft(d => d ? { ...d, secrets: e.target.value } : d)} style={{ resize: "vertical" }}/>
                   : <p style={{ fontSize: 13, color: "var(--text-mid)", margin: 0, lineHeight: 1.5 }}>{faction.secrets || "Sin secretos."}</p>
                 }
               </div>
@@ -192,13 +194,13 @@ export default function FactionDetailPage({ params }: Props) {
           })}
           {isDm && otherFactions.length > 0 && (
             <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
-              <select className="lo-input" value={newRelTarget} onChange={e => setNewRelTarget(e.target.value)} style={{ flex: 1, fontSize: 13 }}>
+              <select className="lo-input" aria-label="Facción con la que relacionar" value={newRelTarget} onChange={e => setNewRelTarget(e.target.value)} style={{ flex: 1, fontSize: 13 }}>
                 <option value="">Seleccionar facción...</option>
-                {otherFactions.filter(f => !faction.relations.some(r => r.targetFactionId === f.id)).map(f => (
+                {otherFactions.flatMap(f => relatedFactionIds.has(f.id) ? [] : [
                   <option key={f.id} value={f.id}>{f.name}</option>
-                ))}
+                ])}
               </select>
-              <select className="lo-input" value={newRelType} onChange={e => setNewRelType(e.target.value as FactionRelationType)} style={{ fontSize: 13 }}>
+              <select className="lo-input" aria-label="Tipo de relación" value={newRelType} onChange={e => setNewRelType(e.target.value as FactionRelationType)} style={{ fontSize: 13 }}>
                 {(Object.keys(FACTION_RELATION_LABEL) as FactionRelationType[]).map(t => (
                   <option key={t} value={t}>{FACTION_RELATION_LABEL[t]}</option>
                 ))}

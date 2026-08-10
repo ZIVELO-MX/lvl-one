@@ -190,7 +190,6 @@ export function combatantIsAlive(combatant: Pick<Combatant, "type" | "hp" | "dea
   return combatant.type === "player";
 }
 
-export const isCombatantAlive = combatantIsAlive;
 
 export function resolveCombatantLife(combatant: Combatant): Combatant {
   const maxHp = Math.max(1, Math.round(combatant.maxHp));

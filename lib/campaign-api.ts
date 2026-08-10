@@ -243,29 +243,6 @@ export async function deleteFactionFromAPI(campaignId: string, factionId: string
   if (!res.ok) throw new Error("Failed to delete faction");
 }
 
-// ── World Lore ────────────────────────────────────────────────
-
-export async function createWorldLore(campaignId: string, lore: Partial<WorldLore>) {
-  const res = await fetch(`/api/campaigns/${campaignId}/lore`, {
-    method: "POST", headers: headers(), body: JSON.stringify(lore),
-  });
-  if (!res.ok) throw new Error("Failed to create lore");
-  return res.json();
-}
-
-export async function updateWorldLoreAPI(campaignId: string, loreId: string, patch: Partial<WorldLore>) {
-  const res = await fetch(`/api/campaigns/${campaignId}/lore/${loreId}`, {
-    method: "PATCH", headers: headers(), body: JSON.stringify(patch),
-  });
-  if (!res.ok) throw new Error("Failed to update lore");
-  return res.json();
-}
-
-export async function deleteWorldLoreFromAPI(campaignId: string, loreId: string) {
-  const res = await fetch(`/api/campaigns/${campaignId}/lore/${loreId}`, { method: "DELETE" });
-  if (!res.ok) throw new Error("Failed to delete lore");
-}
-
 // ── Players ───────────────────────────────────────────────────
 
 export async function addCampaignPlayer(campaignId: string, player: Partial<CampaignPlayer>) {

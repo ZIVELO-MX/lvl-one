@@ -27,6 +27,12 @@ function crLabel(cr: number) {
   if (cr === 0.125) return "1/8"; if (cr === 0.25) return "1/4"; if (cr === 0.5) return "1/2";
   return String(cr);
 }
+function crColor(cr: number) {
+  if (cr <= 0.5) return "#A3C28F";
+  if (cr <= 3) return "var(--quest-gold-hi)";
+  if (cr <= 8) return "#C9956A";
+  return "#C28F8F";
+}
 
 const TYPE_LABEL: Record<MonsterType, string> = {
   "bestia": "Bestia", "humanoides": "Humanoide", "no-muerto": "No-muerto",
@@ -53,13 +59,6 @@ export default function MonstersPage() {
     });
   }, [search, filterType, filterCr]);
 
-  const crColor = (cr: number) => {
-    if (cr <= 0.5) return "#A3C28F";
-    if (cr <= 3) return "var(--quest-gold-hi)";
-    if (cr <= 8) return "#C9956A";
-    return "#C28F8F";
-  };
-
   return (
     <main className="lo-page-enter" style={{ padding: "0 0 60px" }}>
       <TopBar crumb={["LVL ONE", "Enciclopedia", "Bestiario"]}/>
@@ -78,16 +77,16 @@ export default function MonstersPage() {
         {/* Filters */}
         <div style={{ display: "flex", gap: 10, marginBottom: 20, flexWrap: "wrap", alignItems: "flex-end" }}>
           <div style={{ flex: "1 1 180px" }}>
-            <input className="lo-input" value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar monstruo..." style={{ fontSize: 13 }}/>
+            <input id="monsters-search" aria-label="Buscar monstruo" className="lo-input" value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar monstruo..." style={{ fontSize: 13 }}/>
           </div>
           <div style={{ flex: "0 0 auto" }}>
-            <select className="lo-input" value={filterType} onChange={e => setFilterType(e.target.value as MonsterType | "")} style={{ fontSize: 12 }}>
+            <select id="monsters-type" aria-label="Filtrar por tipo de monstruo" className="lo-input" value={filterType} onChange={e => setFilterType(e.target.value as MonsterType | "")} style={{ fontSize: 12 }}>
               <option value="">Todos los tipos</option>
               {ALL_TYPES.map(t => <option key={t} value={t}>{TYPE_LABEL[t]}</option>)}
             </select>
           </div>
           <div style={{ flex: "0 0 auto" }}>
-            <select className="lo-input" value={filterCr} onChange={e => setFilterCr(e.target.value === "" ? "" : Number(e.target.value))} style={{ fontSize: 12, width: 90 }}>
+            <select id="monsters-cr" aria-label="Filtrar por nivel de desafío" className="lo-input" value={filterCr} onChange={e => setFilterCr(e.target.value === "" ? "" : Number(e.target.value))} style={{ fontSize: 12, width: 90 }}>
               <option value="">Todo CR</option>
               {ALL_CRS.map(cr => <option key={cr} value={cr}>CR {crLabel(cr)}</option>)}
             </select>

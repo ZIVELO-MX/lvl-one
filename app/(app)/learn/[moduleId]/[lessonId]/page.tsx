@@ -1,5 +1,5 @@
 "use client";
-import { use, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useApp } from "@/lib/store";
 import { TopBar } from "@/components/layout/AppShell";
@@ -10,17 +10,23 @@ interface Props { params: Promise<{ moduleId: string; lessonId: string }> }
 function D20({ onRoll }: { onRoll: (n: number) => void }) {
   const [val, setVal] = useState<number | null>(null);
   const [rolling, setRolling] = useState(false);
+  const timer = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Si el usuario cambia de lección con el dado girando, el intervalo seguiría
+  // vivo escribiendo estado de un componente ya desmontado.
+  useEffect(() => () => { if (timer.current) clearInterval(timer.current); }, []);
 
   const roll = () => {
     if (rolling) return;
     setRolling(true);
     let ticks = 0;
-    const interval = setInterval(() => {
+    timer.current = setInterval(() => {
       const n = Math.floor(Math.random() * 20) + 1;
       setVal(n);
       ticks++;
       if (ticks >= 10) {
-        clearInterval(interval);
+        if (timer.current) clearInterval(timer.current);
+        timer.current = null;
         setRolling(false);
         onRoll(n);
       }

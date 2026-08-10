@@ -79,16 +79,16 @@ export default function ItemsPage() {
         </div>
 
         <div style={{ display: "flex", gap: 10, marginBottom: 20, flexWrap: "wrap" }}>
-          <input className="lo-input" value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar objeto..." style={{ fontSize: 13, flex: "1 1 160px" }} />
-          <select className="lo-input" value={filterRarity} onChange={e => setFilterRarity(e.target.value as Rarity | "")} style={{ fontSize: 12, flex: "0 0 auto" }}>
+          <input id="items-search" aria-label="Buscar objeto" className="lo-input" value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar objeto..." style={{ fontSize: 13, flex: "1 1 160px" }} />
+          <select id="items-rarity" aria-label="Filtrar por rareza" className="lo-input" value={filterRarity} onChange={e => setFilterRarity(e.target.value as Rarity | "")} style={{ fontSize: 12, flex: "0 0 auto" }}>
             <option value="">Toda rareza</option>
             {ALL_RARITIES.map(r => <option key={r} value={r} style={{ color: RARITY_COLOR[r] }}>{r}</option>)}
           </select>
-          <select className="lo-input" value={filterType} onChange={e => setFilterType(e.target.value as ItemType | "")} style={{ fontSize: 12, flex: "0 0 auto" }}>
+          <select id="items-type" aria-label="Filtrar por tipo de objeto" className="lo-input" value={filterType} onChange={e => setFilterType(e.target.value as ItemType | "")} style={{ fontSize: 12, flex: "0 0 auto" }}>
             <option value="">Todos los tipos</option>
             {ALL_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
           </select>
-          <select className="lo-input" value={filterAttunement} onChange={e => setFilterAttunement(e.target.value as "" | "yes" | "no")} style={{ fontSize: 12, flex: "0 0 auto" }}>
+          <select id="items-attunement" aria-label="Filtrar por attunement" className="lo-input" value={filterAttunement} onChange={e => setFilterAttunement(e.target.value as "" | "yes" | "no")} style={{ fontSize: 12, flex: "0 0 auto" }}>
             <option value="">Attunement: todos</option>
             <option value="yes">Requiere attunement</option>
             <option value="no">Sin attunement</option>

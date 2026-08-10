@@ -30,9 +30,12 @@ export default function LocationDetailPage({ params }: Props) {
   }
 
   const isDm = campaign.dmId === (state.user?.email ?? "local-user");
-  const linkedNpcs = (campaign.npcs ?? []).filter(n => loc.npcIds.includes(n.id));
-  const linkedQuests = (campaign.quests ?? []).filter(q => loc.questIds.includes(q.id));
-  const linkedFactions = (campaign.factions ?? []).filter(f => loc.factionIds.includes(f.id));
+  const locNpcIds = new Set(loc.npcIds);
+  const locQuestIds = new Set(loc.questIds);
+  const locFactionIds = new Set(loc.factionIds);
+  const linkedNpcs = (campaign.npcs ?? []).filter(n => locNpcIds.has(n.id));
+  const linkedQuests = (campaign.quests ?? []).filter(q => locQuestIds.has(q.id));
+  const linkedFactions = (campaign.factions ?? []).filter(f => locFactionIds.has(f.id));
 
   const save = () => {
     dispatch({ type: "LOCATION_SAVE", campaignId: campaign.id, location: draft });
@@ -48,11 +51,11 @@ export default function LocationDetailPage({ params }: Props) {
 
   const tf = (label: string, key: string, rows?: number) => (
     <div>
-      <label style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.06em" }}>{label}</label>
+      <label htmlFor={`location-${key}`} style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.06em" }}>{label}</label>
       {editing
         ? rows
-          ? <textarea className="lo-input" rows={rows} value={(draft as unknown as Record<string, string>)[key] ?? ""} onChange={e => setDraft(d => d ? { ...d, [key]: e.target.value } : d)} style={{ resize: "vertical", fontSize: 13 }}/>
-          : <input className="lo-input" value={(draft as unknown as Record<string, string>)[key] ?? ""} onChange={e => setDraft(d => d ? { ...d, [key]: e.target.value } : d)} style={{ fontSize: 13 }}/>
+          ? <textarea id={`location-${key}`} className="lo-input" rows={rows} value={(draft as unknown as Record<string, string>)[key] ?? ""} onChange={e => setDraft(d => d ? { ...d, [key]: e.target.value } : d)} style={{ resize: "vertical", fontSize: 13 }}/>
+          : <input id={`location-${key}`} className="lo-input" value={(draft as unknown as Record<string, string>)[key] ?? ""} onChange={e => setDraft(d => d ? { ...d, [key]: e.target.value } : d)} style={{ fontSize: 13 }}/>
         : <p style={{ fontSize: 14, color: "var(--text-hi)", margin: 0, lineHeight: 1.5 }}>{(loc as unknown as Record<string, string>)[key] || "—"}</p>
       }
     </div>
@@ -75,7 +78,7 @@ export default function LocationDetailPage({ params }: Props) {
               <h1 style={{ fontSize: 22, margin: "0 0 4px" }}>{loc.name || "Sin nombre"}</h1>
               <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
                 {editing ? (
-                  <select className="lo-input" value={draft.type} onChange={e => setDraft(d => d ? { ...d, type: e.target.value as LocationType } : d)} style={{ fontSize: 12, padding: "2px 6px" }}>
+                  <select className="lo-input" aria-label="Tipo de ubicación" value={draft.type} onChange={e => setDraft(d => d ? { ...d, type: e.target.value as LocationType } : d)} style={{ fontSize: 12, padding: "2px 6px" }}>
                     {(Object.keys(LOCATION_TYPE_LABEL) as LocationType[]).map(t => (
                       <option key={t} value={t}>{LOCATION_TYPE_LABEL[t]}</option>
                     ))}
@@ -111,8 +114,8 @@ export default function LocationDetailPage({ params }: Props) {
         {/* Name edit */}
         {editing && (
           <div style={{ marginBottom: 16 }}>
-            <label style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.06em" }}>Nombre</label>
-            <input className="lo-input" value={draft.name} onChange={e => setDraft(d => d ? { ...d, name: e.target.value } : d)} style={{ fontSize: 15, fontWeight: 600 }}/>
+            <label htmlFor="location-name" style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.06em" }}>Nombre</label>
+            <input id="location-name" className="lo-input" value={draft.name} onChange={e => setDraft(d => d ? { ...d, name: e.target.value } : d)} style={{ fontSize: 15, fontWeight: 600 }}/>
           </div>
         )}
 
@@ -120,7 +123,7 @@ export default function LocationDetailPage({ params }: Props) {
         <div className="lo-card" style={{ padding: 18, marginBottom: 16 }}>
           <h3 style={{ fontSize: 12, color: "var(--text-low)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 10 }}>Descripción</h3>
           {editing
-            ? <textarea className="lo-input" rows={4} value={draft.description} onChange={e => setDraft(d => d ? { ...d, description: e.target.value } : d)} style={{ resize: "vertical" }}/>
+            ? <textarea className="lo-input" aria-label="Descripción" rows={4} value={draft.description} onChange={e => setDraft(d => d ? { ...d, description: e.target.value } : d)} style={{ resize: "vertical" }}/>
             : <p style={{ fontSize: 14, color: "var(--text-mid)", margin: 0, lineHeight: 1.6, whiteSpace: "pre-wrap" }}>{loc.description || "Sin descripción."}</p>
           }
         </div>
@@ -140,7 +143,7 @@ export default function LocationDetailPage({ params }: Props) {
         <div className="lo-card" style={{ padding: 18, marginBottom: 16 }}>
           <h3 style={{ fontSize: 12, color: "var(--text-low)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 10 }}>Etiquetas</h3>
           {editing
-            ? <input className="lo-input" value={draft.tags.join(", ")} onChange={e => setDraft(d => d ? { ...d, tags: e.target.value.split(",").map(t => t.trim()).filter(Boolean) } : d)} placeholder="Separadas por coma"/>
+            ? <input className="lo-input" aria-label="Etiquetas" value={draft.tags.join(", ")} onChange={e => setDraft(d => d ? { ...d, tags: e.target.value.split(",").map(t => t.trim()).filter(Boolean) } : d)} placeholder="Separadas por coma"/>
             : loc.tags.length > 0
               ? <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>{loc.tags.map(t => <span key={t} className="lo-chip" style={{ fontSize: 11 }}>{t}</span>)}</div>
               : <p style={{ color: "var(--text-low)", fontSize: 13, margin: 0 }}>Sin etiquetas.</p>
@@ -154,7 +157,7 @@ export default function LocationDetailPage({ params }: Props) {
               <Ico name="lock" size={12}/> Notas del DM
             </h3>
             {editing
-              ? <textarea className="lo-input" rows={3} value={draft.notes ?? ""} onChange={e => setDraft(d => d ? { ...d, notes: e.target.value } : d)} style={{ resize: "vertical" }}/>
+              ? <textarea className="lo-input" aria-label="Notas del DM" rows={3} value={draft.notes ?? ""} onChange={e => setDraft(d => d ? { ...d, notes: e.target.value } : d)} style={{ resize: "vertical" }}/>
               : <p style={{ fontSize: 13, color: "var(--text-mid)", margin: 0, lineHeight: 1.5 }}>{loc.notes || "Sin notas."}</p>
             }
           </div>
