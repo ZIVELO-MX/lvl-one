@@ -38,6 +38,8 @@ export default function ClassesPage() {
         {/* Filters */}
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 16 }}>
           <input
+            id="classes-search"
+            aria-label="Buscar clase"
             value={q}
             onChange={e => setQ(e.target.value)}
             placeholder="Buscar clase…"
@@ -57,7 +59,7 @@ export default function ClassesPage() {
                 border: spellFilter === f ? "1px solid var(--arcane-blue)" : "1px solid var(--line-strong)",
                 background: spellFilter === f ? "rgba(92,122,184,0.15)" : "rgba(244,231,197,0.03)",
                 color: spellFilter === f ? "var(--arcane-blue-hi)" : "var(--text-low)",
-                transition: "all .12s",
+                transition: "border-color .12s, background .12s, color .12s",
               }}
             >
               {f === "all" ? "Todas" : f === "caster" ? "Lanzadoras" : "No-mágicas"}
@@ -68,11 +70,12 @@ export default function ClassesPage() {
         {/* Grid */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(270px, 1fr))", gap: 12 }}>
           {filtered.map(cls => (
-            <div
+            <button
+              type="button"
               key={cls.id}
               className="lo-card-elev"
               onClick={() => router.push(`/encyclopedia/classes/${cls.id}`)}
-              style={{ padding: "18px 20px", cursor: "pointer", border: "1px solid var(--line-strong)", transition: "border-color .15s" }}
+              style={{ padding: "18px 20px", cursor: "pointer", border: "1px solid var(--line-strong)", transition: "border-color .15s", font: "inherit", textAlign: "left", width: "100%", display: "block" }}
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 }}>
                 <div>
@@ -100,7 +103,7 @@ export default function ClassesPage() {
                   </span>
                 )}
               </div>
-            </div>
+            </button>
           ))}
         </div>
 

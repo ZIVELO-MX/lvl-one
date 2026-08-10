@@ -75,7 +75,7 @@ export default function LoginPage() {
 
         <h2 style={{ fontSize: 24, marginBottom: 6 }}>Acceso de invitado</h2>
         <p style={{ color: "var(--text-mid)", fontSize: 13, marginBottom: 24, lineHeight: 1.5 }}>
-          Usa el email y la contraseña provisional que recibiste para entrar.
+          Entra con tu email y tu contraseña. Si es tu primera vez, usa la provisional que recibiste.
         </p>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 20 }}>
@@ -94,7 +94,12 @@ export default function LoginPage() {
             />
           </div>
           <div>
-            <label htmlFor="login-pwd" className="lo-label" style={{ marginBottom: 6 }}>Contraseña provisional</label>
+            <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 6 }}>
+              <label htmlFor="login-pwd" className="lo-label" style={{ marginBottom: 0 }}>Contraseña</label>
+              <Link href="/forgot" style={{ fontSize: 12, color: "var(--text-low)", textDecoration: "none" }}>
+                ¿La olvidaste?
+              </Link>
+            </div>
             <input
               id="login-pwd"
               className="lo-input"

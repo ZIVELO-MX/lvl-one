@@ -642,6 +642,3 @@ export const SUBCLASSES: Subclass[] = [
   },
 ];
 
-export function subclassesForClass(classId: string): Subclass[] {
-  return SUBCLASSES.filter((subclass) => subclass.classId === classId);
-}

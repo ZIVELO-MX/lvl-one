@@ -47,10 +47,10 @@ export default function EquipmentPage() {
 
   const grouped = useMemo(() => {
     const cats = filterCat ? [filterCat as Category] : CATEGORY_ORDER;
-    return cats.map(cat => ({
-      cat,
-      items: filtered.filter(e => e.category === cat),
-    })).filter(g => g.items.length > 0);
+    return cats.flatMap(cat => {
+      const items = filtered.filter(e => e.category === cat);
+      return items.length > 0 ? [{ cat, items }] : [];
+    });
   }, [filtered, filterCat]);
 
   return (
@@ -70,10 +70,10 @@ export default function EquipmentPage() {
 
         <div style={{ display: "flex", gap: 10, marginBottom: 20, flexWrap: "wrap", alignItems: "flex-end" }}>
           <div style={{ flex: "1 1 180px" }}>
-            <input className="lo-input" value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar equipo..." style={{ fontSize: 13 }}/>
+            <input id="equipment-search" aria-label="Buscar equipo" className="lo-input" value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar equipo..." style={{ fontSize: 13 }}/>
           </div>
           <div style={{ flex: "0 0 auto" }}>
-            <select className="lo-input" value={filterCat} onChange={e => setFilterCat(e.target.value as Category | "")} style={{ fontSize: 12 }}>
+            <select id="equipment-category" aria-label="Filtrar por categoría" className="lo-input" value={filterCat} onChange={e => setFilterCat(e.target.value as Category | "")} style={{ fontSize: 12 }}>
               <option value="">Todas las categorías</option>
               {CATEGORY_ORDER.map(c => <option key={c} value={c}>{CATEGORY_LABEL[c]}</option>)}
             </select>

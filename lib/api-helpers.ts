@@ -13,10 +13,6 @@ export function pick<T extends string>(
 
 export const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-export function isValidUUID(s: string): boolean {
-  return UUID_RE.test(s);
-}
-
 export const CAMPAIGN_FIELDS = [
   "name", "description", "cover_image", "setting", "cover_color",
   "status", "invite_code", "rules",
@@ -64,18 +60,6 @@ export const CHARACTER_FIELDS = [
 export const PLAYER_FIELDS = ["user_id", "name", "role", "character_id"] as const;
 
 export const LORE_FIELDS = ["title", "content", "category", "tags"] as const;
-
-export const NOTE_FIELDS = ["title", "content", "is_dm_only"] as const;
-
-export const PROGRESS_FIELDS = ["completedLessons", "pct"] as const;
-
-export const BOOKMARK_FIELDS = ["target_type", "target_id"] as const;
-
-export const COMMENT_FIELDS = ["campaign_id", "body"] as const;
-
-export const GROUP_FIELDS = ["name", "description", "is_public", "max_players"] as const;
-
-export const XP_FIELDS = ["total"] as const;
 
 export function apiError(e: unknown) {
   const msg = e instanceof Error ? e.message : "Internal error";

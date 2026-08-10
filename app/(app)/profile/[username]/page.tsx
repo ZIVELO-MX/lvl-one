@@ -40,18 +40,21 @@ export default function ProfilePage() {
   const [data, setData] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   const isOwnProfile = state.user?.username === username;
 
   useEffect(() => {
     if (!username) return;
     setLoading(true);
+    setLoadError(null);
     fetch(`/api/users/${username}`)
       .then(r => {
         if (r.status === 404) { setNotFound(true); return null; }
         return r.ok ? r.json() : null;
       })
       .then(d => { if (d) setData(d); })
+      .catch(() => setLoadError("No se pudo cargar el perfil. Inténtalo de nuevo."))
       .finally(() => setLoading(false));
   }, [username]);
 
@@ -73,7 +76,7 @@ export default function ProfilePage() {
         <TopBar crumb={["Comunidad", "Perfil"]}/>
         <div style={{ padding: "60px 32px", textAlign: "center", color: "var(--text-low)" }}>
           <Ico name="user" size={40} color="var(--text-low)"/>
-          <p style={{ marginTop: 12, fontSize: 15 }}>Usuario @{username} no encontrado.</p>
+          <p style={{ marginTop: 12, fontSize: 15 }}>{loadError ?? `Usuario @${username} no encontrado.`}</p>
         </div>
       </main>
     );

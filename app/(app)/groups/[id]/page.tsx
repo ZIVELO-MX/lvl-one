@@ -39,6 +39,8 @@ export default function GroupDetailPage({ params }: { params: Promise<{ id: stri
   const [group, setGroup] = useState<GroupDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [joining, setJoining] = useState(false);
 
   useEffect(() => {
     fetch(`/api/groups/${id}`)
@@ -47,6 +49,7 @@ export default function GroupDetailPage({ params }: { params: Promise<{ id: stri
         return r.json();
       })
       .then(d => { if (d) setGroup(d); })
+      .catch(() => setLoadError("No se pudo cargar el grupo. Inténtalo de nuevo."))
       .finally(() => setLoading(false));
   }, [id]);
 
@@ -56,10 +59,16 @@ export default function GroupDetailPage({ params }: { params: Promise<{ id: stri
   }
 
   async function handleJoin() {
-    const res = await fetch(`/api/groups/${id}/members`, { method: "POST" });
-    if (res.ok) {
-      const updated = await fetch(`/api/groups/${id}`).then(r => r.json());
-      setGroup(updated);
+    if (joining) return;
+    setJoining(true);
+    try {
+      const res = await fetch(`/api/groups/${id}/members`, { method: "POST" });
+      if (!res.ok) return;
+      const refreshed = await fetch(`/api/groups/${id}`);
+      if (!refreshed.ok) return;
+      setGroup(await refreshed.json());
+    } finally {
+      setJoining(false);
     }
   }
 
@@ -77,7 +86,7 @@ export default function GroupDetailPage({ params }: { params: Promise<{ id: stri
       <TopBar crumb={["Comunidad", "Grupos", "No encontrado"]}/>
       <div style={{ padding: "40px 32px", textAlign: "center", color: "var(--text-low)" }}>
         <Ico name="users" size={40} color="var(--text-low)"/>
-        <p style={{ marginTop: 12 }}>Este grupo no existe o no tienes acceso.</p>
+        <p style={{ marginTop: 12 }}>{loadError ?? "Este grupo no existe o no tienes acceso."}</p>
         <Link href="/groups" className="lo-btn lo-btn-ghost" style={{ marginTop: 16 }}>← Volver a grupos</Link>
       </div>
     </main>
@@ -118,7 +127,7 @@ export default function GroupDetailPage({ params }: { params: Promise<{ id: stri
               </div>
             </div>
             {!isDM && !isMember && (
-              <button type="button" onClick={handleJoin} disabled={isFull} className="lo-btn lo-btn-primary" style={{ padding: "8px 16px", fontSize: 13, flexShrink: 0 }}>
+              <button type="button" onClick={handleJoin} disabled={isFull || joining} className="lo-btn lo-btn-primary" style={{ padding: "8px 16px", fontSize: 13, flexShrink: 0 }}>
                 <Ico name="user-plus" size={13}/> Unirse
               </button>
             )}

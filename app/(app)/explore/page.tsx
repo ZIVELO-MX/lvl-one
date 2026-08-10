@@ -34,6 +34,7 @@ export default function ExplorePage() {
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<Tab>("campaigns");
   const [search, setSearch] = useState("");
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
     Promise.all([
@@ -44,7 +45,8 @@ export default function ExplorePage() {
         campaigns: camps.campaigns ?? camps ?? [],
         characters: chars.characters ?? chars ?? [],
       });
-    }).finally(() => setLoading(false));
+    }).catch(() => setLoadError("No se pudo cargar el contenido de la comunidad. Inténtalo de nuevo."))
+      .finally(() => setLoading(false));
   }, []);
 
   const filteredCampaigns = data.campaigns.filter(c =>
@@ -77,6 +79,7 @@ export default function ExplorePage() {
             <Ico name="search" size={14} color="var(--text-low)"/>
           </div>
           <input
+            aria-label="Buscar campañas o personajes"
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Buscar campañas, personajes..."
@@ -87,6 +90,12 @@ export default function ExplorePage() {
             }}
           />
         </div>
+
+        {loadError && (
+          <div role="alert" style={{ marginBottom: 16, padding: "10px 14px", borderRadius: 8, fontSize: 13, background: "rgba(180,58,46,0.15)", color: "#E8847A", border: "1px solid rgba(180,58,46,0.3)" }}>
+            {loadError}
+          </div>
+        )}
 
         {/* Tabs */}
         <div style={{ display: "flex", gap: 4, marginBottom: 20, borderBottom: "1px solid var(--line)", paddingBottom: 0 }}>

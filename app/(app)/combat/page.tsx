@@ -299,7 +299,7 @@ export default function CombatTrackerPage() {
                             <div key={key} style={{ display: "flex", alignItems: "center", gap: 4 }}>
                               <span style={{ fontSize: 9, color: key === "successes" ? "#A3C28F" : "#C28F8F" }}>{key === "successes" ? "Éxitos" : "Fallos"}:</span>
                               {[1, 2, 3].map(n => (
-                                <button type="button" key={n} onClick={() => updateDeathSave(c.id, key, c.deathSaves[key] >= n ? n - 1 : n)} style={{ width: 13, height: 13, borderRadius: "50%", border: `1px solid ${key === "successes" ? "#A3C28F" : "#C28F8F"}`, background: c.deathSaves[key] >= n ? (key === "successes" ? "#A3C28F" : "#C28F8F") : "transparent", cursor: "pointer" }}/>
+                                <button type="button" key={n} onClick={() => updateDeathSave(c.id, key, c.deathSaves[key] >= n ? n - 1 : n)} aria-label={`${key === "successes" ? "Éxito" : "Fallo"} ${n} de salvación por muerte de ${c.name}`} aria-pressed={c.deathSaves[key] >= n} style={{ width: 13, height: 13, borderRadius: "50%", border: `1px solid ${key === "successes" ? "#A3C28F" : "#C28F8F"}`, background: c.deathSaves[key] >= n ? (key === "successes" ? "#A3C28F" : "#C28F8F") : "transparent", cursor: "pointer" }}/>
                               ))}
                             </div>
                           ))}
@@ -316,7 +316,7 @@ export default function CombatTrackerPage() {
                     {/* Damage/heal */}
                     {c.isAlive && (
                       <div style={{ display: "flex", alignItems: "center", gap: 4, flexShrink: 0 }}>
-                        <input type="number" min="0" value={dmgInputs[c.id] ?? ""} onChange={e => setDmgInputs(p => ({ ...p, [c.id]: e.target.value }))} placeholder="0" style={{ width: 44, background: "var(--input-bg, rgba(255,255,255,0.05))", border: "1px solid var(--border-lo)", borderRadius: 5, padding: "3px 5px", color: "var(--text-hi)", fontSize: 12, textAlign: "center" }}/>
+                        <input type="number" min="0" aria-label={`Puntos de daño o curación para ${c.name}`} value={dmgInputs[c.id] ?? ""} onChange={e => setDmgInputs(p => ({ ...p, [c.id]: e.target.value }))} placeholder="0" style={{ width: 44, background: "var(--input-bg, rgba(255,255,255,0.05))", border: "1px solid var(--border-lo)", borderRadius: 5, padding: "3px 5px", color: "var(--text-hi)", fontSize: 12, textAlign: "center" }}/>
                         <button type="button" onClick={() => handleDmgInput(c.id, true)} title="Daño" style={{ padding: "4px 7px", borderRadius: 5, border: "1px solid rgba(194,143,143,0.5)", background: "rgba(194,143,143,0.1)", color: "#C28F8F", cursor: "pointer", fontSize: 11, fontWeight: 700 }}>-HP</button>
                         <button type="button" onClick={() => handleDmgInput(c.id, false)} title="Curar" style={{ padding: "4px 7px", borderRadius: 5, border: "1px solid rgba(163,194,143,0.5)", background: "rgba(163,194,143,0.1)", color: "#A3C28F", cursor: "pointer", fontSize: 11, fontWeight: 700 }}>+HP</button>
                       </div>
@@ -339,7 +339,7 @@ export default function CombatTrackerPage() {
                       {CONDITION_TYPES.map(type => {
                         const has = c.conditions.some(cd => cd.type === type);
                         return (
-                          <button type="button" key={type} onClick={() => toggleCondition(c.id, type)} style={{ fontSize: 10, padding: "2px 8px", borderRadius: 4, border: `1px solid ${has ? CONDITION_COLOR[type] : "var(--border-lo)"}`, background: has ? `${CONDITION_COLOR[type]}22` : "transparent", color: has ? CONDITION_COLOR[type] : "var(--text-low)", cursor: "pointer", transition: "all .1s" }}>
+                          <button type="button" key={type} onClick={() => toggleCondition(c.id, type)} style={{ fontSize: 10, padding: "2px 8px", borderRadius: 4, border: `1px solid ${has ? CONDITION_COLOR[type] : "var(--border-lo)"}`, background: has ? `${CONDITION_COLOR[type]}22` : "transparent", color: has ? CONDITION_COLOR[type] : "var(--text-low)", cursor: "pointer", transition: "border-color .1s, background .1s, color .1s" }}>
                             {CONDITION_LABEL[type]}
                           </button>
                         );
@@ -378,7 +378,7 @@ export default function CombatTrackerPage() {
 
       {/* Add modal */}
       {showAdd && (
-        <div onClick={e => e.target === e.currentTarget && setShowAdd(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.72)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100, padding: 16 }}>
+        <div role="presentation" onClick={e => e.target === e.currentTarget && setShowAdd(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.72)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100, padding: 16 }}>
           <div className="lo-card" style={{ padding: 24, width: "100%", maxWidth: 500, maxHeight: "88vh", overflowY: "auto" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
               <h3 style={{ margin: 0, fontSize: 16 }}>Añadir combatiente</h3>
@@ -395,20 +395,20 @@ export default function CombatTrackerPage() {
             {addTab === "manual" && (
               <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                 <div>
-                  <label style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Nombre *</label>
-                  <input className="lo-input" value={manualForm.name} onChange={e => setManualForm(f => ({ ...f, name: e.target.value }))} onKeyDown={e => e.key === "Enter" && addManual()} placeholder="Ej: Aragorn, Araña Gigante" autoFocus/>
+                  <label htmlFor="combat-add-name" style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Nombre *</label>
+                  <input id="combat-add-name" className="lo-input" value={manualForm.name} onChange={e => setManualForm(f => ({ ...f, name: e.target.value }))} onKeyDown={e => e.key === "Enter" && addManual()} placeholder="Ej: Aragorn, Araña Gigante" autoFocus/>
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
                   {[["Iniciativa", "initiative", "10"], ["HP máx", "hp", "10"], ["CA", "ac", "10"]].map(([lbl, key, ph]) => (
                     <div key={key}>
-                      <label style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: 4 }}>{lbl}</label>
-                      <input className="lo-input" type="number" value={(manualForm as Record<string, string>)[key]} onChange={e => setManualForm(f => ({ ...f, [key]: e.target.value }))} placeholder={ph} style={{ fontSize: 13 }}/>
+                      <label htmlFor={`combat-add-${key}`} style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: 4 }}>{lbl}</label>
+                      <input id={`combat-add-${key}`} className="lo-input" type="number" value={(manualForm as Record<string, string>)[key]} onChange={e => setManualForm(f => ({ ...f, [key]: e.target.value }))} placeholder={ph} style={{ fontSize: 13 }}/>
                     </div>
                   ))}
                 </div>
                 <div>
-                  <label style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Tipo</label>
-                  <select className="lo-input" value={manualForm.type} onChange={e => setManualForm(f => ({ ...f, type: e.target.value as CombatantType }))}>
+                  <label htmlFor="combat-add-type" style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Tipo</label>
+                  <select id="combat-add-type" className="lo-input" value={manualForm.type} onChange={e => setManualForm(f => ({ ...f, type: e.target.value as CombatantType }))}>
                     <option value="player">Personaje (PJ)</option>
                     <option value="monster">Monstruo</option>
                     <option value="npc">NPC</option>
@@ -423,7 +423,7 @@ export default function CombatTrackerPage() {
 
             {addTab === "monster" && (
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                <input className="lo-input" value={monsterSearch} onChange={e => setMonsterSearch(e.target.value)} placeholder="Buscar monstruo..." autoFocus/>
+                <input className="lo-input" aria-label="Buscar monstruo en el bestiario" value={monsterSearch} onChange={e => setMonsterSearch(e.target.value)} placeholder="Buscar monstruo..." autoFocus/>
                 <div style={{ maxHeight: 340, overflowY: "auto", display: "flex", flexDirection: "column", gap: 4 }}>
                   {filteredMonsters.map(m => (
                     <button type="button" key={m.id} onClick={() => addMonsterEntry(m)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 12px", background: "var(--card)", border: "1px solid var(--border-lo)", borderRadius: 8, cursor: "pointer", textAlign: "left", transition: "border-color .1s" }}>

@@ -100,20 +100,21 @@ export default function LorePage({ params }: Props) {
             <h3 style={{ fontSize: 14, fontWeight: 600, margin: "0 0 16px" }}>Nueva entrada</h3>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
               <div>
-                <label style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Título *</label>
-                <input className="lo-input" value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} placeholder="Ej: La Gran Guerra de los Dioses" autoFocus/>
+                <label htmlFor="lore-new-title" style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Título *</label>
+                <input id="lore-new-title" className="lo-input" value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} placeholder="Ej: La Gran Guerra de los Dioses"/>
               </div>
               <div>
-                <label style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Categoría</label>
-                <select className="lo-input" value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value as LoreCategory }))}>
+                <label htmlFor="lore-new-category" style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Categoría</label>
+                <select id="lore-new-category" className="lo-input" value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value as LoreCategory }))}>
                   {(Object.keys(LORE_CATEGORY_LABEL) as LoreCategory[]).map(c => <option key={c} value={c}>{LORE_CATEGORY_LABEL[c]}</option>)}
                 </select>
               </div>
             </div>
-            <textarea className="lo-input" rows={6} value={form.content} onChange={e => setForm(f => ({ ...f, content: e.target.value }))} placeholder="Contenido de la entrada de lore..." style={{ marginBottom: 12, resize: "vertical" }}/>
+            <label htmlFor="lore-new-content" style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Contenido</label>
+            <textarea id="lore-new-content" className="lo-input" rows={6} value={form.content} onChange={e => setForm(f => ({ ...f, content: e.target.value }))} placeholder="Contenido de la entrada de lore..." style={{ marginBottom: 12, resize: "vertical" }}/>
             <div style={{ marginBottom: 12 }}>
-              <label style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Etiquetas</label>
-              <input className="lo-input" value={form.tags} onChange={e => setForm(f => ({ ...f, tags: e.target.value }))} placeholder="Separadas por coma"/>
+              <label htmlFor="lore-new-tags" style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Etiquetas</label>
+              <input id="lore-new-tags" className="lo-input" value={form.tags} onChange={e => setForm(f => ({ ...f, tags: e.target.value }))} placeholder="Separadas por coma"/>
             </div>
             <div style={{ display: "flex", gap: 8 }}>
               <button type="button" className="lo-btn lo-btn-ghost" onClick={() => setCreating(false)}>Cancelar</button>
@@ -153,18 +154,20 @@ export default function LorePage({ params }: Props) {
                       <div style={{ paddingTop: 14, display: "flex", flexDirection: "column", gap: 12 }}>
                         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                           <div>
-                            <label style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Título</label>
-                            <input className="lo-input" value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))}/>
+                            <label htmlFor={`lore-edit-title-${entry.id}`} style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Título</label>
+                            <input id={`lore-edit-title-${entry.id}`} className="lo-input" value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))}/>
                           </div>
                           <div>
-                            <label style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Categoría</label>
-                            <select className="lo-input" value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value as LoreCategory }))}>
+                            <label htmlFor={`lore-edit-category-${entry.id}`} style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Categoría</label>
+                            <select id={`lore-edit-category-${entry.id}`} className="lo-input" value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value as LoreCategory }))}>
                               {(Object.keys(LORE_CATEGORY_LABEL) as LoreCategory[]).map(c => <option key={c} value={c}>{LORE_CATEGORY_LABEL[c]}</option>)}
                             </select>
                           </div>
                         </div>
-                        <textarea className="lo-input" rows={6} value={form.content} onChange={e => setForm(f => ({ ...f, content: e.target.value }))} style={{ resize: "vertical" }}/>
-                        <input className="lo-input" value={form.tags} onChange={e => setForm(f => ({ ...f, tags: e.target.value }))} placeholder="Etiquetas separadas por coma"/>
+                        <label htmlFor={`lore-edit-content-${entry.id}`} style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: -4 }}>Contenido</label>
+                        <textarea id={`lore-edit-content-${entry.id}`} className="lo-input" rows={6} value={form.content} onChange={e => setForm(f => ({ ...f, content: e.target.value }))} style={{ resize: "vertical" }}/>
+                        <label htmlFor={`lore-edit-tags-${entry.id}`} style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: -4 }}>Etiquetas</label>
+                        <input id={`lore-edit-tags-${entry.id}`} className="lo-input" value={form.tags} onChange={e => setForm(f => ({ ...f, tags: e.target.value }))} placeholder="Separadas por coma"/>
                         <div style={{ display: "flex", gap: 8 }}>
                           <button type="button" className="lo-btn lo-btn-ghost" onClick={() => setEditing(null)}>Cancelar</button>
                           <button type="button" className="lo-btn lo-btn-primary" onClick={saveLore}><Ico name="check" size={13}/> Guardar</button>

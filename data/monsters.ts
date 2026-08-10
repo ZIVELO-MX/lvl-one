@@ -1551,20 +1551,3 @@ export const MONSTERS: Monster[] = [
     portraitPrompt: "D&D fantasy art, an ochre jelly slime monster, amorphous blob of yellow-orange gelatinous matter dripping acid, crawling on a stone dungeon wall, dark corridor background, dark fantasy slime monster art, square portrait format",
   },
 ];
-
-// Helpers
-export function getMonsterById(id: string): Monster | undefined {
-  return MONSTERS.find(m => m.id === id);
-}
-
-export function getMonstersByCr(cr: number): Monster[] {
-  return MONSTERS.filter(m => m.cr === cr);
-}
-
-export function getMonstersByType(type: string): Monster[] {
-  return MONSTERS.filter(m => m.type === type);
-}
-
-export function getMonstersByEnvironment(env: string): Monster[] {
-  return MONSTERS.filter(m => m.environment.includes(env));
-}

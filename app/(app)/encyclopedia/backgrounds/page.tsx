@@ -32,7 +32,7 @@ export default function BackgroundsPage() {
 
         <div style={{ display: "flex", gap: 10, marginBottom: 20, alignItems: "flex-end" }}>
           <div style={{ flex: "1 1 200px" }}>
-            <input className="lo-input" value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar trasfondo..." style={{ fontSize: 13 }}/>
+            <input id="backgrounds-search" aria-label="Buscar trasfondo" className="lo-input" value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar trasfondo..." style={{ fontSize: 13 }}/>
           </div>
           {search && (
             <button type="button" className="lo-btn lo-btn-ghost" onClick={() => setSearch("")} style={{ fontSize: 12, padding: "6px 10px" }}>

@@ -62,12 +62,12 @@ export default function NewLocationPage({ params }: Props) {
         <div className="lo-card" style={{ padding: 24, display: "flex", flexDirection: "column", gap: 16 }}>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
             <div>
-              <label style={{ fontSize: 12, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Nombre *</label>
-              <input className="lo-input" value={form.name} onChange={set("name")} placeholder="Ej: Ciudad de Waterdeep" autoFocus/>
+              <label htmlFor="location-name" style={{ fontSize: 12, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Nombre *</label>
+              <input id="location-name" className="lo-input" value={form.name} onChange={set("name")} placeholder="Ej: Ciudad de Waterdeep"/>
             </div>
             <div>
-              <label style={{ fontSize: 12, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Tipo</label>
-              <select className="lo-input" value={form.type} onChange={set("type")}>
+              <label htmlFor="location-type" style={{ fontSize: 12, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Tipo</label>
+              <select id="location-type" className="lo-input" value={form.type} onChange={set("type")}>
                 {(Object.keys(LOCATION_TYPE_LABEL) as LocationType[]).map(t => (
                   <option key={t} value={t}>{LOCATION_TYPE_LABEL[t]}</option>
                 ))}
@@ -76,8 +76,8 @@ export default function NewLocationPage({ params }: Props) {
           </div>
 
           <div>
-            <label style={{ fontSize: 12, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Descripción</label>
-            <textarea className="lo-input" rows={3} value={form.description} onChange={set("description")} placeholder="Describe brevemente este lugar..." style={{ resize: "vertical" }}/>
+            <label htmlFor="location-description" style={{ fontSize: 12, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Descripción</label>
+            <textarea id="location-description" className="lo-input" rows={3} value={form.description} onChange={set("description")} placeholder="Describe brevemente este lugar..." style={{ resize: "vertical" }}/>
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
@@ -88,20 +88,20 @@ export default function NewLocationPage({ params }: Props) {
               ["Población", "population", "Ej: ~50.000 habitantes"],
             ].map(([lbl, key, ph]) => (
               <div key={key}>
-                <label style={{ fontSize: 12, color: "var(--text-low)", display: "block", marginBottom: 4 }}>{lbl}</label>
-                <input className="lo-input" value={(form as Record<string, string>)[key]} onChange={set(key)} placeholder={ph} style={{ fontSize: 13 }}/>
+                <label htmlFor={`location-${key}`} style={{ fontSize: 12, color: "var(--text-low)", display: "block", marginBottom: 4 }}>{lbl}</label>
+                <input id={`location-${key}`} className="lo-input" value={(form as Record<string, string>)[key]} onChange={set(key)} placeholder={ph} style={{ fontSize: 13 }}/>
               </div>
             ))}
           </div>
 
           <div>
-            <label style={{ fontSize: 12, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Notas del DM</label>
-            <textarea className="lo-input" rows={3} value={form.notes} onChange={set("notes")} placeholder="Información privada, ganchos de trama, secretos..." style={{ resize: "vertical" }}/>
+            <label htmlFor="location-notes" style={{ fontSize: 12, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Notas del DM</label>
+            <textarea id="location-notes" className="lo-input" rows={3} value={form.notes} onChange={set("notes")} placeholder="Información privada, ganchos de trama, secretos..." style={{ resize: "vertical" }}/>
           </div>
 
           <div>
-            <label style={{ fontSize: 12, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Etiquetas (separadas por coma)</label>
-            <input className="lo-input" value={form.tags} onChange={set("tags")} placeholder="Ej: capital, segura, comercio"/>
+            <label htmlFor="location-tags" style={{ fontSize: 12, color: "var(--text-low)", display: "block", marginBottom: 4 }}>Etiquetas (separadas por coma)</label>
+            <input id="location-tags" className="lo-input" value={form.tags} onChange={set("tags")} placeholder="Ej: capital, segura, comercio"/>
           </div>
         </div>
 

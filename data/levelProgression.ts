@@ -15,7 +15,6 @@ export interface ClassLevel {
 export type ClassProgression = ClassLevel[];
 
 export const maxAttunedItems = 3;
-export const MAX_ATTUNED_ITEMS = maxAttunedItems;
 
 export const FULL_CASTER_SPELL_SLOTS: number[][] = [
   [2, 0, 0, 0, 0, 0, 0, 0, 0],

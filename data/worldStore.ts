@@ -106,14 +106,6 @@ export function upsertFactionRelation(faction: Faction, relation: FactionRelatio
   return normalizeFaction({ ...faction, relations, updatedAt: Date.now() });
 }
 
-export function removeFactionRelation(faction: Faction, targetId: string): Faction {
-  return {
-    ...faction,
-    relations: faction.relations.filter(relation => relation.targetFactionId !== targetId),
-    updatedAt: Date.now(),
-  };
-}
-
 export function setLocationPin(locations: Location[], locationId: string, pin: Omit<MapPin, "locationId">): Location[] {
   return locations.map(location =>
     location.id === locationId

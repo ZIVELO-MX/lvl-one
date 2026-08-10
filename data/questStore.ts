@@ -84,21 +84,3 @@ export function setQuestObjectiveCompleted(quest: Quest, objectiveId: string, co
   });
 }
 
-export function upsertQuestObjective(quest: Quest, objective: QuestObjective): Quest {
-  const exists = quest.objectives.some(current => current.id === objective.id);
-  return normalizeQuest({
-    ...quest,
-    objectives: exists
-      ? quest.objectives.map(current => current.id === objective.id ? objective : current)
-      : [...quest.objectives, objective],
-    updatedAt: Date.now(),
-  });
-}
-
-export function removeQuestObjective(quest: Quest, objectiveId: string): Quest {
-  return {
-    ...quest,
-    objectives: quest.objectives.filter(objective => objective.id !== objectiveId),
-    updatedAt: Date.now(),
-  };
-}

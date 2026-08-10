@@ -22,6 +22,7 @@ export default function GroupsPage() {
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState<CreateForm>({ name: "", description: "", maxPlayers: 5, isPublic: true });
   const [search, setSearch] = useState("");
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/groups")
@@ -30,15 +31,20 @@ export default function GroupsPage() {
         const list: Group[] = d.groups ?? d ?? [];
         setGroups(list);
         if (state.user) {
-          const mine = new Set(list.filter(g => g.dmId === state.user!.id).map(g => g.id));
+          const mine = new Set<string>();
+          for (const g of list) {
+            if (g.dmId === state.user.id) mine.add(g.id);
+          }
           setMyGroups(mine);
         }
       })
+      .catch(() => setLoadError("No se pudieron cargar los grupos. Inténtalo de nuevo."))
       .finally(() => setLoading(false));
   }, [state.user]);
 
   async function createGroup(e: React.FormEvent) {
     e.preventDefault();
+    if (creating) return;
     if (!form.name.trim()) return;
     setCreating(true);
     try {
@@ -108,8 +114,9 @@ export default function GroupsPage() {
             <h3 style={{ fontSize: 15, marginBottom: 16, color: "var(--text-hi)" }}>Nuevo grupo</h3>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 12 }}>
               <div>
-                <label style={{ fontSize: 12, color: "var(--text-low)", display: "block", marginBottom: 5 }}>Nombre *</label>
+                <label htmlFor="group-name" style={{ fontSize: 12, color: "var(--text-low)", display: "block", marginBottom: 5 }}>Nombre *</label>
                 <input
+                  id="group-name"
                   value={form.name}
                   onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
                   placeholder="Los Caballeros del Dado"
@@ -118,8 +125,9 @@ export default function GroupsPage() {
                 />
               </div>
               <div>
-                <label style={{ fontSize: 12, color: "var(--text-low)", display: "block", marginBottom: 5 }}>Máximo de jugadores</label>
+                <label htmlFor="group-max-players" style={{ fontSize: 12, color: "var(--text-low)", display: "block", marginBottom: 5 }}>Máximo de jugadores</label>
                 <input
+                  id="group-max-players"
                   type="number" min={2} max={20}
                   value={form.maxPlayers}
                   onChange={e => setForm(f => ({ ...f, maxPlayers: Number(e.target.value) }))}
@@ -128,8 +136,9 @@ export default function GroupsPage() {
               </div>
             </div>
             <div style={{ marginBottom: 12 }}>
-              <label style={{ fontSize: 12, color: "var(--text-low)", display: "block", marginBottom: 5 }}>Descripción</label>
+              <label htmlFor="group-description" style={{ fontSize: 12, color: "var(--text-low)", display: "block", marginBottom: 5 }}>Descripción</label>
               <textarea
+                id="group-description"
                 value={form.description}
                 onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
                 placeholder="¿De qué va tu grupo? ¿Qué tipo de campaña buscan?"
@@ -165,6 +174,7 @@ export default function GroupsPage() {
             <Ico name="search" size={14} color="var(--text-low)"/>
           </div>
           <input
+            aria-label="Buscar grupos"
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Buscar grupos..."
@@ -175,6 +185,12 @@ export default function GroupsPage() {
             }}
           />
         </div>
+
+        {loadError && (
+          <div role="alert" style={{ marginBottom: 16, padding: "10px 14px", borderRadius: 8, fontSize: 13, background: "rgba(180,58,46,0.15)", color: "#E8847A", border: "1px solid rgba(180,58,46,0.3)" }}>
+            {loadError}
+          </div>
+        )}
 
         {/* Groups list */}
         {loading ? (

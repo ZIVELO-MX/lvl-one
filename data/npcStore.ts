@@ -33,22 +33,6 @@ export function saveNPC(npcs: NPC[], npc: NPC): NPC[] {
   return npcs.map(current => current.id === normalized.id ? normalized : current);
 }
 
-export function updateNPC(npcs: NPC[], npcId: string, patch: NPCPatch): NPC[] {
-  const now = Date.now();
-  return npcs.map(npc =>
-    npc.id === npcId
-      ? normalizeNPC({
-          ...npc,
-          ...patch,
-          id: npc.id,
-          campaignId: npc.campaignId,
-          createdAt: npc.createdAt,
-          updatedAt: now,
-        })
-      : npc,
-  );
-}
-
 export function deleteNPC(npcs: NPC[], npcId: string): NPC[] {
   return npcs.filter(npc => npc.id !== npcId);
 }
@@ -65,14 +49,6 @@ export function upsertNPCRelation(npc: NPC, relation: NPCRelation): NPC {
     : [...npc.relations, relation];
 
   return { ...npc, relations, updatedAt: Date.now() };
-}
-
-export function removeNPCRelation(npc: NPC, targetId: string, targetType: NPCRelation["targetType"]): NPC {
-  return {
-    ...npc,
-    relations: npc.relations.filter(relation => relation.targetId !== targetId || relation.targetType !== targetType),
-    updatedAt: Date.now(),
-  };
 }
 
 export function rememberNPC(npc: NPC, memory: Omit<NPCMemory, "id" | "createdAt"> & Partial<Pick<NPCMemory, "id" | "createdAt">>): NPC {

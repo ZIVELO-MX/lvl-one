@@ -53,9 +53,9 @@ export default function FeatsPage() {
 
         <div style={{ display: "flex", gap: 10, marginBottom: 20, flexWrap: "wrap", alignItems: "flex-end" }}>
           <div style={{ flex: "1 1 180px" }}>
-            <input className="lo-input" value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar dote..." style={{ fontSize: 13 }} />
+            <input id="feats-search" aria-label="Buscar dote" className="lo-input" value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar dote..." style={{ fontSize: 13 }} />
           </div>
-          <select className="lo-input" value={filterType} onChange={e => setFilterType(e.target.value as FeatType | "")} style={{ fontSize: 12, flex: "0 0 auto" }}>
+          <select id="feats-type" aria-label="Filtrar por tipo de dote" className="lo-input" value={filterType} onChange={e => setFilterType(e.target.value as FeatType | "")} style={{ fontSize: 12, flex: "0 0 auto" }}>
             <option value="">Todos los tipos</option>
             {ALL_TYPES.map(t => <option key={t} value={t}>{TYPE_LABEL[t]}</option>)}
           </select>
