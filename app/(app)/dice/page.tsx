@@ -114,31 +114,31 @@ export default function DicePage() {
           <div style={{ display: "flex", gap: 16, flexWrap: "wrap", alignItems: "flex-end" }}>
             {/* Count */}
             <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-              <label style={{ fontSize: 11, color: "var(--text-low)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Cantidad</label>
-              <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
-                <button type="button" onClick={() => setCount(c => Math.max(1, c - 1))} className="lo-btn lo-btn-ghost" style={{ padding: "4px 10px", fontSize: 16 }}>−</button>
-                <span style={{ fontSize: 18, fontWeight: 700, color: "var(--text-hi)", minWidth: 28, textAlign: "center" }}>{count}</span>
-                <button type="button" onClick={() => setCount(c => Math.min(10, c + 1))} className="lo-btn lo-btn-ghost" style={{ padding: "4px 10px", fontSize: 16 }}>+</button>
+              <span id="dice-count-label" style={{ fontSize: 11, color: "var(--text-low)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Cantidad</span>
+              <div role="group" aria-labelledby="dice-count-label" style={{ display: "flex", gap: 4, alignItems: "center" }}>
+                <button type="button" aria-label="Un dado menos" onClick={() => setCount(c => Math.max(1, c - 1))} className="lo-btn lo-btn-ghost" style={{ padding: "4px 10px", fontSize: 16 }}>−</button>
+                <span aria-live="polite" style={{ fontSize: 18, fontWeight: 700, color: "var(--text-hi)", minWidth: 28, textAlign: "center" }}>{count}</span>
+                <button type="button" aria-label="Un dado más" onClick={() => setCount(c => Math.min(10, c + 1))} className="lo-btn lo-btn-ghost" style={{ padding: "4px 10px", fontSize: 16 }}>+</button>
               </div>
             </div>
 
             {/* Modifier */}
             <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-              <label style={{ fontSize: 11, color: "var(--text-low)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Modificador</label>
-              <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
-                <button type="button" onClick={() => setMod(m => m - 1)} className="lo-btn lo-btn-ghost" style={{ padding: "4px 10px", fontSize: 16 }}>−</button>
-                <span style={{ fontSize: 18, fontWeight: 700, color: mod >= 0 ? "#A3C28F" : "#C28F8F", minWidth: 36, textAlign: "center" }}>{mod >= 0 ? `+${mod}` : mod}</span>
-                <button type="button" onClick={() => setMod(m => m + 1)} className="lo-btn lo-btn-ghost" style={{ padding: "4px 10px", fontSize: 16 }}>+</button>
+              <span id="dice-mod-label" style={{ fontSize: 11, color: "var(--text-low)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Modificador</span>
+              <div role="group" aria-labelledby="dice-mod-label" style={{ display: "flex", gap: 4, alignItems: "center" }}>
+                <button type="button" aria-label="Bajar el modificador" onClick={() => setMod(m => m - 1)} className="lo-btn lo-btn-ghost" style={{ padding: "4px 10px", fontSize: 16 }}>−</button>
+                <span aria-live="polite" style={{ fontSize: 18, fontWeight: 700, color: mod >= 0 ? "#A3C28F" : "#C28F8F", minWidth: 36, textAlign: "center" }}>{mod >= 0 ? `+${mod}` : mod}</span>
+                <button type="button" aria-label="Subir el modificador" onClick={() => setMod(m => m + 1)} className="lo-btn lo-btn-ghost" style={{ padding: "4px 10px", fontSize: 16 }}>+</button>
               </div>
             </div>
 
             {/* Advantage (only for d20 × 1) */}
             {selected === 20 && count === 1 && (
               <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                <label style={{ fontSize: 11, color: "var(--text-low)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Ventaja</label>
-                <div style={{ display: "flex", gap: 4 }}>
+                <span id="dice-adv-label" style={{ fontSize: 11, color: "var(--text-low)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Ventaja</span>
+                <div role="group" aria-labelledby="dice-adv-label" style={{ display: "flex", gap: 4 }}>
                   {(["none", "advantage", "disadvantage"] as const).map(v => (
-                    <button type="button" key={v} onClick={() => setAdv(v)} style={{
+                    <button type="button" key={v} onClick={() => setAdv(v)} aria-pressed={adv === v} style={{
                       padding: "5px 10px", borderRadius: 6, border: "none", cursor: "pointer", fontSize: 11,
                       background: adv === v ? (v === "advantage" ? "rgba(163,194,143,0.2)" : v === "disadvantage" ? "rgba(194,143,143,0.2)" : "rgba(255,255,255,0.08)") : "rgba(255,255,255,0.04)",
                       outline: adv === v ? `1px solid ${v === "advantage" ? "#A3C28F" : v === "disadvantage" ? "#C28F8F" : "var(--border-lo)"}` : "1px solid transparent",

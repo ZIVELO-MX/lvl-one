@@ -74,30 +74,30 @@ export default function SessionDetailPage({ params }: Props) {
           <div className="lo-card" style={{ padding: 20, marginBottom: 20 }}>
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               <div>
-                <label style={{ display: "block", fontSize: 12, color: "var(--text-mid)", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.06em" }}>Estado</label>
-                <div style={{ display: "flex", gap: 8 }}>
+                <span id="session-status-label" style={{ display: "block", fontSize: 12, color: "var(--text-mid)", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.06em" }}>Estado</span>
+                <div role="group" aria-labelledby="session-status-label" style={{ display: "flex", gap: 8 }}>
                   {(["scheduled", "in-progress", "completed", "cancelled"] as SessionStatus[]).map(s => (
-                    <button type="button" key={s} onClick={() => setStatus(s)} className={`lo-btn ${status === s ? "lo-btn-primary" : "lo-btn-ghost"}`} style={{ padding: "6px 12px", fontSize: 12 }}>
+                    <button type="button" key={s} onClick={() => setStatus(s)} aria-pressed={status === s} className={`lo-btn ${status === s ? "lo-btn-primary" : "lo-btn-ghost"}`} style={{ padding: "6px 12px", fontSize: 12 }}>
                       {s === "scheduled" ? "Planificada" : s === "in-progress" ? "En curso" : s === "completed" ? "Completada" : "Cancelada"}
                     </button>
                   ))}
                 </div>
               </div>
               <div>
-                <label style={{ display: "block", fontSize: 12, color: "var(--text-mid)", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.06em" }}>Resumen</label>
-                <textarea className="lo-input" value={summary} onChange={e => setSummary(e.target.value)} rows={4} placeholder="Qué ocurrió en esta sesión..." style={{ resize: "vertical" }}/>
+                <label htmlFor="session-summary" style={{ display: "block", fontSize: 12, color: "var(--text-mid)", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.06em" }}>Resumen</label>
+                <textarea id="session-summary" className="lo-input" value={summary} onChange={e => setSummary(e.target.value)} rows={4} placeholder="Qué ocurrió en esta sesión..." style={{ resize: "vertical" }}/>
               </div>
               <div>
-                <label style={{ display: "block", fontSize: 12, color: "var(--text-mid)", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.06em" }}>NPCs presentes</label>
-                <input className="lo-input" value={npcsText} onChange={e => setNpcsText(e.target.value)} placeholder="Nombres separados por comas"/>
+                <label htmlFor="session-npcs" style={{ display: "block", fontSize: 12, color: "var(--text-mid)", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.06em" }}>NPCs presentes</label>
+                <input id="session-npcs" className="lo-input" value={npcsText} onChange={e => setNpcsText(e.target.value)} placeholder="Nombres separados por comas"/>
               </div>
               <div>
-                <label style={{ display: "block", fontSize: 12, color: "var(--text-mid)", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.06em" }}>Loot / Recompensas</label>
-                <textarea className="lo-input" value={loot} onChange={e => setLoot(e.target.value)} rows={2} placeholder="Tesoros, objetos, recompensas..." style={{ resize: "vertical" }}/>
+                <label htmlFor="session-loot" style={{ display: "block", fontSize: 12, color: "var(--text-mid)", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.06em" }}>Loot / Recompensas</label>
+                <textarea id="session-loot" className="lo-input" value={loot} onChange={e => setLoot(e.target.value)} rows={2} placeholder="Tesoros, objetos, recompensas..." style={{ resize: "vertical" }}/>
               </div>
               <div>
-                <label style={{ display: "block", fontSize: 12, color: "var(--text-mid)", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.06em" }}>XP otorgados</label>
-                <input type="number" className="lo-input" value={xp} onChange={e => setXp(Number(e.target.value))} min={0}/>
+                <label htmlFor="session-xp" style={{ display: "block", fontSize: 12, color: "var(--text-mid)", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.06em" }}>XP otorgados</label>
+                <input id="session-xp" type="number" className="lo-input" value={xp} onChange={e => setXp(Number(e.target.value))} min={0}/>
               </div>
             </div>
             <div style={{ display: "flex", gap: 10, justifyContent: "flex-end", marginTop: 16 }}>
