@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { LvlLogo } from "@/components/ui/icons";
 import { useApp } from "@/lib/store";
+import { createClient } from "@/lib/supabaseClient";
 
 const QUESTIONS = [
   { id: "exp",   t: "¿Ya has jugado rol antes?",             opts: ["Nunca", "Un poco", "Bastante", "Soy veterano"] },
@@ -25,6 +26,10 @@ export default function OnboardingPage() {
       setTimeout(() => setStep(s => s + 1), 200);
     } else {
       dispatch({ type: "ONBOARDING_DONE", answers: next });
+      // Marcar la cuenta como ya presentada, o /login volvería a traerla aquí
+      // en cada inicio de sesión. Si falla, se repite el cuestionario: molesto
+      // pero inofensivo, así que no bloqueamos la entrada por esto.
+      createClient().auth.updateUser({ data: { onboarded: true } }).catch(() => {});
       setTimeout(() => router.push("/dashboard"), 350);
     }
   }

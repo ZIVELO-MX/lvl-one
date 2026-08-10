@@ -40,7 +40,7 @@ export default function LoginPage() {
       const user = data.user;
       if (!user) { setErr("Error al iniciar sesión."); setLoading(false); return; }
 
-      // Primera vez: usuario con acceso provisional — redirigir a setup
+      // Invitado con contraseña provisional: aún tiene que elegir nombre y clave.
       if (user.user_metadata?.needs_setup === true) {
         router.push("/setup");
         return;
@@ -49,7 +49,10 @@ export default function LoginPage() {
       const username = user.user_metadata?.username ?? email.split("@")[0];
       dispatch({ type: "LOGIN", user: { id: user.id, username, email } });
       setLoading(false);
-      router.push("/dashboard");
+
+      // Sólo el false explícito manda al onboarding: las cuentas antiguas no
+      // llevan la marca y no queremos repetírselo a quien ya lleva meses.
+      router.push(user.user_metadata?.onboarded === false ? "/onboarding" : "/dashboard");
     } catch (e) {
       setErr(e instanceof Error ? e.message : "Error de conexión.");
       setLoading(false);
@@ -69,13 +72,9 @@ export default function LoginPage() {
           <span style={{ fontFamily: "var(--font-display)", letterSpacing: "0.18em", fontSize: 13 }}>LVL ONE</span>
         </div>
 
-        <div className="lo-chip lo-chip-gold" style={{ marginBottom: 16, fontSize: 11, display: "inline-flex", alignItems: "center", gap: 6 }}>
-          <Ico name="shield" size={11}/> Beta cerrada · Solo por invitación
-        </div>
-
-        <h2 style={{ fontSize: 24, marginBottom: 6 }}>Acceso de invitado</h2>
+        <h2 style={{ fontSize: 24, marginBottom: 6 }}>Bienvenido de vuelta</h2>
         <p style={{ color: "var(--text-mid)", fontSize: 13, marginBottom: 24, lineHeight: 1.5 }}>
-          Entra con tu email y tu contraseña. Si es tu primera vez, usa la provisional que recibiste.
+          Entra con tu email y tu contraseña.
         </p>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 20 }}>
@@ -128,16 +127,8 @@ export default function LoginPage() {
 
         <div style={{ borderTop: "1px solid var(--line)", paddingTop: 16, textAlign: "center" }}>
           <p style={{ fontSize: 12, color: "var(--text-low)", lineHeight: 1.5 }}>
-            ¿No tienes acceso todavía?{" "}
-            <a
-              href="https://discord.gg/nwQ8pPVc6f"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: "var(--quest-gold-hi)" }}
-            >
-              Únete al Discord
-            </a>{" "}
-            para solicitar una invitación.
+            ¿Todavía no tienes cuenta?{" "}
+            <Link href="/register" style={{ color: "var(--quest-gold-hi)" }}>Créala gratis</Link>
           </p>
         </div>
       </form>
