@@ -148,18 +148,19 @@ export default function EncounterBuilderPage() {
             <div className="lo-card" style={{ padding: 16, marginBottom: 16, display: "flex", gap: 24, alignItems: "center", flexWrap: "wrap" }}>
               <div style={{ fontSize: 13, color: "var(--text-low)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em" }}>Partido</div>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <label style={{ fontSize: 12, color: "var(--text-low)" }}>Jugadores</label>
-                <div style={{ display: "flex", gap: 4 }}>
+                {/* No es un <label>: rotula un grupo de botones, no un campo. */}
+                <span id="eb-party-size-label" style={{ fontSize: 12, color: "var(--text-low)" }}>Jugadores</span>
+                <div role="group" aria-labelledby="eb-party-size-label" style={{ display: "flex", gap: 4 }}>
                   {[1,2,3,4,5,6,7,8].map(n => (
-                    <button type="button" key={n} onClick={() => setPartySize(n)} style={{ width: 28, height: 28, borderRadius: 6, border: `1px solid ${partySize === n ? "var(--quest-gold-hi)" : "var(--border-lo)"}`, background: partySize === n ? "rgba(214,168,79,0.15)" : "transparent", color: partySize === n ? "var(--quest-gold-hi)" : "var(--text-mid)", fontSize: 12, cursor: "pointer", fontWeight: partySize === n ? 700 : 400 }}>{n}</button>
+                    <button type="button" key={n} onClick={() => setPartySize(n)} aria-pressed={partySize === n} style={{ width: 28, height: 28, borderRadius: 6, border: `1px solid ${partySize === n ? "var(--quest-gold-hi)" : "var(--border-lo)"}`, background: partySize === n ? "rgba(214,168,79,0.15)" : "transparent", color: partySize === n ? "var(--quest-gold-hi)" : "var(--text-mid)", fontSize: 12, cursor: "pointer", fontWeight: partySize === n ? 700 : 400 }}>{n}</button>
                   ))}
                 </div>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <label style={{ fontSize: 12, color: "var(--text-low)" }}>Nivel</label>
-                <div style={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
+                <span id="eb-party-level-label" style={{ fontSize: 12, color: "var(--text-low)" }}>Nivel</span>
+                <div role="group" aria-labelledby="eb-party-level-label" style={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
                   {Array.from({ length: 20 }, (_, i) => i + 1).map(n => (
-                    <button type="button" key={n} onClick={() => setPartyLevel(n)} style={{ width: 26, height: 26, borderRadius: 5, border: `1px solid ${partyLevel === n ? "var(--arcane-blue-hi)" : "var(--border-lo)"}`, background: partyLevel === n ? "var(--arcane-blue-lo)" : "transparent", color: partyLevel === n ? "var(--arcane-blue-hi)" : "var(--text-mid)", fontSize: 11, cursor: "pointer", fontWeight: partyLevel === n ? 700 : 400 }}>{n}</button>
+                    <button type="button" key={n} onClick={() => setPartyLevel(n)} aria-pressed={partyLevel === n} style={{ width: 26, height: 26, borderRadius: 5, border: `1px solid ${partyLevel === n ? "var(--arcane-blue-hi)" : "var(--border-lo)"}`, background: partyLevel === n ? "var(--arcane-blue-lo)" : "transparent", color: partyLevel === n ? "var(--arcane-blue-hi)" : "var(--text-mid)", fontSize: 11, cursor: "pointer", fontWeight: partyLevel === n ? 700 : 400 }}>{n}</button>
                   ))}
                 </div>
               </div>
@@ -168,36 +169,36 @@ export default function EncounterBuilderPage() {
             {/* Filters */}
             <div className="lo-card" style={{ padding: 16, marginBottom: 16, display: "flex", gap: 10, flexWrap: "wrap", alignItems: "flex-end" }}>
               <div style={{ flex: "1 1 160px", minWidth: 160 }}>
-                <label style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.06em" }}>Buscar</label>
+                <label htmlFor="eb-search" style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.06em" }}>Buscar</label>
                 <div style={{ position: "relative" }}>
                   <Ico name="search" size={13} color="var(--text-low)"/>
-                  <input className="lo-input" value={search} onChange={e => setSearch(e.target.value)} placeholder="Nombre del monstruo..." style={{ fontSize: 13, paddingLeft: 28 }}/>
+                  <input id="eb-search" className="lo-input" value={search} onChange={e => setSearch(e.target.value)} placeholder="Nombre del monstruo..." style={{ fontSize: 13, paddingLeft: 28 }}/>
                 </div>
               </div>
               <div style={{ flex: "0 0 auto" }}>
-                <label style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.06em" }}>CR mín</label>
-                <select className="lo-input" value={filterCrMin ?? ""} onChange={e => setFilterCrMin(e.target.value === "" ? null : Number(e.target.value))} style={{ fontSize: 12, width: 80 }}>
+                <label htmlFor="eb-cr-min" style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.06em" }}>CR mín</label>
+                <select id="eb-cr-min" className="lo-input" value={filterCrMin ?? ""} onChange={e => setFilterCrMin(e.target.value === "" ? null : Number(e.target.value))} style={{ fontSize: 12, width: 80 }}>
                   <option value="">–</option>
                   {ALL_CRS.map(cr => <option key={cr} value={cr}>{crLabel(cr)}</option>)}
                 </select>
               </div>
               <div style={{ flex: "0 0 auto" }}>
-                <label style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.06em" }}>CR máx</label>
-                <select className="lo-input" value={filterCrMax ?? ""} onChange={e => setFilterCrMax(e.target.value === "" ? null : Number(e.target.value))} style={{ fontSize: 12, width: 80 }}>
+                <label htmlFor="eb-cr-max" style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.06em" }}>CR máx</label>
+                <select id="eb-cr-max" className="lo-input" value={filterCrMax ?? ""} onChange={e => setFilterCrMax(e.target.value === "" ? null : Number(e.target.value))} style={{ fontSize: 12, width: 80 }}>
                   <option value="">–</option>
                   {ALL_CRS.map(cr => <option key={cr} value={cr}>{crLabel(cr)}</option>)}
                 </select>
               </div>
               <div style={{ flex: "1 1 140px", minWidth: 140 }}>
-                <label style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.06em" }}>Tipo</label>
-                <select className="lo-input" value={filterType} onChange={e => setFilterType(e.target.value as MonsterType | "")} style={{ fontSize: 12 }}>
+                <label htmlFor="eb-type" style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.06em" }}>Tipo</label>
+                <select id="eb-type" className="lo-input" value={filterType} onChange={e => setFilterType(e.target.value as MonsterType | "")} style={{ fontSize: 12 }}>
                   <option value="">Todos</option>
                   {ALL_TYPES.map(t => <option key={t} value={t}>{TYPE_LABEL[t]}</option>)}
                 </select>
               </div>
               <div style={{ flex: "1 1 140px", minWidth: 140 }}>
-                <label style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.06em" }}>Entorno</label>
-                <select className="lo-input" value={filterEnv} onChange={e => setFilterEnv(e.target.value)} style={{ fontSize: 12 }}>
+                <label htmlFor="eb-env" style={{ fontSize: 11, color: "var(--text-low)", display: "block", marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.06em" }}>Entorno</label>
+                <select id="eb-env" className="lo-input" value={filterEnv} onChange={e => setFilterEnv(e.target.value)} style={{ fontSize: 12 }}>
                   <option value="">Todos</option>
                   {ALL_ENVS.map(env => <option key={env} value={env} style={{ textTransform: "capitalize" }}>{env.charAt(0).toUpperCase() + env.slice(1)}</option>)}
                 </select>
@@ -294,11 +295,11 @@ export default function EncounterBuilderPage() {
                           <div style={{ fontSize: 11, color: "var(--text-low)" }}>CR {crLabel(entry.monster.cr)} · {(crToXp(entry.monster.cr) * entry.count).toLocaleString()} XP</div>
                         </div>
                         <div style={{ display: "flex", alignItems: "center", gap: 4, flexShrink: 0 }}>
-                          <button type="button" onClick={() => setCount(entry.monster.id, entry.count - 1)} style={{ width: 22, height: 22, borderRadius: 4, border: "1px solid var(--border-lo)", background: "transparent", color: "var(--text-mid)", fontSize: 14, cursor: "pointer", display: "grid", placeItems: "center" }}>−</button>
-                          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--text-hi)", minWidth: 18, textAlign: "center" }}>{entry.count}</span>
-                          <button type="button" onClick={() => setCount(entry.monster.id, entry.count + 1)} style={{ width: 22, height: 22, borderRadius: 4, border: "1px solid var(--border-lo)", background: "transparent", color: "var(--text-mid)", fontSize: 14, cursor: "pointer", display: "grid", placeItems: "center" }}>+</button>
+                          <button type="button" aria-label={`Quitar un ${entry.monster.name}`} onClick={() => setCount(entry.monster.id, entry.count - 1)} style={{ width: 22, height: 22, borderRadius: 4, border: "1px solid var(--border-lo)", background: "transparent", color: "var(--text-mid)", fontSize: 14, cursor: "pointer", display: "grid", placeItems: "center" }}>−</button>
+                          <span aria-live="polite" style={{ fontSize: 13, fontWeight: 700, color: "var(--text-hi)", minWidth: 18, textAlign: "center" }}>{entry.count}</span>
+                          <button type="button" aria-label={`Añadir un ${entry.monster.name}`} onClick={() => setCount(entry.monster.id, entry.count + 1)} style={{ width: 22, height: 22, borderRadius: 4, border: "1px solid var(--border-lo)", background: "transparent", color: "var(--text-mid)", fontSize: 14, cursor: "pointer", display: "grid", placeItems: "center" }}>+</button>
                         </div>
-                        <button type="button" onClick={() => setCount(entry.monster.id, 0)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-low)", padding: 2 }}>
+                        <button type="button" aria-label={`Quitar ${entry.monster.name} del encuentro`} onClick={() => setCount(entry.monster.id, 0)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-low)", padding: 2 }}>
                           <Ico name="x" size={13}/>
                         </button>
                       </div>
