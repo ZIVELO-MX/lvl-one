@@ -3,15 +3,25 @@ import { useState } from "react";
 import { TopBar } from "@/components/layout/AppShell";
 import { GLOSSARY_TERMS } from "@/data/glossary";
 
-const CATEGORIES = ["Todas", "Mesa", "Mecánicas", "Combate", "Personaje", "Magia", "Descansos"];
+// Sólo fija el orden de los filtros; las categorías que existen de verdad
+// salen de los datos, así que añadir términos nuevos no obliga a tocar esto.
+const CATEGORIES = [
+  "Todas", "Mesa", "Mecánicas", "Combate", "Condición", "Personaje", "Ficha",
+  "Características", "Progresión", "Magia", "Equipo", "Descanso",
+];
 
 const CAT_COLOR: Record<string, string> = {
   Mesa: "var(--quest-gold)",
   Mecánicas: "var(--arcane-blue-hi)",
   Combate: "var(--dragon-red)",
+  Condición: "#e879a5",
   Personaje: "var(--moss-green)",
+  Ficha: "var(--quest-gold-hi)",
+  Características: "#8fb996",
+  Progresión: "#f0a868",
   Magia: "#c084fc",
-  Descansos: "#67e8f9",
+  Equipo: "#b8a189",
+  Descanso: "#67e8f9",
 };
 
 export default function GlossaryPage() {
@@ -19,8 +29,12 @@ export default function GlossaryPage() {
   const [cat, setCat] = useState("Todas");
   const [expanded, setExpanded] = useState<string | null>(null);
 
-  const availableCats = Array.from(new Set(GLOSSARY_TERMS.map(t => t.cat)));
-  const visibleCats = ["Todas", ...availableCats.filter(c => CATEGORIES.includes(c)), ...availableCats.filter(c => !CATEGORIES.includes(c) && c !== "Todas")];
+  const availableCats = new Set(GLOSSARY_TERMS.map(t => t.cat));
+  const visibleCats = [
+    "Todas",
+    ...CATEGORIES.filter(c => c !== "Todas" && availableCats.has(c)),
+    ...[...availableCats].filter(c => !CATEGORIES.includes(c)),
+  ];
 
   const filtered = GLOSSARY_TERMS.filter(t => {
     if (cat !== "Todas" && t.cat !== cat) return false;
