@@ -249,7 +249,7 @@ export interface CharacterDraft {
   age: string;
   status: CharacterStatus;
   conceptId: string | null;
-  statsMethod: "standard" | "roll";
+  statsMethod: "standard" | "roll" | "point-buy";
   equipment: string[];
   equippedItems?: string[];
   spells: string[];
@@ -309,4 +309,5 @@ export {
   STAT_KEYS, STAT_LABELS, STANDARD_ARRAY, MAX_FREE_CHARACTERS,
   modOf, fmtMod, proficiencyBonusForLevel, avgHitDie, hpForLevel,
   levelGrantsASI, asiCountUpToLevel, armorClassFrom,
+  POINT_BUY_BUDGET, POINT_BUY_MIN, POINT_BUY_MAX, pointBuyCost, pointBuySpent, pointBuyRemaining,
 } from "@/lib/characterMath";

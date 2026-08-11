@@ -6,7 +6,7 @@ import { LivePreview } from "../LivePreview";
 import { CLASSES } from "@/data/classes";
 import { RACES } from "@/data/races";
 import { SUBRACES } from "@/data/subraces";
-import { STAT_KEYS, STAT_LABELS, STANDARD_ARRAY, modOf, fmtMod } from "@/types/character";
+import { STAT_KEYS, STAT_LABELS, STANDARD_ARRAY, modOf, fmtMod, POINT_BUY_MIN, POINT_BUY_MAX, pointBuyCost, pointBuyRemaining } from "@/types/character";
 import type { CharacterDraft, StatKey } from "@/types/character";
 
 export function Step4Stats({ draft, id }: { draft: CharacterDraft; id: string }) {
@@ -117,6 +117,89 @@ export function Step4Stats({ draft, id }: { draft: CharacterDraft; id: string })
 
         {/* sidebar */}
         <div style={{ width: 200 }}>
+          {/* Método de puntuación. statsMethod existía en el modelo y este paso
+              lo ignoraba: sólo repartía el array estándar. */}
+          <div className="lo-label" style={{ marginBottom: 6 }}>Método</div>
+          <div style={{ display: "flex", gap: 4, marginBottom: 14 }}>
+            {([
+              { id: "standard", texto: "Array" },
+              { id: "point-buy", texto: "Puntos" },
+            ] as const).map(m => {
+              const activo = (draft.statsMethod ?? "standard") === m.id;
+              return (
+                <button type="button" key={m.id} aria-pressed={activo}
+                  onClick={() => up({
+                    statsMethod: m.id,
+                    // Cambiar de método reinicia el reparto: mezclarlos daría
+                    // puntuaciones imposibles en cualquiera de los dos.
+                    baseStats: m.id === "point-buy"
+                      ? Object.fromEntries(STAT_KEYS.map(k => [k, POINT_BUY_MIN]))
+                      : Object.fromEntries(STAT_KEYS.map((k, i) => [k, STANDARD_ARRAY[i]])),
+                  })}
+                  style={{
+                    flex: 1, padding: "6px 8px", borderRadius: 8, fontSize: 11, cursor: "pointer",
+                    border: activo ? "1px solid var(--quest-gold)" : "1px solid var(--line-strong)",
+                    background: activo ? "rgba(214,168,79,0.08)" : "transparent",
+                    color: activo ? "var(--quest-gold-hi)" : "var(--text-mid)",
+                  }}>
+                  {m.texto}
+                </button>
+              );
+            })}
+          </div>
+
+          {draft.statsMethod === "point-buy" ? (
+            <div style={{ marginBottom: 16 }}>
+              <div className="lo-label" style={{ marginBottom: 6 }}>Compra de puntos</div>
+              {(() => {
+                const restante = pointBuyRemaining(draft.baseStats);
+                return (
+                  <>
+                    <div style={{ textAlign: "center", marginBottom: 10 }}>
+                      <div style={{ fontFamily: "var(--font-display)", fontSize: 26, color: restante < 0 ? "#E8847A" : "var(--text-hi)" }}>
+                        {restante}
+                      </div>
+                      <div style={{ fontSize: 10, color: "var(--text-low)" }}>puntos sin gastar</div>
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                      {STAT_KEYS.map(k => {
+                        const v = draft.baseStats[k] ?? POINT_BUY_MIN;
+                        const subir = () => {
+                          if (v >= POINT_BUY_MAX) return;
+                          const coste = pointBuyCost(v + 1) - pointBuyCost(v);
+                          if (coste > restante) return;
+                          up({ baseStats: { ...draft.baseStats, [k]: v + 1 } });
+                        };
+                        const bajar = () => {
+                          if (v <= POINT_BUY_MIN) return;
+                          up({ baseStats: { ...draft.baseStats, [k]: v - 1 } });
+                        };
+                        const costeSubir = v < POINT_BUY_MAX ? pointBuyCost(v + 1) - pointBuyCost(v) : 0;
+                        return (
+                          <div key={k} style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                            <span style={{ fontSize: 11, color: "var(--text-low)", width: 30 }}>{k}</span>
+                            <button type="button" aria-label={`Bajar ${k}`} onClick={bajar} disabled={v <= POINT_BUY_MIN}
+                              style={{ width: 22, height: 22, borderRadius: 5, border: "1px solid var(--line-strong)", background: "transparent", color: "var(--text-mid)", cursor: v > POINT_BUY_MIN ? "pointer" : "default", opacity: v > POINT_BUY_MIN ? 1 : 0.35 }}>−</button>
+                            <span style={{ fontFamily: "var(--font-display)", fontSize: 15, width: 22, textAlign: "center", color: "var(--text-hi)" }}>{v}</span>
+                            <button type="button" aria-label={`Subir ${k}`} onClick={subir} disabled={v >= POINT_BUY_MAX || costeSubir > restante}
+                              title={costeSubir > restante ? "No te quedan puntos" : undefined}
+                              style={{ width: 22, height: 22, borderRadius: 5, border: "1px solid var(--line-strong)", background: "transparent", color: "var(--text-mid)", cursor: v < POINT_BUY_MAX && costeSubir <= restante ? "pointer" : "default", opacity: v < POINT_BUY_MAX && costeSubir <= restante ? 1 : 0.35 }}>+</button>
+                            {v < POINT_BUY_MAX && (
+                              <span style={{ fontSize: 9, color: "var(--text-low)" }}>+{costeSubir}</span>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <p style={{ fontSize: 10, color: "var(--text-low)", marginTop: 10, lineHeight: 1.5 }}>
+                      De 8 a 15. Los dos últimos puntos cuestan el doble.
+                    </p>
+                  </>
+                );
+              })()}
+            </div>
+          ) : (
+          <>
           <div className="lo-label" style={{ marginBottom: 8 }}>Array estándar</div>
           <div style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: 16 }}>
             {STANDARD_ARRAY.map(v => {
@@ -132,6 +215,8 @@ export function Step4Stats({ draft, id }: { draft: CharacterDraft; id: string })
               );
             })}
           </div>
+          </>
+          )}
           {cls?.primary && (
             <div>
               <div className="lo-label" style={{ marginBottom: 6 }}>Stats principales</div>
