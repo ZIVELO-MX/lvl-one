@@ -69,7 +69,13 @@ export function Step2Race({ draft, id }: { draft: CharacterDraft; id: string }) 
 
   const pickRace = (raceId: string) => {
     if (draft.raceId === raceId) return;
-    const patch: Partial<CharacterDraft> = { raceId, subraceId: null };
+    // Todo lo que dependía de la raza anterior se cae con ella. Sin esto, un
+    // semielfo convertido en enano se quedaba con sus dos habilidades y sus
+    // dos +1 elegidos, que el enano no concede.
+    const patch: Partial<CharacterDraft> = {
+      raceId, subraceId: null,
+      raceSkills: [], asiBonuses: {}, feats: [], featBonuses: {},
+    };
     if (!draft.classId) {
       const synergy = getRaceSynergy(raceId);
       if (synergy?.bestFor.length) {
@@ -185,7 +191,7 @@ export function Step2Race({ draft, id }: { draft: CharacterDraft; id: string }) 
               const picked = draft.subraceId === s.id;
               const subSrc = subracePortrait(s.id, gender);
               return (
-                <button type="button" key={s.id} onClick={() => up({ subraceId: s.id })} style={{
+                <button type="button" key={s.id} onClick={() => up({ subraceId: s.id, feats: [], featBonuses: {} })} style={{
                   padding: "12px 10px", borderRadius: 8, textAlign: "left", cursor: "pointer",
                   border: picked ? "1px solid var(--quest-gold)" : "1px solid var(--line-strong)",
                   background: picked ? "rgba(214,168,79,0.10)" : "rgba(244,231,197,0.03)" }}>

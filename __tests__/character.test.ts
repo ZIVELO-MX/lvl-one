@@ -135,15 +135,15 @@ describe("buildCharacter", () => {
     expect(character.stats.CON).toBe(11);
   });
 
-  it("auto-assigns variant human extra choices (race +1 all + subrace +1 to 2 stats)", () => {
+  it("el humano variante cambia el +1 a todo por +1 a dos, no los suma", () => {
+    // Este test asertaba 11 ó 12 en las seis: el variante cobraba el +1 a todo
+    // del humano Y su +1 a dos. En el manual el segundo sustituye al primero.
     const character = buildCharacter(draft({
       raceId: "human",
       subraceId: "human_variant",
     }));
-    const humanBase = STAT_KEYS.every(k => character.stats[k] === 11 || character.stats[k] === 12);
-    expect(humanBase).toBe(true);
-    const bonusCount = STAT_KEYS.filter(k => character.stats[k] === 12).length;
-    expect(bonusCount).toBe(2);
+    expect(STAT_KEYS.every(k => character.stats[k] === 10 || character.stats[k] === 11)).toBe(true);
+    expect(STAT_KEYS.filter(k => character.stats[k] === 11).length).toBe(2);
   });
 
   it("uses existing asiBonuses for variant human when set instead of auto-assign", () => {
@@ -152,8 +152,9 @@ describe("buildCharacter", () => {
       subraceId: "human_variant",
       asiBonuses: { FUE: 1, DES: 1 },
     }));
-    expect(character.stats.FUE).toBe(12);
-    expect(character.stats.DES).toBe(12);
+    expect(character.stats.FUE).toBe(11);
+    expect(character.stats.DES).toBe(11);
+    expect(character.stats.CON).toBe(10);
   });
 
   it("applies level-up ASI bonuses on top of racial bonuses", () => {

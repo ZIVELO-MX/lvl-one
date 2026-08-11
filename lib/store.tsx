@@ -6,14 +6,7 @@ import type { Campaign, CampaignPlayer, CampaignNote, Session } from "@/types/ca
 import type { NPC } from "@/types/npc";
 import type { Quest } from "@/types/quest";
 import type { Faction, Location, WorldLore } from "@/types/world";
-import { RACES } from "@/data/races";
-import { SUBRACES } from "@/data/subraces";
-import { CLASSES } from "@/data/classes";
-import { SUBCLASSES } from "@/data/subclasses";
-import { BACKGROUNDS } from "@/data/backgrounds";
-import { STAT_KEYS, SKILLS_BY_STAT, modOf, MAX_FREE_CHARACTERS, hpForLevel, proficiencyBonusForLevel, armorClassFrom, type ASI } from "@/types/character";
-import { EQUIPMENT_ITEMS } from "@/data/equipment";
-import { weightCapacity } from "@/data/levelProgression";
+import { MAX_FREE_CHARACTERS } from "@/types/character";
 import { addInventoryItem, equipInventoryItem, removeInventoryItem, unequipInventoryItem } from "@/lib/inventory";
 import { completeLessonProgress, resetModuleProgress } from "@/lib/progress";
 import { addPlayer, addSession, createCampaign, updateSession, type CampaignPlayerInput } from "@/lib/campaignStore";
@@ -697,117 +690,9 @@ export function useApp() {
   return ctx;
 }
 
-export function buildCharacter(draft: CharacterDraft) {
-  const race = RACES.find(r => r.id === draft.raceId);
-  const subrace = SUBRACES.find(s => s.id === draft.subraceId);
-  const cls = CLASSES.find(c => c.id === draft.classId);
-  const subclass = SUBCLASSES.find(s => s.id === draft.subclassId);
-  const bg = BACKGROUNDS.find(b => b.id === draft.backgroundId);
-
-  const stats: Record<string, number> = {};
-  const mods: Record<string, number> = {};
-  STAT_KEYS.forEach(k => {
-    const base = draft.baseStats[k] ?? 10;
-    const asi = race?.asi ?? {};
-    const subraceAsi = subrace?.asi ?? {};
-    stats[k] = base
-      + (("all" in asi ? asi.all ?? 0 : 0))
-      + ((asi as Record<string, number>)[k] ?? 0)
-      + (("all" in subraceAsi ? subraceAsi.all ?? 0 : 0))
-      + ((subraceAsi as Record<string, number>)[k] ?? 0)
-      + (draft.asiBonuses?.[k] ?? 0);
-    mods[k] = modOf(stats[k]);
-  });
-
-  // Apply racial ASI choices (e.g. Variant Human, Half-Elf) via asiBonuses
-  // If asiBonuses has user-set values, use them; otherwise auto-assign to fill choices
-  const choiceSources: ASI[] = [race?.asi, subrace?.asi].filter((s): s is ASI => s !== undefined && !!s.choices);
-  for (const src of choiceSources) {
-    for (const choice of src.choices ?? []) {
-      const eligible = choice.from
-        ? STAT_KEYS.filter(k => choice.from!.includes(k))
-        : [...STAT_KEYS];
-      const existing = eligible.filter(k => (draft.asiBonuses?.[k] ?? 0) > 0);
-      const toAssign = Math.max(0, choice.choose - existing.length);
-      let assigned = 0;
-      for (const k of eligible) {
-        if (assigned >= toAssign) break;
-        if ((draft.asiBonuses?.[k] ?? 0) === 0) {
-          stats[k] += choice.amount;
-          mods[k] = modOf(stats[k]);
-          assigned++;
-        }
-      }
-    }
-  }
-
-  const conMod = modOf(stats.CON ?? 10);
-  const dexMod = modOf(stats.DES ?? 10);
-  const wisMod = modOf(stats.SAB ?? 10);
-  const hitDie = cls ? parseInt(cls.hit.slice(1), 10) : 8;
-  const level = Math.max(1, draft.level ?? 1);
-  const hp = hpForLevel(hitDie, conMod, level);
-  const proficiencyBonus = proficiencyBonusForLevel(level);
-  // La CA sale de lo que lleva puesto, no de una tabla por clase. Si no ha
-  // equipado nada a mano se mira el inventario: las fichas creadas antes de
-  // esto tienen equippedItems vacío y no deben quedarse en 10 + DES.
-  const gearIds = (draft.equippedItems ?? []).length ? draft.equippedItems! : (draft.equipment ?? []);
-  const equippedGear = gearIds
-    .map(id => EQUIPMENT_ITEMS.find(i => i.id === id))
-    .filter((i): i is NonNullable<typeof i> => !!i);
-  const ac = armorClassFrom(equippedGear, { DES: dexMod, CON: conMod, SAB: wisMod }, cls?.id);
-
-  const inheritedSpells = [...(draft.spells ?? [])];
-  if (subrace?.spells) {
-    for (const s of subrace.spells) {
-      if (!inheritedSpells.includes(s)) inheritedSpells.push(s);
-    }
-  }
-  if (subclass?.spells) {
-    for (const s of subclass.spells) {
-      if (!inheritedSpells.includes(s)) inheritedSpells.push(s);
-    }
-  }
-
-  // Competencias de habilidad: las elegidas, las del trasfondo y las que
-  // concede la raza. Estas últimas no se aplicaban en ninguna parte, así que
-  // un elfo no era competente en Percepción ni un semiorco en Intimidación
-  // aunque su ficha lo prometiera.
-  const ALL_SKILLS = new Set(Object.values(SKILLS_BY_STAT).flat());
-  const skillProficiencies = [...new Set([
-    ...(bg?.skills ?? []),
-    ...(draft.selectedSkills ?? []),
-    ...(draft.raceSkills ?? []),
-    // "+2 a elección" del semielfo es un marcador, no una habilidad: se filtra
-    // aquí y se elige en el asistente.
-    ...(race?.skillProficiencies ?? []).filter(s => ALL_SKILLS.has(s)),
-    ...(subrace?.skillProficiencies ?? []).filter(s => ALL_SKILLS.has(s)),
-  ])];
-
-  // Carga: lo que pesa todo el inventario frente a lo que aguanta su Fuerza.
-  const carriedKg = Math.round(
-    (draft.equipment ?? []).reduce((kg, id) => kg + (EQUIPMENT_ITEMS.find(i => i.id === id)?.weightKg ?? 0), 0) * 10,
-  ) / 10;
-  const carryCapacityKg = weightCapacity(stats.FUE ?? 10);
-
-  // Velocidad e idiomas: los declaraba cada raza y no los leía nadie, así que
-  // la hoja no podía mostrarlos. La subraza manda sobre la raza si la cambia.
-  const speed = subrace?.speed ?? race?.speed ?? 9;
-  const languages = [...new Set([...(race?.languages ?? []), ...(subrace?.languages ?? [])])];
-
-  // Competencias que no son de habilidad: armaduras, armas y herramientas de
-  // clase, raza y trasfondo. Se llama "derived" para no pisar
-  // otherProficiencies, que es el recuadro de texto libre de la hoja.
-  const derivedProficiencies = [...new Set([
-    ...(cls?.armorProficiencies ?? []),
-    ...(cls?.weaponProficiencies ?? []),
-    ...(cls?.toolProficiencies ?? []),
-    ...(race?.weaponProficiencies ?? []),
-    ...(bg?.tools ?? []),
-  ])];
-
-  return { ...draft, race, subrace, class: cls, subclass, background: bg, stats, mods, hp, ac, initiative: dexMod, proficiencyBonus, spells: inheritedSpells, skillProficiencies, speed, languages, derivedProficiencies, carriedKg, carryCapacityKg };
-}
+// El cálculo de la ficha vive en su propio módulo: también lo necesita el
+// mapeo de Supabase, que no puede importar este archivo de cliente.
+export { buildCharacter } from "@/lib/buildCharacter";
 
 export function newDraft(): CharacterDraft {
   return {

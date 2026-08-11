@@ -9,7 +9,13 @@ export const SUBRACES: Subrace[] = [
     sourceTag: "PHB opcional",
     requiresDMApproval: true,
     asi: { choices: [{ choose: 2, amount: 1, note: "Elige dos características diferentes." }] },
-    skillProficiencies: ["+1 a elección"],
+    // El +1 a dos características SUSTITUYE al +1 a todo del humano normal.
+    replacesRaceAsi: true,
+    // Antes era skillProficiencies: ["+1 a elección"], un marcador que
+    // buildCharacter filtraba por no ser una habilidad real: el humano variante
+    // perdía su competencia extra sin que nadie lo dijera.
+    skillChoices: { count: 1 },
+    grantsFeat: 1,
     traits: [
       { id: "variant_skill", name: "Habilidad adicional", summary: "Obtienes competencia en una habilidad a elección." },
       { id: "variant_feat", name: "Dote inicial", summary: "Obtienes una dote a nivel 1 si tu mesa usa esta regla opcional." },

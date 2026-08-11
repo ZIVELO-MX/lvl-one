@@ -6,6 +6,7 @@ import { LivePreview } from "../LivePreview";
 import { CLASSES } from "@/data/classes";
 import { RACES } from "@/data/races";
 import { SUBRACES } from "@/data/subraces";
+import { FEATS, getFeatsByPrerequisite } from "@/data/feats";
 import { STAT_KEYS, STAT_LABELS, STANDARD_ARRAY, modOf, fmtMod, POINT_BUY_MIN, POINT_BUY_MAX, pointBuyCost, pointBuyRemaining } from "@/types/character";
 import type { CharacterDraft, StatKey } from "@/types/character";
 
@@ -19,7 +20,8 @@ export function Step4Stats({ draft, id }: { draft: CharacterDraft; id: string })
   const subrace = SUBRACES.find(s => s.id === draft.subraceId);
 
   const getRaceBonus = (k: StatKey): number => {
-    if (!race) return 0;
+    // El humano variante sustituye el aumento del humano, no lo suma.
+    if (!race || subrace?.replacesRaceAsi) return 0;
     const asi = race.asi ?? {};
     return (("all" in asi ? asi.all ?? 0 : 0)) + ((asi as Record<string, number>)[k] ?? 0);
   };
@@ -28,6 +30,15 @@ export function Step4Stats({ draft, id }: { draft: CharacterDraft; id: string })
     const asi = (subrace.asi ?? {}) as Record<string, number>;
     return asi[k] ?? 0;
   };
+
+  /**
+   * Lo que vale la característica de verdad. Las tarjetas sólo sumaban los
+   * bonos fijos de raza: si elegías el +1 del semielfo o de una media dote, el
+   * número no se movía y parecía que la elección no hacía nada.
+   */
+  const totalDe = (k: StatKey): number =>
+    (draft.baseStats[k] ?? 10) + getRaceBonus(k) + getSubraceBonus(k)
+    + (draft.asiBonuses?.[k] ?? 0) + (draft.featBonuses?.[k] ?? 0);
 
   const handleStatClick = (k: StatKey) => {
     if (!swapFrom) {
@@ -69,9 +80,8 @@ export function Step4Stats({ draft, id }: { draft: CharacterDraft; id: string })
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 12 }}>
             {STAT_KEYS.map(k => {
               const base = draft.baseStats[k] ?? 10;
-              const raceB = getRaceBonus(k);
-              const subB = getSubraceBonus(k);
-              const total = base + raceB + subB;
+              const total = totalDe(k);
+              const bonus = total - base;
               const m = modOf(total);
               const isPrimary = cls?.primary?.includes(k);
               const isSelected = swapFrom === k;
@@ -104,15 +114,103 @@ export function Step4Stats({ draft, id }: { draft: CharacterDraft; id: string })
                   <div style={{ fontSize: 13, fontFamily: "var(--font-mono)", color: "var(--text-mid)", marginTop: 2 }}>
                     {fmtMod(m)}
                   </div>
-                  {(raceB + subB) !== 0 && (
+                  {bonus !== 0 && (
                     <div style={{ fontSize: 9, color: "var(--text-low)", marginTop: 4 }}>
-                      {base} +{raceB + subB} raza
+                      {base} +{bonus} bonif.
                     </div>
                   )}
                 </div>
               );
             })}
           </div>
+
+          {/* Dote inicial. El humano variante la promete en su descripción
+              desde siempre y no había manera de elegirla: data/feats.ts
+              existía sin puerta de entrada. Va en este paso porque los
+              requisitos miran tus puntuaciones, y es aquí donde quedan
+              fijadas. */}
+          {(subrace?.grantsFeat ?? 0) > 0 && (() => {
+            const elegidaId = (draft.feats ?? [])[0] ?? "";
+            const elegida = FEATS.find(f => f.id === elegidaId);
+            // Los requisitos se miran ANTES de aplicar la propia dote: si no,
+            // una media dote de +1 FUE podría estar sosteniendo su propio
+            // requisito de Fuerza 13.
+            const disponibles = getFeatsByPrerequisite({
+              level: draft.level ?? 1,
+              race: draft.raceId ?? "",
+              class: draft.classId ?? "",
+              stats: Object.fromEntries(
+                STAT_KEYS.map(k => [k, totalDe(k) - (draft.featBonuses?.[k] ?? 0)]),
+              ),
+              spellcaster: cls?.spellcaster,
+              armorProficiencies: cls?.armorProficiencies,
+            });
+            const subida = elegida?.effects?.abilityIncrease;
+
+            const elegir = (id: string) => {
+              const feat = FEATS.find(f => f.id === id);
+              const sube = feat?.effects?.abilityIncrease;
+              up({
+                feats: id ? [id] : [],
+                // Si la dote sube una característica concreta se aplica sola;
+                // si deja elegir entre varias, espera a que el jugador escoja.
+                featBonuses: sube && sube.from.length === 1
+                  ? { [sube.from[0]]: sube.amount }
+                  : {},
+              });
+            };
+
+            return (
+              <div style={{ marginTop: 20, padding: 16, borderRadius: 12,
+                border: "1px solid var(--line-strong)", background: "rgba(244,231,197,0.03)" }}>
+                <label htmlFor="dote-inicial" className="lo-label" style={{ display: "block", marginBottom: 6 }}>
+                  Dote inicial de {subrace?.name}
+                </label>
+                <select id="dote-inicial" className="lo-input" value={elegidaId}
+                  onChange={e => elegir(e.target.value)} style={{ fontSize: 13, width: "100%" }}>
+                  <option value="">Sin dote</option>
+                  {disponibles.map(f => (
+                    <option key={f.id} value={f.id}>{f.name}</option>
+                  ))}
+                </select>
+
+                {elegida && (
+                  <p style={{ fontSize: 12, color: "var(--text-mid)", lineHeight: 1.6, margin: "10px 0 0" }}>
+                    {elegida.description}
+                  </p>
+                )}
+
+                {subida && subida.from.length > 1 && (
+                  <div style={{ marginTop: 12 }}>
+                    <div style={{ fontSize: 11, color: "var(--text-low)", marginBottom: 6 }}>
+                      Esta dote sube +{subida.amount} a una característica. Elige cuál:
+                    </div>
+                    <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                      {subida.from.map(k => {
+                        const puesta = (draft.featBonuses?.[k] ?? 0) > 0;
+                        return (
+                          <button type="button" key={k} aria-pressed={puesta}
+                            onClick={() => up({ featBonuses: puesta ? {} : { [k]: subida.amount } })}
+                            style={{
+                              padding: "6px 12px", borderRadius: 8, cursor: "pointer", fontSize: 12,
+                              border: puesta ? "1px solid var(--quest-gold)" : "1px solid var(--line-strong)",
+                              background: puesta ? "rgba(214,168,79,0.08)" : "transparent",
+                              color: puesta ? "var(--quest-gold-hi)" : "var(--text-mid)",
+                            }}>
+                            {k}{puesta ? ` +${subida.amount}` : ""}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                <p style={{ fontSize: 10, color: "var(--text-low)", marginTop: 12, lineHeight: 1.5 }}>
+                  Sólo aparecen las dotes cuyos requisitos cumples con estas puntuaciones.
+                </p>
+              </div>
+            );
+          })()}
         </div>
 
         {/* sidebar */}

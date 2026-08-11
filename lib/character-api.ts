@@ -49,6 +49,9 @@ interface SnakeChar {
   hair?: string | null;
   allies?: string | null;
   treasure?: string | null;
+  // Dotes (migración 012).
+  feats?: string[] | null;
+  feat_bonuses?: Record<string, number> | null;
   created_at: string;
   updated_at: string;
 }
@@ -101,6 +104,9 @@ function toSnake(ch: Partial<CharacterDraft>): Record<string, unknown> {
   if (ch.hair !== undefined) out.hair = ch.hair ?? null;
   if (ch.allies !== undefined) out.allies = ch.allies ?? null;
   if (ch.treasure !== undefined) out.treasure = ch.treasure ?? null;
+  // Dotes (migración 012).
+  if (ch.feats !== undefined) out.feats = ch.feats;
+  if (ch.featBonuses !== undefined) out.feat_bonuses = ch.featBonuses;
   return out;
 }
 
@@ -152,6 +158,8 @@ function toCamel(data: SnakeChar): CharacterDraft {
     hair: data.hair ?? "",
     allies: data.allies ?? "",
     treasure: data.treasure ?? "",
+    feats: data.feats ?? [],
+    featBonuses: data.feat_bonuses ?? undefined,
     createdAt: new Date(data.created_at).getTime(),
     updatedAt: new Date(data.updated_at).getTime(),
   };
