@@ -255,6 +255,28 @@ export interface CharacterDraft {
   platinum?: number;
   spellSlotsUsed?: Record<number, number>;
   gender?: "male" | "female";
+  /** Cara 1 de la hoja: el cuarto recuadro, junto a ideales, vínculos y defectos. */
+  personalityTraits?: string;
+  /** La concede el DM; el jugador la gasta para tirar con ventaja. */
+  inspiration?: boolean;
+  /** Dados de golpe gastados. El total sale de clase y nivel; sin esto no hay descanso corto. */
+  hitDiceUsed?: number;
+  /** Salvaciones de muerte. Antes sólo vivían en el rastreador de combate y se perdían al recargar. */
+  deathSaves?: { successes: number; failures: number };
+  /** Electro (EP): la quinta moneda de la hoja. */
+  electrum?: number;
+  /** Puntos de experiencia, para quien no lleva progresión por hitos. */
+  xp?: number;
+  /** Herramientas del trasfondo e idiomas extra que no vienen de la raza. */
+  otherProficiencies?: string;
+  /** Cara 2 de la hoja: apariencia y vínculos con el mundo. */
+  height?: string;
+  weight?: string;
+  eyes?: string;
+  skin?: string;
+  hair?: string;
+  allies?: string;
+  treasure?: string;
   /** Aumentos de características por ASI (Ability Score Improvement) aplicados. Se suman a baseStats en buildCharacter. */
   asiBonuses?: Partial<Record<StatKey, number>>;
   createdAt: number;

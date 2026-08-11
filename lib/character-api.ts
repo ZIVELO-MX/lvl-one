@@ -32,6 +32,22 @@ interface SnakeChar {
   spell_slots_used: Record<number, number> | null;
   gender: string | null;
   asi_bonuses: Record<string, number> | null;
+  // Casillas de la hoja oficial (migración 010). Opcionales porque las filas
+  // creadas antes de la migración llegan sin ellas.
+  personality_traits?: string | null;
+  inspiration?: boolean | null;
+  hit_dice_used?: number | null;
+  death_saves?: { successes: number; failures: number } | null;
+  electrum?: number | null;
+  xp?: number | null;
+  other_proficiencies?: string | null;
+  height?: string | null;
+  weight?: string | null;
+  eyes?: string | null;
+  skin?: string | null;
+  hair?: string | null;
+  allies?: string | null;
+  treasure?: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -68,6 +84,21 @@ function toSnake(ch: Partial<CharacterDraft>): Record<string, unknown> {
   if (ch.spellSlotsUsed !== undefined) out.spell_slots_used = ch.spellSlotsUsed ?? null;
   if (ch.gender !== undefined) out.gender = ch.gender ?? null;
   if (ch.asiBonuses !== undefined) out.asi_bonuses = ch.asiBonuses ?? null;
+  // Casillas de la hoja oficial (migración 010).
+  if (ch.personalityTraits !== undefined) out.personality_traits = ch.personalityTraits ?? null;
+  if (ch.inspiration !== undefined) out.inspiration = ch.inspiration;
+  if (ch.hitDiceUsed !== undefined) out.hit_dice_used = ch.hitDiceUsed;
+  if (ch.deathSaves !== undefined) out.death_saves = ch.deathSaves;
+  if (ch.electrum !== undefined) out.electrum = ch.electrum;
+  if (ch.xp !== undefined) out.xp = ch.xp;
+  if (ch.otherProficiencies !== undefined) out.other_proficiencies = ch.otherProficiencies ?? null;
+  if (ch.height !== undefined) out.height = ch.height ?? null;
+  if (ch.weight !== undefined) out.weight = ch.weight ?? null;
+  if (ch.eyes !== undefined) out.eyes = ch.eyes ?? null;
+  if (ch.skin !== undefined) out.skin = ch.skin ?? null;
+  if (ch.hair !== undefined) out.hair = ch.hair ?? null;
+  if (ch.allies !== undefined) out.allies = ch.allies ?? null;
+  if (ch.treasure !== undefined) out.treasure = ch.treasure ?? null;
   return out;
 }
 
@@ -104,6 +135,20 @@ function toCamel(data: SnakeChar): CharacterDraft {
     spellSlotsUsed: data.spell_slots_used ?? undefined,
     gender: (data.gender as CharacterDraft["gender"]) ?? undefined,
     asiBonuses: data.asi_bonuses ?? undefined,
+    personalityTraits: data.personality_traits ?? "",
+    inspiration: data.inspiration ?? false,
+    hitDiceUsed: data.hit_dice_used ?? 0,
+    deathSaves: data.death_saves ?? { successes: 0, failures: 0 },
+    electrum: data.electrum ?? undefined,
+    xp: data.xp ?? 0,
+    otherProficiencies: data.other_proficiencies ?? "",
+    height: data.height ?? "",
+    weight: data.weight ?? "",
+    eyes: data.eyes ?? "",
+    skin: data.skin ?? "",
+    hair: data.hair ?? "",
+    allies: data.allies ?? "",
+    treasure: data.treasure ?? "",
     createdAt: new Date(data.created_at).getTime(),
     updatedAt: new Date(data.updated_at).getTime(),
   };
