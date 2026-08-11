@@ -298,6 +298,46 @@ export default function CharacterSheetPage({ params }: Props) {
           )}
         </div>
 
+        {/* ── RASGOS Y ATRIBUTOS ──
+            La casilla de la hoja oficial. Los rasgos raciales, los de clase y
+            el del trasfondo estaban en los datos y no se enseñaban en ninguna
+            parte: el jugador no sabía qué sabe hacer su personaje. */}
+        {(() => {
+          // La raza los guarda como cadenas y la subraza como objetos.
+          const nombreRasgo = (t: string | { name: string }) => (typeof t === "string" ? t : t.name);
+          const rasgosRaza = [
+            ...(built.race?.traits ?? []).map(nombreRasgo),
+            ...(built.subrace?.traits ?? []).map(nombreRasgo),
+          ];
+          const rasgosClase = (built.class?.classFeatures ?? [])
+            .filter(f => f.level <= character.level)
+            .map(f => `${f.name} (nv ${f.level})`);
+          const grupos = [
+            { titulo: built.race?.name ?? "Raza", items: rasgosRaza },
+            { titulo: built.class?.name ?? "Clase", items: rasgosClase },
+            { titulo: built.background?.name ?? "Trasfondo", items: built.background?.feature ? [built.background.feature] : [] },
+          ].filter(g => g.items.length > 0);
+
+          if (!grupos.length) return null;
+          return (
+            <div className="lo-card-elev" style={{ padding: 20, marginBottom: 16 }}>
+              <div className="lo-label" style={{ marginBottom: 12 }}>Rasgos y atributos</div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16 }}>
+                {grupos.map(g => (
+                  <div key={g.titulo}>
+                    <div style={{ fontSize: 11, color: "var(--quest-gold-hi)", marginBottom: 6 }}>{g.titulo}</div>
+                    <ul style={{ margin: 0, paddingLeft: 16, display: "flex", flexDirection: "column", gap: 4 }}>
+                      {g.items.map(item => (
+                        <li key={item} style={{ fontSize: 12, color: "var(--text-mid)", lineHeight: 1.5 }}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })()}
+
         {/* ── STATS + SKILLS ── */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
           {/* Stats */}
