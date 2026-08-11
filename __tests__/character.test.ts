@@ -93,10 +93,22 @@ describe("buildCharacter", () => {
   });
 
   it("calculates fighter AC from chain mail and shield", () => {
+    // Este test pasaba SIN equipo: la CA era un 18 fijo por ser guerrero.
     const character = buildCharacter(
-      draft({ classId: "fighter", baseStats: { FUE: 10, DES: 10, CON: 10, INT: 10, SAB: 10, CAR: 10 } }),
+      draft({
+        classId: "fighter",
+        equipment: ["chain_mail", "shield"],
+        baseStats: { FUE: 10, DES: 10, CON: 10, INT: 10, SAB: 10, CAR: 10 },
+      }),
     );
     expect(character.ac).toBe(18);
+  });
+
+  it("un guerrero sin armadura no lleva 18 de CA", () => {
+    const character = buildCharacter(
+      draft({ classId: "fighter", equipment: [], baseStats: { FUE: 10, DES: 10, CON: 10, INT: 10, SAB: 10, CAR: 10 } }),
+    );
+    expect(character.ac).toBe(10);
   });
 
   it("never returns HP below 1", () => {
@@ -179,9 +191,10 @@ describe("buildCharacter", () => {
     expect(character.ac).toBe(10 + 2);
   });
 
-  it("calculates rogue AC (pícaro: 11 + DES)", () => {
+  it("calculates rogue AC (armadura de cuero: 11 + DES)", () => {
     const character = buildCharacter(draft({
       classId: "rogue",
+      equipment: ["leather_armor"],
       baseStats: { FUE: 8, DES: 16, CON: 12, INT: 14, SAB: 10, CAR: 12 },
     }));
     expect(character.ac).toBe(11 + 3);

@@ -11,7 +11,8 @@ import { SUBRACES } from "@/data/subraces";
 import { CLASSES } from "@/data/classes";
 import { SUBCLASSES } from "@/data/subclasses";
 import { BACKGROUNDS } from "@/data/backgrounds";
-import { STAT_KEYS, SKILLS_BY_STAT, modOf, MAX_FREE_CHARACTERS, hpForLevel, proficiencyBonusForLevel, type ASI } from "@/types/character";
+import { STAT_KEYS, SKILLS_BY_STAT, modOf, MAX_FREE_CHARACTERS, hpForLevel, proficiencyBonusForLevel, armorClassFrom, type ASI } from "@/types/character";
+import { EQUIPMENT_ITEMS } from "@/data/equipment";
 import { addInventoryItem, equipInventoryItem, removeInventoryItem, unequipInventoryItem } from "@/lib/inventory";
 import { completeLessonProgress, resetModuleProgress } from "@/lib/progress";
 import { addPlayer, addSession, createCampaign, updateSession, type CampaignPlayerInput } from "@/lib/campaignStore";
@@ -746,18 +747,14 @@ export function buildCharacter(draft: CharacterDraft) {
   const level = Math.max(1, draft.level ?? 1);
   const hp = hpForLevel(hitDie, conMod, level);
   const proficiencyBonus = proficiencyBonusForLevel(level);
-  const ac = (() => {
-    switch (cls?.id) {
-      case "fighter": case "paladin": return 18;
-      case "cleric": return 16 + Math.min(dexMod, 2);
-      case "barbarian": return 10 + dexMod + conMod;
-      case "monk": return 10 + dexMod + wisMod;
-      case "druid": return 13 + dexMod;
-      case "ranger": return 14 + Math.min(dexMod, 2);
-      case "bard": case "rogue": case "warlock": return 11 + dexMod;
-      default: return 10 + dexMod;
-    }
-  })();
+  // La CA sale de lo que lleva puesto, no de una tabla por clase. Si no ha
+  // equipado nada a mano se mira el inventario: las fichas creadas antes de
+  // esto tienen equippedItems vacío y no deben quedarse en 10 + DES.
+  const gearIds = (draft.equippedItems ?? []).length ? draft.equippedItems! : (draft.equipment ?? []);
+  const equippedGear = gearIds
+    .map(id => EQUIPMENT_ITEMS.find(i => i.id === id))
+    .filter((i): i is NonNullable<typeof i> => !!i);
+  const ac = armorClassFrom(equippedGear, { DES: dexMod, CON: conMod, SAB: wisMod }, cls?.id);
 
   const inheritedSpells = [...(draft.spells ?? [])];
   if (subrace?.spells) {

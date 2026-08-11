@@ -308,5 +308,5 @@ export interface Character extends CharacterDraft {
 export {
   STAT_KEYS, STAT_LABELS, STANDARD_ARRAY, MAX_FREE_CHARACTERS,
   modOf, fmtMod, proficiencyBonusForLevel, avgHitDie, hpForLevel,
-  levelGrantsASI, asiCountUpToLevel,
+  levelGrantsASI, asiCountUpToLevel, armorClassFrom,
 } from "@/lib/characterMath";

@@ -55,6 +55,53 @@ export function hpForLevel(hitDie: number, conMod: number, level: number): numbe
   return Math.max(1, first + (lvl - 1) * perLevel);
 }
 
+/**
+ * Clase de armadura a partir de lo que el personaje lleva puesto.
+ *
+ * Antes era un número fijo por clase: un mago con cota de mallas seguía
+ * mostrando 10 + DES, y un guerrero sin nada encima, 18. Ahora sale de la
+ * armadura equipada, con su tope de Destreza, más el escudo.
+ *
+ * Sin armadura se aplica la defensa sin armadura de la clase, como en el
+ * manual: bárbaro 10 + DES + CON, monje 10 + DES + SAB, el resto 10 + DES.
+ */
+export function armorClassFrom(
+  equipped: { armorClass?: string; category?: string }[],
+  mods: { DES: number; CON: number; SAB: number },
+  classId?: string,
+): number {
+  const shieldBonus = equipped.some(i => i.category === "shield") ? 2 : 0;
+
+  // Si lleva varias armaduras encima se usa la que más protege: al no haber
+  // equipado nada explícitamente, esto mira el inventario entero y acierta.
+  const armors = equipped.filter(i => i.category === "armor" && i.armorClass);
+  const armor = armors.length
+    ? armors.reduce((mejor, i) => (acDeArmadura(i.armorClass!, mods.DES) >= acDeArmadura(mejor.armorClass!, mods.DES) ? i : mejor))
+    : undefined;
+
+  if (!armor) {
+    // El monje pierde su defensa sin armadura en cuanto empuña un escudo; el
+    // bárbaro la conserva.
+    if (classId === "monk" && shieldBonus > 0) return 10 + mods.DES + shieldBonus;
+    const base = classId === "barbarian" ? 10 + mods.DES + mods.CON
+      : classId === "monk" ? 10 + mods.DES + mods.SAB
+      : 10 + mods.DES;
+    return base + shieldBonus;
+  }
+
+  return acDeArmadura(armor.armorClass!, mods.DES) + shieldBonus;
+}
+
+/** Interpreta los formatos del catálogo: "16", "11 + DES", "12 + DES máx 2". */
+function acDeArmadura(texto: string, dexMod: number): number {
+  const base = parseInt(texto.match(/^\d+/)?.[0] ?? "10", 10);
+  const tope = texto.match(/máx\s*(\d+)/);
+  const dex = !/DES/.test(texto) ? 0
+    : tope ? Math.min(dexMod, parseInt(tope[1], 10))
+    : dexMod;
+  return base + dex;
+}
+
 export function levelGrantsASI(level: number): boolean {
   return [4, 6, 8, 12, 16, 19].includes(level);
 }
