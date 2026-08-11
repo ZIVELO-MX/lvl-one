@@ -45,6 +45,27 @@ describe("equipo inicial por clase", () => {
   });
 });
 
+describe("catálogo de equipo", () => {
+  // Sin peso, weightCapacity() no puede calcular carga; sin precio no hay
+  // tabla de compra. Los datos estaban y faltaban las dos columnas.
+  it("todo objeto tiene precio y peso", () => {
+    const incompletos = EQUIPMENT_ITEMS
+      .filter(i => !i.cost || i.weightKg === undefined)
+      .map(i => `${i.name} (${!i.cost ? "sin precio" : ""}${!i.cost && i.weightKg === undefined ? " y " : ""}${i.weightKg === undefined ? "sin peso" : ""})`);
+    expect(incompletos, "un objeto sin precio ni peso no se puede comprar ni cargar").toEqual([]);
+  });
+
+  it("las armas traen daño y tipo de daño", () => {
+    const mudas = EQUIPMENT_ITEMS.filter(i => i.category === "weapon" && (!i.damage || !i.damageType)).map(i => i.name);
+    expect(mudas, "un arma sin daño no sirve para atacar").toEqual([]);
+  });
+
+  it("las armaduras traen su fórmula de CA", () => {
+    const sinCA = EQUIPMENT_ITEMS.filter(i => (i.category === "armor" || i.category === "shield") && !i.armorClass).map(i => i.name);
+    expect(sinCA, "sin fórmula no entra en el cálculo de la CA").toEqual([]);
+  });
+});
+
 describe("conjuros disponibles", () => {
   const casters = CLASSES.filter(c => c.spellcaster);
 
@@ -139,6 +160,26 @@ describe("razas", () => {
     expect(conRaza.skillProficiencies).toEqual(
       expect.arrayContaining(["Arcanos", "Historia", "Acrobacias", "Medicina"]),
     );
+  });
+});
+
+describe("subclases", () => {
+  // Cuántas trae cada clase en el Manual del Jugador. Suman 40.
+  const MANUAL: Record<string, number> = {
+    barbarian: 2, bard: 2, cleric: 7, druid: 2, fighter: 3, monk: 3,
+    paladin: 3, ranger: 2, rogue: 3, sorcerer: 2, warlock: 3, wizard: 8,
+  };
+
+  for (const [classId, esperadas] of Object.entries(MANUAL)) {
+    it(`${classId}: ${esperadas}`, () => {
+      const hay = SUBCLASSES.filter(s => s.classId === classId).length;
+      expect(hay, `${classId} tiene ${hay} y el manual trae ${esperadas}`).toBe(esperadas);
+    });
+  }
+
+  it("cada subclase trae rasgos con su nivel", () => {
+    const mudas = SUBCLASSES.filter(s => !s.traits?.length || s.traits.some(t => !t.level)).map(s => s.name);
+    expect(mudas, "una subclase sin rasgos no cambia nada al elegirla").toEqual([]);
   });
 });
 

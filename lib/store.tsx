@@ -13,6 +13,7 @@ import { SUBCLASSES } from "@/data/subclasses";
 import { BACKGROUNDS } from "@/data/backgrounds";
 import { STAT_KEYS, SKILLS_BY_STAT, modOf, MAX_FREE_CHARACTERS, hpForLevel, proficiencyBonusForLevel, armorClassFrom, type ASI } from "@/types/character";
 import { EQUIPMENT_ITEMS } from "@/data/equipment";
+import { weightCapacity } from "@/data/levelProgression";
 import { addInventoryItem, equipInventoryItem, removeInventoryItem, unequipInventoryItem } from "@/lib/inventory";
 import { completeLessonProgress, resetModuleProgress } from "@/lib/progress";
 import { addPlayer, addSession, createCampaign, updateSession, type CampaignPlayerInput } from "@/lib/campaignStore";
@@ -783,6 +784,12 @@ export function buildCharacter(draft: CharacterDraft) {
     ...(subrace?.skillProficiencies ?? []).filter(s => ALL_SKILLS.has(s)),
   ])];
 
+  // Carga: lo que pesa todo el inventario frente a lo que aguanta su Fuerza.
+  const carriedKg = Math.round(
+    (draft.equipment ?? []).reduce((kg, id) => kg + (EQUIPMENT_ITEMS.find(i => i.id === id)?.weightKg ?? 0), 0) * 10,
+  ) / 10;
+  const carryCapacityKg = weightCapacity(stats.FUE ?? 10);
+
   // Velocidad e idiomas: los declaraba cada raza y no los leía nadie, así que
   // la hoja no podía mostrarlos. La subraza manda sobre la raza si la cambia.
   const speed = subrace?.speed ?? race?.speed ?? 9;
@@ -799,7 +806,7 @@ export function buildCharacter(draft: CharacterDraft) {
     ...(bg?.tools ?? []),
   ])];
 
-  return { ...draft, race, subrace, class: cls, subclass, background: bg, stats, mods, hp, ac, initiative: dexMod, proficiencyBonus, spells: inheritedSpells, skillProficiencies, speed, languages, derivedProficiencies };
+  return { ...draft, race, subrace, class: cls, subclass, background: bg, stats, mods, hp, ac, initiative: dexMod, proficiencyBonus, spells: inheritedSpells, skillProficiencies, speed, languages, derivedProficiencies, carriedKg, carryCapacityKg };
 }
 
 export function newDraft(): CharacterDraft {

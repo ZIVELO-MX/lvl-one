@@ -277,9 +277,15 @@ export default function CharacterSheetPage({ params }: Props) {
               { etiqueta: "Velocidad", valor: `${built.speed} m` },
               { etiqueta: "Competencia", valor: fmtMod(profBonus) },
               { etiqueta: "Percepción pasiva", valor: String(10 + skillMod("Percepción")) },
-            ].map(({ etiqueta, valor }) => (
+              {
+                etiqueta: "Carga",
+                valor: `${built.carriedKg} / ${built.carryCapacityKg} kg`,
+                // Pasado de peso: el manual te deja llevarlo, pero a media velocidad.
+                alerta: built.carriedKg > built.carryCapacityKg,
+              },
+            ].map(({ etiqueta, valor, alerta }) => (
               <div key={etiqueta} style={{ textAlign: "center" }}>
-                <div style={{ fontFamily: "var(--font-display)", fontSize: 24, color: "var(--text-hi)" }}>{valor}</div>
+                <div style={{ fontFamily: "var(--font-display)", fontSize: 24, color: alerta ? "#E8847A" : "var(--text-hi)" }}>{valor}</div>
                 <div style={{ fontSize: 10, color: "var(--text-low)", textTransform: "uppercase", letterSpacing: "0.06em" }}>{etiqueta}</div>
               </div>
             ))}

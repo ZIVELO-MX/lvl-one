@@ -44,7 +44,9 @@ describe("multiclass progression", () => {
 describe("level-up validations", () => {
   it("calculates attunement, carrying capacity, and prepared spells", () => {
     expect(maxAttunedItems).toBe(3);
-    expect(weightCapacity(10)).toBe(150);
+    // En kilos, no en libras: el catálogo pesa en weightKg, y comparar contra
+    // las 150 lb del manual daba más del doble del margen real.
+    expect(weightCapacity(10)).toBe(68);
     expect(preparedSpells(1, -1)).toBe(1);
     expect(preparedSpells(5, 3)).toBe(8);
   });
