@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { CLASSES } from "@/data/classes";
 import { RACES } from "@/data/races";
 import { SUBCLASSES } from "@/data/subclasses";
+import { SUBRACES } from "@/data/subraces";
 import { BACKGROUNDS } from "@/data/backgrounds";
 import { buildCharacter, newDraft } from "@/lib/store";
 import { CLASS_PROGRESSION } from "@/data/levelProgression";
@@ -138,6 +139,57 @@ describe("razas", () => {
     expect(conRaza.skillProficiencies).toEqual(
       expect.arrayContaining(["Arcanos", "Historia", "Acrobacias", "Medicina"]),
     );
+  });
+});
+
+describe("subrazas", () => {
+  // Valores del Manual del Jugador. Escritos aquí para que cualquier cambio
+  // futuro tenga que justificarse contra el libro.
+  const MANUAL: Record<string, { asi: Record<string, number>; speed?: number }> = {
+    high_elf: { asi: { INT: 1 } },
+    wood_elf: { asi: { SAB: 1 }, speed: 10.5 },   // Pies ligeros: 35 pies
+    drow: { asi: { CAR: 1 } },
+    hill_dwarf: { asi: { SAB: 1 } },
+    mountain_dwarf: { asi: { FUE: 2 } },          // la única subraza con +2
+    lightfoot_halfling: { asi: { CAR: 1 } },
+    stout_halfling: { asi: { CON: 1 } },
+    forest_gnome: { asi: { DES: 1 } },
+    rock_gnome: { asi: { CON: 1 } },
+  };
+
+  it("todas las subrazas del manual existen con ese id", () => {
+    // Sin esto, un id mal escrito haría que su comprobación se saltara en
+    // silencio y el test daría verde sin haber mirado nada.
+    const ids = new Set(SUBRACES.map(s => s.id));
+    const faltan = Object.keys(MANUAL).filter(id => !ids.has(id));
+    expect(faltan, "ids del manual que no están en los datos").toEqual([]);
+  });
+
+  for (const [id, esperado] of Object.entries(MANUAL)) {
+    const sub = SUBRACES.find(s => s.id === id);
+    if (!sub) continue; // lo denuncia el test de cobertura de arriba
+    it(`${sub.name}: ASI y velocidad del manual`, () => {
+      for (const [stat, valor] of Object.entries(esperado.asi)) {
+        expect((sub.asi as Record<string, number>)?.[stat], `${sub.name} → ${stat}`).toBe(valor);
+      }
+      if (esperado.speed) expect(sub.speed, `${sub.name} → velocidad`).toBe(esperado.speed);
+    });
+  }
+
+  it("las ascendencias dracónicas no dan características: eso es de la raza base", () => {
+    const dracos = SUBRACES.filter(s => s.raceId === "dragonborn");
+    expect(dracos.length, "faltan ascendencias dracónicas").toBeGreaterThan(0);
+    for (const d of dracos) {
+      const asi = (d.asi ?? {}) as Record<string, number>;
+      const suma = Object.entries(asi).filter(([k]) => k !== "choices").reduce((s, [, v]) => s + (typeof v === "number" ? v : 0), 0);
+      expect(suma, `${d.name} no debería dar ASI propio`).toBe(0);
+    }
+  });
+
+  it("la velocidad de la subraza manda sobre la de la raza", () => {
+    // El elfo de los bosques corre más que un elfo normal: 10,5 m contra 9.
+    const built = buildCharacter({ ...newDraft(), raceId: "elf", subraceId: "wood_elf" });
+    expect(built.speed).toBe(10.5);
   });
 });
 
