@@ -118,6 +118,26 @@ describe("razas", () => {
       expect(ALL_SKILL_NAMES.has(s), `"${s}" no es una habilidad real`).toBe(true);
     }
   });
+
+  it("el semielfo elige dos habilidades cualesquiera y cuentan", () => {
+    const halfelf = RACES.find(r => r.id === "halfelf");
+    expect(halfelf?.skillChoices?.count, "Versatilidad del semielfo").toBe(2);
+
+    const built = buildCharacter({ ...newDraft(), raceId: "halfelf", raceSkills: ["Acrobacias", "Medicina"] });
+    expect(built.skillProficiencies).toContain("Acrobacias");
+    expect(built.skillProficiencies).toContain("Medicina");
+  });
+
+  it("las elegidas por raza no gastan los huecos de clase", () => {
+    const conRaza = buildCharacter({
+      ...newDraft(), raceId: "halfelf", classId: "wizard",
+      selectedSkills: ["Arcanos", "Historia"], raceSkills: ["Acrobacias", "Medicina"],
+    });
+    // Dos de clase más dos de raza: cuatro competencias, no dos.
+    expect(conRaza.skillProficiencies).toEqual(
+      expect.arrayContaining(["Arcanos", "Historia", "Acrobacias", "Medicina"]),
+    );
+  });
 });
 
 describe("conjuros que no se eligen", () => {

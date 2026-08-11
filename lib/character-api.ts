@@ -34,6 +34,7 @@ interface SnakeChar {
   asi_bonuses: Record<string, number> | null;
   // Casillas de la hoja oficial (migración 010). Opcionales porque las filas
   // creadas antes de la migración llegan sin ellas.
+  race_skills?: string[] | null;
   personality_traits?: string | null;
   inspiration?: boolean | null;
   hit_dice_used?: number | null;
@@ -84,6 +85,7 @@ function toSnake(ch: Partial<CharacterDraft>): Record<string, unknown> {
   if (ch.spellSlotsUsed !== undefined) out.spell_slots_used = ch.spellSlotsUsed ?? null;
   if (ch.gender !== undefined) out.gender = ch.gender ?? null;
   if (ch.asiBonuses !== undefined) out.asi_bonuses = ch.asiBonuses ?? null;
+  if (ch.raceSkills !== undefined) out.race_skills = ch.raceSkills;
   // Casillas de la hoja oficial (migración 010).
   if (ch.personalityTraits !== undefined) out.personality_traits = ch.personalityTraits ?? null;
   if (ch.inspiration !== undefined) out.inspiration = ch.inspiration;
@@ -135,6 +137,7 @@ function toCamel(data: SnakeChar): CharacterDraft {
     spellSlotsUsed: data.spell_slots_used ?? undefined,
     gender: (data.gender as CharacterDraft["gender"]) ?? undefined,
     asiBonuses: data.asi_bonuses ?? undefined,
+    raceSkills: data.race_skills ?? [],
     personalityTraits: data.personality_traits ?? "",
     inspiration: data.inspiration ?? false,
     hitDiceUsed: data.hit_dice_used ?? 0,

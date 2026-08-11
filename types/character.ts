@@ -127,6 +127,12 @@ export interface Race {
   alignmentHint?: string;
   traitDetails?: TraitSummary[];
   skillProficiencies?: string[];
+  /**
+   * Habilidades que la raza deja ELEGIR (el semielfo escoge dos cualesquiera).
+   * Sin `from` significa "cualquiera de la lista canónica". Va aparte de
+   * skillProficiencies, que son competencias fijas.
+   */
+  skillChoices?: { count: number; from?: string[] };
   weaponProficiencies?: string[];
   armorProficiencies?: string[];
   toolProficiencies?: string[];
@@ -255,6 +261,8 @@ export interface CharacterDraft {
   platinum?: number;
   spellSlotsUsed?: Record<number, number>;
   gender?: "male" | "female";
+  /** Habilidades elegidas gracias a la raza (semielfo). Aparte de selectedSkills, que son las de clase. */
+  raceSkills?: string[];
   /** Cara 1 de la hoja: el cuarto recuadro, junto a ideales, vínculos y defectos. */
   personalityTraits?: string;
   /** La concede el DM; el jugador la gasta para tirar con ventaja. */

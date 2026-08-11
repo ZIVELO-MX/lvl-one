@@ -182,7 +182,9 @@ export const RACES: Race[] = [
     recommendedFor: ["Bardo", "Paladín", "Hechicero", "Brujo"],
     age: "Maduran como humanos y viven más de 180 años.",
     alignmentHint: "La independencia de sus dos herencias los inclina a la flexibilidad.",
-    skillProficiencies: ["+2 a elección"],
+    // Versatilidad: dos habilidades CUALESQUIERA, no una lista fija. Antes era
+    // la cadena "+2 a elección", que ni se elegía ni se aplicaba a nada.
+    skillChoices: { count: 2 },
     traitDetails: [
       { id: "halfelf_darkvision", name: "Visión en la oscuridad", summary: "Puedes ver en luz tenue y oscuridad hasta 60 ft." },
       { id: "halfelf_fey_ancestry", name: "Ascendencia feérica", summary: "Ventaja contra ser encantado y la magia no puede dormirte." },

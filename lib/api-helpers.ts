@@ -57,6 +57,7 @@ export const CHARACTER_FIELDS = [
   "spell_slots_used", "gender", "asi_bonuses",
   // Casillas de la hoja oficial añadidas en la migración 010. Si un campo no
   // está en esta lista, pick() lo descarta y el guardado lo pierde en silencio.
+  "race_skills",
   "personality_traits", "inspiration", "hit_dice_used", "death_saves",
   "electrum", "xp", "other_proficiencies",
   "height", "weight", "eyes", "skin", "hair", "allies", "treasure",

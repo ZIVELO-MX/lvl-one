@@ -779,6 +779,7 @@ export function buildCharacter(draft: CharacterDraft) {
   const skillProficiencies = [...new Set([
     ...(bg?.skills ?? []),
     ...(draft.selectedSkills ?? []),
+    ...(draft.raceSkills ?? []),
     // "+2 a elección" del semielfo es un marcador, no una habilidad: se filtra
     // aquí y se elige en el asistente.
     ...(race?.skillProficiencies ?? []).filter(s => ALL_SKILLS.has(s)),
