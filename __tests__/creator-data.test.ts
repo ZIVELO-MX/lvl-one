@@ -4,6 +4,7 @@ import { RACES } from "@/data/races";
 import { SUBCLASSES } from "@/data/subclasses";
 import { BACKGROUNDS } from "@/data/backgrounds";
 import { buildCharacter, newDraft } from "@/lib/store";
+import { CLASS_PROGRESSION } from "@/data/levelProgression";
 import { CLASS_STARTING_EQUIPMENT, EQUIPMENT_ITEMS } from "@/data/equipment";
 import { SPELLS } from "@/data/spells";
 import { SKILLS_BY_STAT } from "@/types/character";
@@ -159,6 +160,36 @@ describe("conjuros que no se eligen", () => {
       (sub.spells ?? []).filter(id => !ids.has(id)).map(id => `${sub.name}: "${id}"`),
     );
     expect(huerfanos, "un conjuro inexistente no aparece en la ficha").toEqual([]);
+  });
+});
+
+describe("límites de conjuros a nivel 1", () => {
+  // Tabla del Manual del Jugador. Se escribe aquí a propósito: si alguien toca
+  // la progresión, el test dice contra qué se está desviando.
+  const MANUAL: Record<string, { trucos: number; conocidos: number }> = {
+    bard: { trucos: 2, conocidos: 4 },
+    cleric: { trucos: 3, conocidos: 0 },   // prepara, no conoce
+    druid: { trucos: 2, conocidos: 0 },    // prepara, no conoce
+    sorcerer: { trucos: 4, conocidos: 2 },
+    warlock: { trucos: 2, conocidos: 2 },
+    wizard: { trucos: 3, conocidos: 6 },   // los seis del libro de conjuros
+    paladin: { trucos: 0, conocidos: 0 },  // no lanza hasta nivel 2
+    ranger: { trucos: 0, conocidos: 0 },   // no lanza hasta nivel 2
+  };
+
+  for (const [classId, esperado] of Object.entries(MANUAL)) {
+    it(`${classId}: ${esperado.trucos} trucos y ${esperado.conocidos} conjuros`, () => {
+      const fila = CLASS_PROGRESSION[classId]?.[0];
+      expect(fila?.cantripsKnown ?? 0, "trucos").toBe(esperado.trucos);
+      expect(fila?.spellsKnown ?? 0, "conjuros conocidos").toBe(esperado.conocidos);
+    });
+  }
+
+  it("paladín y explorador sí lanzan a nivel 2", () => {
+    expect(CLASS_PROGRESSION.ranger?.[1]?.spellsKnown).toBe(2);
+    // El paladín prepara CAR + mitad de nivel, así que no lleva tabla de
+    // conocidos; lo que debe tener a nivel 2 son espacios.
+    expect(CLASS_PROGRESSION.paladin?.[1]?.spellSlots?.[0]).toBeGreaterThan(0);
   });
 });
 

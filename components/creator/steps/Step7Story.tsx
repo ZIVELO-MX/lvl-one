@@ -5,6 +5,7 @@ import { LivePreview } from "../LivePreview";
 import { ALIGNMENTS } from "@/data/backgrounds";
 import { CLASSES } from "@/data/classes";
 import { SPELLS } from "@/data/spells";
+import { CLASS_PROGRESSION } from "@/data/levelProgression";
 import type { CharacterDraft } from "@/types/character";
 
 const TEXTAREA_STYLE: React.CSSProperties = {
@@ -14,16 +15,21 @@ const TEXTAREA_STYLE: React.CSSProperties = {
   minHeight: 80, boxSizing: "border-box",
 };
 
-const SPELL_LIMITS: Record<string, { cantrips: number; spells: number }> = {
-  wizard:   { cantrips: 3, spells: 6 },
-  sorcerer: { cantrips: 4, spells: 2 },
-  bard:     { cantrips: 2, spells: 4 },
-  warlock:  { cantrips: 2, spells: 2 },
-  cleric:   { cantrips: 3, spells: 0 },
-  druid:    { cantrips: 2, spells: 0 },
-  paladin:  { cantrips: 0, spells: 2 },
-  ranger:   { cantrips: 0, spells: 2 },
-};
+/**
+ * Cuántos trucos y conjuros puede elegir a este nivel.
+ *
+ * Sale de CLASS_PROGRESSION, la tabla del proyecto, en vez de una copia local
+ * que vivía aquí: aquella decía que paladín y explorador eligen 2 conjuros a
+ * nivel 1, cuando ninguno de los dos lanza hasta el 2.
+ *
+ * Clérigo y druida se quedan en 0 a propósito: no "conocen" conjuros, los
+ * preparan cada día de toda la lista de su clase.
+ */
+function spellLimitsFor(classId: string | null, level: number) {
+  if (!classId) return { cantrips: 0, spells: 0 };
+  const fila = CLASS_PROGRESSION[classId]?.[Math.max(1, level) - 1];
+  return { cantrips: fila?.cantripsKnown ?? 0, spells: fila?.spellsKnown ?? 0 };
+}
 
 const SCHOOL_COLORS: Record<string, string> = {
   Evocación: "var(--dragon-red)", Conjuración: "var(--arcane-blue)",
@@ -38,7 +44,7 @@ export function Step7Story({ draft, id }: { draft: CharacterDraft; id: string })
 
   const cls = CLASSES.find(c => c.id === draft.classId);
   const isSpellcaster = !!cls?.spellcaster;
-  const limits = draft.classId ? (SPELL_LIMITS[draft.classId] ?? { cantrips: 0, spells: 0 }) : { cantrips: 0, spells: 0 };
+  const limits = spellLimitsFor(draft.classId, draft.level ?? 1);
 
   const classSpells = SPELLS.filter(s => draft.classId && s.classes.includes(draft.classId));
   const cantrips = classSpells.filter(s => s.level === 0);
