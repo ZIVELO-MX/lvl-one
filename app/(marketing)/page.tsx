@@ -1,9 +1,47 @@
 import Link from "next/link";
 import { Ico, LvlLogo } from "@/components/ui/icons";
+import { SITE_URL } from "@/lib/site";
+
+// Datos estructurados. Sin esto Google ve una web más: no sabe que detrás hay
+// un producto, ni que es gratis, ni en qué idioma está.
+const JSON_LD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: "LVL ONE",
+      inLanguage: "es",
+      description: "Crea personajes de D&D 5e, aprende las reglas y juega con tu grupo, en español.",
+      publisher: { "@id": `${SITE_URL}/#organization` },
+    },
+    {
+      "@type": "Organization",
+      "@id": `${SITE_URL}/#organization`,
+      name: "ZIVELO",
+      url: SITE_URL,
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": `${SITE_URL}/#app`,
+      name: "LVL ONE",
+      applicationCategory: "GameApplication",
+      operatingSystem: "Web",
+      inLanguage: "es",
+      description:
+        "Herramienta en español para jugar Dungeons & Dragons 5e: creador de personajes guiado, enciclopedia de razas, clases, conjuros y monstruos, glosario y gestión de campañas.",
+      offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
+      publisher: { "@id": `${SITE_URL}/#organization` },
+    },
+  ],
+};
 
 export default function LandingPage() {
   return (
     <main className="lo lo-darkframe lo-landing-page" style={{ position: "relative", minHeight: "100vh", overflowX: "hidden" }}>
+      {/* Contenido nuestro y estático: no entra nada del usuario. */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}/>
       <div className="lo-grain" style={{ position: "absolute", inset: 0, pointerEvents: "none" }}></div>
       {/* Nav */}
       <header className="lo-landing-header" style={{ position: "sticky", top: 0, zIndex: 10, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 48px", borderBottom: "1px solid var(--line)" }}>

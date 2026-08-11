@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Cinzel, Inter, JetBrains_Mono } from "next/font/google";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const cinzel = Cinzel({
@@ -24,7 +25,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://lvlone.app"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "LVL ONE — D&D 5e en español, sin manuales",
     template: "%s | LVL ONE",
@@ -38,7 +39,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "es_ES",
-    url: "https://lvlone.app",
+    url: SITE_URL,
     siteName: "LVL ONE",
     title: "LVL ONE — D&D 5e en español, sin manuales",
     description:
