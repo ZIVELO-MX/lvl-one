@@ -53,6 +53,16 @@ export interface Subrace {
   languages?: string[];
   languageChoices?: ChoiceRule[];
   skillProficiencies?: string[];
+  /** Como en Race: habilidades que la subraza deja ELEGIR (el humano variante, una). */
+  skillChoices?: { count: number; from?: string[] };
+  /** Dotes que concede a nivel 1. Sólo el humano variante, y sólo una. */
+  grantsFeat?: number;
+  /**
+   * La subraza SUSTITUYE el aumento de la raza en lugar de sumarse. El humano
+   * variante cambia el +1 a todo por +1 a dos a elección; sumar los dos daba
+   * un personaje una cabeza por encima de lo que permite el manual.
+   */
+  replacesRaceAsi?: boolean;
   weaponProficiencies?: string[];
   armorProficiencies?: string[];
   toolProficiencies?: string[];
@@ -249,7 +259,7 @@ export interface CharacterDraft {
   age: string;
   status: CharacterStatus;
   conceptId: string | null;
-  statsMethod: "standard" | "roll";
+  statsMethod: "standard" | "roll" | "point-buy";
   equipment: string[];
   equippedItems?: string[];
   spells: string[];
@@ -287,6 +297,14 @@ export interface CharacterDraft {
   treasure?: string;
   /** Aumentos de características por ASI (Ability Score Improvement) aplicados. Se suman a baseStats en buildCharacter. */
   asiBonuses?: Partial<Record<StatKey, number>>;
+  /** Dotes elegidas. El humano variante recibe una a nivel 1; la columna ya existía en la base y nadie la escribía. */
+  feats?: string[];
+  /**
+   * El +1 de las medias dotes (Atleta, Resiliente…). Va aparte de asiBonuses
+   * porque ese campo lo consume el reparto racial: mezclarlos haría que la
+   * raza creyera ya repartido lo que puso la dote.
+   */
+  featBonuses?: Partial<Record<StatKey, number>>;
   createdAt: number;
   updatedAt: number;
 }
@@ -303,10 +321,13 @@ export interface Character extends CharacterDraft {
   ac: number;
   initiative: number;
   proficiencyBonus: number;
+  /** Se calcula aquí porque Observador le suma +5 y la hoja no conoce las dotes. */
+  passivePerception: number;
 }
 
 export {
   STAT_KEYS, STAT_LABELS, STANDARD_ARRAY, MAX_FREE_CHARACTERS,
   modOf, fmtMod, proficiencyBonusForLevel, avgHitDie, hpForLevel,
   levelGrantsASI, asiCountUpToLevel, armorClassFrom,
+  POINT_BUY_BUDGET, POINT_BUY_MIN, POINT_BUY_MAX, pointBuyCost, pointBuySpent, pointBuyRemaining,
 } from "@/lib/characterMath";

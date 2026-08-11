@@ -1,11 +1,6 @@
-import { BACKGROUNDS } from "@/data/backgrounds";
-import { CLASSES } from "@/data/classes";
-import { RACES } from "@/data/races";
-import { SUBCLASSES } from "@/data/subclasses";
-import { SUBRACES } from "@/data/subraces";
+import { buildCharacter } from "@/lib/buildCharacter";
 import type { Campaign, CampaignDecision, CampaignNote, CampaignPlayer, CampaignRules, Session } from "@/types/campaign";
-import type { Character, CharacterDraft, CharacterStatus, ASI, StatKey } from "@/types/character";
-import { STAT_KEYS, hpForLevel, modOf, proficiencyBonusForLevel } from "@/types/character";
+import type { Character, CharacterDraft, CharacterStatus, StatKey } from "@/types/character";
 import type { ModuleProgress } from "@/types/learning";
 import type { NPC, NPCMemory, NPCRelation } from "@/types/npc";
 import type { Quest, QuestObjective } from "@/types/quest";
@@ -85,6 +80,7 @@ export interface DbCharacter {
   equipped_items?: string[] | null;
   spells: string[] | null;
   feats?: string[] | null;
+  feat_bonuses?: Partial<Record<StatKey, number>> | null;
   hp_current?: number | null;
   hp_temp?: number | null;
   gold?: number | null;
@@ -359,103 +355,6 @@ function defaultCampaignRules(): CampaignRules {
   };
 }
 
-function hydrateCharacter(draft: CharacterDraft): Character {
-  const race = RACES.find(raceOption => raceOption.id === draft.raceId);
-  const subrace = SUBRACES.find(subraceOption => subraceOption.id === draft.subraceId);
-  const cls = CLASSES.find(classOption => classOption.id === draft.classId);
-  const subclass = SUBCLASSES.find(subclassOption => subclassOption.id === draft.subclassId);
-  const background = BACKGROUNDS.find(backgroundOption => backgroundOption.id === draft.backgroundId);
-  const stats = {} as Record<StatKey, number>;
-  const mods = {} as Record<StatKey, number>;
-
-  STAT_KEYS.forEach(key => {
-    const base = draft.baseStats[key] ?? 10;
-    const raceAsi = race?.asi ?? {};
-    const subraceAsi = subrace?.asi ?? {};
-    stats[key] = base
-      + (raceAsi.all ?? 0)
-      + (raceAsi[key] ?? 0)
-      + (subraceAsi.all ?? 0)
-      + (subraceAsi[key] ?? 0)
-      + (draft.asiBonuses?.[key] ?? 0);
-    mods[key] = modOf(stats[key]);
-  });
-
-  const choiceSources: ASI[] = [race?.asi, subrace?.asi].filter((source): source is ASI => Boolean(source?.choices));
-  for (const source of choiceSources) {
-    for (const choice of source.choices ?? []) {
-      const eligible = choice.from ? STAT_KEYS.filter(key => choice.from!.includes(key)) : [...STAT_KEYS];
-      const existing = eligible.filter(key => (draft.asiBonuses?.[key] ?? 0) > 0);
-      const toAssign = Math.max(0, choice.choose - existing.length);
-      let assigned = 0;
-
-      for (const key of eligible) {
-        if (assigned >= toAssign) break;
-        if ((draft.asiBonuses?.[key] ?? 0) === 0) {
-          stats[key] += choice.amount;
-          mods[key] = modOf(stats[key]);
-          assigned += 1;
-        }
-      }
-    }
-  }
-
-  const conMod = modOf(stats.CON ?? 10);
-  const dexMod = modOf(stats.DES ?? 10);
-  const wisMod = modOf(stats.SAB ?? 10);
-  const hitDie = cls ? Number.parseInt(cls.hit.slice(1), 10) : 8;
-  const level = Math.max(1, draft.level ?? 1);
-  const hp = hpForLevel(hitDie, conMod, level);
-  const proficiencyBonus = proficiencyBonusForLevel(level);
-  const ac = (() => {
-    switch (cls?.id) {
-      case "fighter":
-      case "paladin":
-        return 18;
-      case "cleric":
-        return 16 + Math.min(dexMod, 2);
-      case "barbarian":
-        return 10 + dexMod + conMod;
-      case "monk":
-        return 10 + dexMod + wisMod;
-      case "druid":
-        return 13 + dexMod;
-      case "ranger":
-        return 14 + Math.min(dexMod, 2);
-      case "bard":
-      case "rogue":
-      case "warlock":
-        return 11 + dexMod;
-      default:
-        return 10 + dexMod;
-    }
-  })();
-
-  const inheritedSpells = [...(draft.spells ?? [])];
-  for (const spell of subrace?.spells ?? []) {
-    if (!inheritedSpells.includes(spell)) inheritedSpells.push(spell);
-  }
-  for (const spell of subclass?.spells ?? []) {
-    if (!inheritedSpells.includes(spell)) inheritedSpells.push(spell);
-  }
-
-  return {
-    ...draft,
-    race,
-    subrace,
-    class: cls,
-    subclass,
-    background,
-    stats,
-    mods,
-    hp,
-    ac,
-    initiative: dexMod,
-    proficiencyBonus,
-    spells: inheritedSpells,
-  };
-}
-
 export function toCharacter(db: DbCharacter): Character {
   const draft: CharacterDraft = {
     id: db.id,
@@ -489,16 +388,15 @@ export function toCharacter(db: DbCharacter): Character {
     spellSlotsUsed: db.spell_slots_used ?? undefined,
     gender: db.gender ?? undefined,
     asiBonuses: db.asi_bonuses ?? undefined,
+    feats: listOf(db.feats),
+    featBonuses: db.feat_bonuses ?? undefined,
     createdAt: toMillis(db.created_at),
     updatedAt: toMillis(db.updated_at),
   };
-  const character = hydrateCharacter(draft) as Character & { feats?: string[] };
-  if (db.feats) character.feats = [...db.feats];
-  return character;
+  return buildCharacter(draft);
 }
 
 export function fromCharacter(character: Character): Partial<DbCharacter> {
-  const withFeats = character as Character & { feats?: string[] };
   return stripUndefined({
     id: character.id,
     name: character.name,
@@ -522,7 +420,8 @@ export function fromCharacter(character: Character): Partial<DbCharacter> {
     equipment: character.equipment,
     equipped_items: character.equippedItems,
     spells: character.spells,
-    feats: withFeats.feats,
+    feats: character.feats,
+    feat_bonuses: character.featBonuses,
     hp_current: character.hpCurrent,
     hp_temp: character.hpTemp,
     gold: character.gold,

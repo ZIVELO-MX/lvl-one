@@ -8,6 +8,7 @@ import { TopBar } from "@/components/layout/AppShell";
 import { Ico } from "@/components/ui/icons";
 import { EQUIPMENT_ITEMS, startingEquipmentForClass } from "@/data/equipment";
 import { SPELLS } from "@/data/spells";
+import { FEATS, type Feat } from "@/data/feats";
 import { STAT_KEYS, STAT_LABELS, ALL_SKILLS, SKILLS_BY_STAT, fmtMod, modOf } from "@/types/character";
 import type { CharacterDraft, StatKey } from "@/types/character";
 import { racePortrait, classPortrait } from "@/lib/portraits";
@@ -276,7 +277,9 @@ export default function CharacterSheetPage({ params }: Props) {
               { etiqueta: "Iniciativa", valor: fmtMod(built.initiative) },
               { etiqueta: "Velocidad", valor: `${built.speed} m` },
               { etiqueta: "Competencia", valor: fmtMod(profBonus) },
-              { etiqueta: "Percepción pasiva", valor: String(10 + skillMod("Percepción")) },
+              // Sale de buildCharacter, no de skillMod: Observador le suma +5
+              // y esta pantalla no sabe nada de dotes.
+              { etiqueta: "Percepción pasiva", valor: String(built.passivePerception) },
               {
                 etiqueta: "Carga",
                 valor: `${built.carriedKg} / ${built.carryCapacityKg} kg`,
@@ -337,6 +340,32 @@ export default function CharacterSheetPage({ params }: Props) {
                         <li key={item} style={{ fontSize: 12, color: "var(--text-mid)", lineHeight: 1.5 }}>{item}</li>
                       ))}
                     </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })()}
+
+        {/* ── DOTES ──
+            El texto de una dote ES su regla: sin él, el jugador tiene el
+            nombre de algo que no sabe usar. */}
+        {(() => {
+          const dotes = (character.feats ?? [])
+            .map(id => FEATS.find(f => f.id === id))
+            .filter((f): f is Feat => !!f);
+          if (!dotes.length) return null;
+          return (
+            <div className="lo-card-elev" style={{ padding: 20, marginBottom: 16 }}>
+              <div className="lo-label" style={{ marginBottom: 12 }}>Dotes</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                {dotes.map(dote => (
+                  <div key={dote.id}>
+                    <div style={{ fontSize: 13, color: "var(--quest-gold-hi)", marginBottom: 3 }}>
+                      {dote.name}
+                      <span style={{ fontSize: 10, color: "var(--text-low)", marginLeft: 8 }}>{dote.sourceTag}</span>
+                    </div>
+                    <p style={{ fontSize: 12, color: "var(--text-mid)", lineHeight: 1.6, margin: 0 }}>{dote.description}</p>
                   </div>
                 ))}
               </div>

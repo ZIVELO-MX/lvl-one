@@ -61,6 +61,8 @@ export const CHARACTER_FIELDS = [
   "personality_traits", "inspiration", "hit_dice_used", "death_saves",
   "electrum", "xp", "other_proficiencies",
   "height", "weight", "eyes", "skin", "hair", "allies", "treasure",
+  // Dotes (migración 012).
+  "feats", "feat_bonuses",
 ] as const;
 
 export const PLAYER_FIELDS = ["user_id", "name", "role", "character_id"] as const;

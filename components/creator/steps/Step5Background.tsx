@@ -5,6 +5,7 @@ import { LivePreview } from "../LivePreview";
 import { BACKGROUNDS } from "@/data/backgrounds";
 import { CLASSES } from "@/data/classes";
 import { RACES } from "@/data/races";
+import { SUBRACES } from "@/data/subraces";
 import { SKILLS_BY_STAT, type CharacterDraft } from "@/types/character";
 
 const ALL_SKILLS = Object.values(SKILLS_BY_STAT).flat().sort((a, b) => a.localeCompare(b));
@@ -33,11 +34,20 @@ export function Step5Background({ draft, id }: { draft: CharacterDraft; id: stri
   // Habilidades que concede la raza por elección (el semielfo escoge dos
   // cualesquiera). Van en su propia lista para no gastar los huecos de clase.
   const race = RACES.find(r => r.id === draft.raceId);
-  const raceChoice = race?.skillChoices;
+  const subrace = SUBRACES.find(s => s.id === draft.subraceId);
+  // El semielfo elige dos por raza; el humano variante, una por subraza. Se
+  // suman: si algún día una raza tuviera ambas, no se perdería ninguna.
+  const totalRaceChoices = (race?.skillChoices?.count ?? 0) + (subrace?.skillChoices?.count ?? 0);
+  const raceChoice = totalRaceChoices
+    ? { count: totalRaceChoices, from: race?.skillChoices?.from ?? subrace?.skillChoices?.from }
+    : undefined;
   const raceSkills = draft.raceSkills ?? [];
   const raceOptions = raceChoice?.from ?? ALL_SKILLS;
   // Ya competente por clase o trasfondo: elegirla otra vez no daría nada.
-  const yaCompetente = new Set([...bgSkills, ...(draft.selectedSkills ?? []), ...(race?.skillProficiencies ?? [])]);
+  const yaCompetente = new Set([
+    ...bgSkills, ...(draft.selectedSkills ?? []),
+    ...(race?.skillProficiencies ?? []), ...(subrace?.skillProficiencies ?? []),
+  ]);
 
   const toggleRaceSkill = (skill: string) => {
     if (raceSkills.includes(skill)) {
@@ -117,7 +127,9 @@ export function Step5Background({ draft, id }: { draft: CharacterDraft; id: stri
 
           {raceChoice && (
             <div style={{ marginTop: 20 }}>
-              <div className="lo-label" style={{ marginBottom: 4 }}>Habilidades de {race?.name}</div>
+              <div className="lo-label" style={{ marginBottom: 4 }}>
+                Habilidades de {subrace?.skillChoices ? subrace.name : race?.name}
+              </div>
               <p style={{ fontSize: 12, color: "var(--text-low)", marginBottom: 10 }}>
                 Tu herencia te deja elegir {raceChoice.count} habilidad{raceChoice.count === 1 ? "" : "es"} más,
                 {raceChoice.from ? " de esta lista." : " la que quieras."}

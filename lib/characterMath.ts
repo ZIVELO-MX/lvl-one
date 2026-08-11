@@ -102,6 +102,32 @@ function acDeArmadura(texto: string, dexMod: number): number {
   return base + dex;
 }
 
+/** Presupuesto de la compra de puntos del manual. */
+export const POINT_BUY_BUDGET = 27;
+export const POINT_BUY_MIN = 8;
+export const POINT_BUY_MAX = 15;
+
+/**
+ * Coste de una puntuación en la compra de puntos. La tabla no es lineal: los
+ * dos últimos puntos cuestan el doble, que es lo que impide sacar tres 15.
+ */
+const POINT_BUY_COST: Record<number, number> = {
+  8: 0, 9: 1, 10: 2, 11: 3, 12: 4, 13: 5, 14: 7, 15: 9,
+};
+
+export function pointBuyCost(score: number): number {
+  return POINT_BUY_COST[score] ?? 0;
+}
+
+/** Puntos gastados por un reparto completo. */
+export function pointBuySpent(stats: Partial<Record<string, number>>): number {
+  return Object.values(stats).reduce<number>((total, v) => total + pointBuyCost(v ?? POINT_BUY_MIN), 0);
+}
+
+export function pointBuyRemaining(stats: Partial<Record<string, number>>): number {
+  return POINT_BUY_BUDGET - pointBuySpent(stats);
+}
+
 export function levelGrantsASI(level: number): boolean {
   return [4, 6, 8, 12, 16, 19].includes(level);
 }
