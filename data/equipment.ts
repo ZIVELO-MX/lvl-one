@@ -36,6 +36,18 @@ export const EQUIPMENT_ITEMS: EquipmentItem[] = [
   { id: "thieves_tools", name: "Herramientas de ladrón", category: "tool", summary: "Ganzúas y útiles para cerraduras y trampas." },
   { id: "herbalism_kit", name: "Kit de herborista", category: "tool", summary: "Herramientas para preparar remedios y trabajar con plantas." },
   { id: "lute", name: "Laúd", category: "tool", summary: "Instrumento musical y foco narrativo para bardos." },
+  // El bardo elige uno de estos diez instrumentos al crear el personaje. Los
+  // nueve que no eran el laúd se ofrecían sin existir en el catálogo: quien
+  // elegía la gaita se quedaba con la ficha vacía en su lugar.
+  { id: "bagpipes", name: "Gaita", category: "tool", cost: "30 po", weightKg: 2.7, summary: "Instrumento musical." },
+  { id: "drum", name: "Tambor", category: "tool", cost: "6 po", weightKg: 1.4, summary: "Instrumento musical." },
+  { id: "dulcimer", name: "Salterio", category: "tool", cost: "25 po", weightKg: 4.5, summary: "Instrumento musical." },
+  { id: "flute", name: "Flauta", category: "tool", cost: "2 po", weightKg: 0.5, summary: "Instrumento musical." },
+  { id: "horn", name: "Cuerno", category: "tool", cost: "3 po", weightKg: 0.9, summary: "Instrumento musical." },
+  { id: "lyre", name: "Lira", category: "tool", cost: "30 po", weightKg: 0.9, summary: "Instrumento musical." },
+  { id: "pan_flute", name: "Flauta de pan", category: "tool", cost: "12 po", weightKg: 0.9, summary: "Instrumento musical." },
+  { id: "shawm", name: "Chirimía", category: "tool", cost: "2 po", weightKg: 0.5, summary: "Instrumento musical." },
+  { id: "viol", name: "Viola", category: "tool", cost: "30 po", weightKg: 0.5, summary: "Instrumento musical." },
 
   { id: "explorers_pack", name: "Paquete de explorador", category: "pack", summary: "Mochila, saco de dormir, raciones, yesca, antorchas, cuerda y útiles de viaje." },
   { id: "dungeoneers_pack", name: "Paquete de aventurero de mazmorras", category: "pack", summary: "Equipo para cuevas y ruinas: palanca, martillo, pitones, antorchas, cuerda y raciones." },
@@ -85,7 +97,9 @@ export const CLASS_STARTING_EQUIPMENT: ClassStartingEquipment[] = [
     choices: [
       { choose: 1, from: ["shield", "club", "dagger", "dart", "greatclub", "handaxe", "javelin", "mace", "quarterstaff"], note: "Escudo no metálico o cualquier arma simple." },
       { choose: 1, from: ["scimitar", "quarterstaff"], note: "Arma principal." },
-      { choose: 1, from: ["druidic_focus"], note: "Foco de conjuro." },
+      // El foco druídico no se elige: el manual lo concede, y ya está en
+      // beginnerLoadout. Como "elección" de una sola opción sólo era un paso
+      // de más en el asistente.
     ],
     goldAlternative: "2d4 x 10 po",
   },
