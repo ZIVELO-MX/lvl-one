@@ -266,6 +266,38 @@ export default function CharacterSheetPage({ params }: Props) {
           </div>
         </div>
 
+        {/* ── COMBAT STATS ──
+            CA, iniciativa, velocidad, competencia y percepción pasiva: cinco
+            números de la hoja oficial que se calculaban y no se enseñaban. */}
+        <div className="lo-card-elev" style={{ padding: 20, marginBottom: 16 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(96px, 1fr))", gap: 12 }}>
+            {[
+              { etiqueta: "CA", valor: String(built.ac) },
+              { etiqueta: "Iniciativa", valor: fmtMod(built.initiative) },
+              { etiqueta: "Velocidad", valor: `${built.speed} m` },
+              { etiqueta: "Competencia", valor: fmtMod(profBonus) },
+              { etiqueta: "Percepción pasiva", valor: String(10 + skillMod("Percepción")) },
+            ].map(({ etiqueta, valor }) => (
+              <div key={etiqueta} style={{ textAlign: "center" }}>
+                <div style={{ fontFamily: "var(--font-display)", fontSize: 24, color: "var(--text-hi)" }}>{valor}</div>
+                <div style={{ fontSize: 10, color: "var(--text-low)", textTransform: "uppercase", letterSpacing: "0.06em" }}>{etiqueta}</div>
+              </div>
+            ))}
+          </div>
+          {built.languages.length > 0 && (
+            <div style={{ marginTop: 16, paddingTop: 14, borderTop: "1px solid var(--line)" }}>
+              <div className="lo-label" style={{ marginBottom: 6 }}>Idiomas</div>
+              <p style={{ fontSize: 12, color: "var(--text-mid)", margin: 0 }}>{built.languages.join(" · ")}</p>
+            </div>
+          )}
+          {built.derivedProficiencies.length > 0 && (
+            <div style={{ marginTop: 12 }}>
+              <div className="lo-label" style={{ marginBottom: 6 }}>Otras competencias</div>
+              <p style={{ fontSize: 12, color: "var(--text-mid)", margin: 0 }}>{built.derivedProficiencies.join(" · ")}</p>
+            </div>
+          )}
+        </div>
+
         {/* ── STATS + SKILLS ── */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
           {/* Stats */}

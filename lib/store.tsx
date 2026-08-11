@@ -783,7 +783,23 @@ export function buildCharacter(draft: CharacterDraft) {
     ...(subrace?.skillProficiencies ?? []).filter(s => ALL_SKILLS.has(s)),
   ])];
 
-  return { ...draft, race, subrace, class: cls, subclass, background: bg, stats, mods, hp, ac, initiative: dexMod, proficiencyBonus, spells: inheritedSpells, skillProficiencies };
+  // Velocidad e idiomas: los declaraba cada raza y no los leía nadie, así que
+  // la hoja no podía mostrarlos. La subraza manda sobre la raza si la cambia.
+  const speed = subrace?.speed ?? race?.speed ?? 9;
+  const languages = [...new Set([...(race?.languages ?? []), ...(subrace?.languages ?? [])])];
+
+  // Competencias que no son de habilidad: armaduras, armas y herramientas de
+  // clase, raza y trasfondo. Se llama "derived" para no pisar
+  // otherProficiencies, que es el recuadro de texto libre de la hoja.
+  const derivedProficiencies = [...new Set([
+    ...(cls?.armorProficiencies ?? []),
+    ...(cls?.weaponProficiencies ?? []),
+    ...(cls?.toolProficiencies ?? []),
+    ...(race?.weaponProficiencies ?? []),
+    ...(bg?.tools ?? []),
+  ])];
+
+  return { ...draft, race, subrace, class: cls, subclass, background: bg, stats, mods, hp, ac, initiative: dexMod, proficiencyBonus, spells: inheritedSpells, skillProficiencies, speed, languages, derivedProficiencies };
 }
 
 export function newDraft(): CharacterDraft {
