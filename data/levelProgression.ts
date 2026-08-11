@@ -178,8 +178,15 @@ export function combineSpellSlots(classes: { classId: string; level: number }[])
   return [...FULL_CASTER_SPELL_SLOTS[Math.min(20, casterLevel) - 1]];
 }
 
+/**
+ * Capacidad de carga, en KILOS.
+ *
+ * El manual la da como Fuerza × 15 libras, y así estaba escrita. Pero el
+ * catálogo guarda los pesos en weightKg, así que compararlos habría dado casi
+ * el doble de margen del real. 15 libras son 6,8 kg.
+ */
 export function weightCapacity(str: number): number {
-  return Math.max(0, Math.floor(str)) * 15;
+  return Math.round(Math.max(0, Math.floor(str)) * 6.8 * 10) / 10;
 }
 
 export function preparedSpells(level: number, mod: number): number {
