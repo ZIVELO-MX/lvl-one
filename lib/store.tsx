@@ -11,7 +11,7 @@ import { SUBRACES } from "@/data/subraces";
 import { CLASSES } from "@/data/classes";
 import { SUBCLASSES } from "@/data/subclasses";
 import { BACKGROUNDS } from "@/data/backgrounds";
-import { STAT_KEYS, modOf, MAX_FREE_CHARACTERS, hpForLevel, proficiencyBonusForLevel, type ASI } from "@/types/character";
+import { STAT_KEYS, SKILLS_BY_STAT, modOf, MAX_FREE_CHARACTERS, hpForLevel, proficiencyBonusForLevel, type ASI } from "@/types/character";
 import { addInventoryItem, equipInventoryItem, removeInventoryItem, unequipInventoryItem } from "@/lib/inventory";
 import { completeLessonProgress, resetModuleProgress } from "@/lib/progress";
 import { addPlayer, addSession, createCampaign, updateSession, type CampaignPlayerInput } from "@/lib/campaignStore";
@@ -771,7 +771,21 @@ export function buildCharacter(draft: CharacterDraft) {
     }
   }
 
-  return { ...draft, race, subrace, class: cls, subclass, background: bg, stats, mods, hp, ac, initiative: dexMod, proficiencyBonus, spells: inheritedSpells };
+  // Competencias de habilidad: las elegidas, las del trasfondo y las que
+  // concede la raza. Estas últimas no se aplicaban en ninguna parte, así que
+  // un elfo no era competente en Percepción ni un semiorco en Intimidación
+  // aunque su ficha lo prometiera.
+  const ALL_SKILLS = new Set(Object.values(SKILLS_BY_STAT).flat());
+  const skillProficiencies = [...new Set([
+    ...(bg?.skills ?? []),
+    ...(draft.selectedSkills ?? []),
+    // "+2 a elección" del semielfo es un marcador, no una habilidad: se filtra
+    // aquí y se elige en el asistente.
+    ...(race?.skillProficiencies ?? []).filter(s => ALL_SKILLS.has(s)),
+    ...(subrace?.skillProficiencies ?? []).filter(s => ALL_SKILLS.has(s)),
+  ])];
+
+  return { ...draft, race, subrace, class: cls, subclass, background: bg, stats, mods, hp, ac, initiative: dexMod, proficiencyBonus, spells: inheritedSpells, skillProficiencies };
 }
 
 export function newDraft(): CharacterDraft {

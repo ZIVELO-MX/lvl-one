@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { CLASSES } from "@/data/classes";
+import { RACES } from "@/data/races";
+import { SUBCLASSES } from "@/data/subclasses";
 import { BACKGROUNDS } from "@/data/backgrounds";
+import { buildCharacter, newDraft } from "@/lib/store";
 import { CLASS_STARTING_EQUIPMENT, EQUIPMENT_ITEMS } from "@/data/equipment";
 import { SPELLS } from "@/data/spells";
 import { SKILLS_BY_STAT } from "@/types/character";
@@ -87,6 +90,55 @@ describe("trasfondos", () => {
       expect(bg.equipment.trim().length, `${bg.name} sin equipo`).toBeGreaterThan(0);
       expect(bg.feature.trim().length, `${bg.name} sin rasgo`).toBeGreaterThan(0);
     }
+  });
+});
+
+describe("razas", () => {
+  it("toda raza tiene ASI, velocidad, tamaño e idiomas", () => {
+    const incompletas = RACES.filter(r => !r.asi || !r.speed || !r.size || !r.languages?.length).map(r => r.name);
+    expect(incompletas, "una raza sin estos campos rompe los cálculos de la ficha").toEqual([]);
+  });
+
+  it("las competencias de habilidad raciales llegan al personaje", () => {
+    // Un elfo es competente en Percepción y un semiorco en Intimidación. Esto
+    // se definía en los datos pero no se aplicaba en ninguna parte.
+    for (const race of RACES) {
+      const reales = (race.skillProficiencies ?? []).filter(s => ALL_SKILL_NAMES.has(s));
+      if (!reales.length) continue;
+      const built = buildCharacter({ ...newDraft(), raceId: race.id });
+      for (const skill of reales) {
+        expect(built.skillProficiencies, `${race.name} debería dar ${skill}`).toContain(skill);
+      }
+    }
+  });
+
+  it("un marcador como \"+2 a elección\" no se cuela como habilidad", () => {
+    const built = buildCharacter({ ...newDraft(), raceId: "halfelf" });
+    for (const s of built.skillProficiencies) {
+      expect(ALL_SKILL_NAMES.has(s), `"${s}" no es una habilidad real`).toBe(true);
+    }
+  });
+});
+
+describe("conjuros que no se eligen", () => {
+  it("los de subclase se suman a los del jugador", () => {
+    // Dominios, juramentos y círculos conceden conjuros aparte de los elegidos.
+    const conSpells = SUBCLASSES.filter(s => s.spells?.length);
+    expect(conSpells.length, "ninguna subclase concede conjuros").toBeGreaterThan(0);
+    for (const sub of conSpells.slice(0, 5)) {
+      const built = buildCharacter({ ...newDraft(), classId: sub.classId, subclassId: sub.id });
+      for (const spell of sub.spells ?? []) {
+        expect(built.spells, `${sub.name} debería conceder ${spell}`).toContain(spell);
+      }
+    }
+  });
+
+  it("todo conjuro concedido existe en el catálogo", () => {
+    const ids = new Set(SPELLS.map(s => s.id));
+    const huerfanos = SUBCLASSES.flatMap(sub =>
+      (sub.spells ?? []).filter(id => !ids.has(id)).map(id => `${sub.name}: "${id}"`),
+    );
+    expect(huerfanos, "un conjuro inexistente no aparece en la ficha").toEqual([]);
   });
 });
 

@@ -121,7 +121,8 @@ export default function CharacterSheetPage({ params }: Props) {
 
   const profBonus = built.proficiencyBonus;
   const proficientSaves: string[] = built.class?.saves ?? [];
-  const proficientSkills = [...(built.background?.skills ?? []), ...(character.selectedSkills ?? [])];
+  // buildCharacter ya fusiona trasfondo, elegidas y las que concede la raza.
+  const proficientSkills = built.skillProficiencies;
 
   const skillMod = (skill: string): number => {
     const stat = (Object.entries(SKILLS_BY_STAT) as [StatKey, string[]][])

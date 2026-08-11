@@ -48,6 +48,9 @@ export const EQUIPMENT_ITEMS: EquipmentItem[] = [
   { id: "pan_flute", name: "Flauta de pan", category: "tool", cost: "12 po", weightKg: 0.9, summary: "Instrumento musical." },
   { id: "shawm", name: "Chirimía", category: "tool", cost: "2 po", weightKg: 0.5, summary: "Instrumento musical." },
   { id: "viol", name: "Viola", category: "tool", cost: "30 po", weightKg: 0.5, summary: "Instrumento musical." },
+  // Añadido de la casa: el piano no figura entre los diez instrumentos del
+  // manual. Se ofrece igual porque el juego es nuestro, no del libro.
+  { id: "piano", name: "Piano", category: "tool", cost: "30 po", weightKg: 4.5, summary: "Instrumento musical." },
 
   { id: "explorers_pack", name: "Paquete de explorador", category: "pack", summary: "Mochila, saco de dormir, raciones, yesca, antorchas, cuerda y útiles de viaje." },
   { id: "dungeoneers_pack", name: "Paquete de aventurero de mazmorras", category: "pack", summary: "Equipo para cuevas y ruinas: palanca, martillo, pitones, antorchas, cuerda y raciones." },
@@ -76,7 +79,7 @@ export const CLASS_STARTING_EQUIPMENT: ClassStartingEquipment[] = [
     choices: [
       { choose: 1, from: ["rapier", "longsword", "quarterstaff"], note: "Arma elegante o arma simple." },
       { choose: 1, from: ["diplomats_pack", "entertainers_pack"], note: "Pack social o de artista." },
-      { choose: 1, from: ["lute", "bagpipes", "drum", "dulcimer", "flute", "horn", "lyre", "pan_flute", "shawm", "viol"], note: "Instrumento musical a elección; laúd como default." },
+      { choose: 1, from: ["lute", "bagpipes", "drum", "dulcimer", "flute", "horn", "lyre", "pan_flute", "shawm", "viol", "piano"], note: "Instrumento musical a elección; laúd como default." },
     ],
     goldAlternative: "5d4 x 10 po",
   },
