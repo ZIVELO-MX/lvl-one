@@ -163,6 +163,26 @@ describe("razas", () => {
   });
 });
 
+describe("subclases", () => {
+  // Cuántas trae cada clase en el Manual del Jugador. Suman 40.
+  const MANUAL: Record<string, number> = {
+    barbarian: 2, bard: 2, cleric: 7, druid: 2, fighter: 3, monk: 3,
+    paladin: 3, ranger: 2, rogue: 3, sorcerer: 2, warlock: 3, wizard: 8,
+  };
+
+  for (const [classId, esperadas] of Object.entries(MANUAL)) {
+    it(`${classId}: ${esperadas}`, () => {
+      const hay = SUBCLASSES.filter(s => s.classId === classId).length;
+      expect(hay, `${classId} tiene ${hay} y el manual trae ${esperadas}`).toBe(esperadas);
+    });
+  }
+
+  it("cada subclase trae rasgos con su nivel", () => {
+    const mudas = SUBCLASSES.filter(s => !s.traits?.length || s.traits.some(t => !t.level)).map(s => s.name);
+    expect(mudas, "una subclase sin rasgos no cambia nada al elegirla").toEqual([]);
+  });
+});
+
 describe("subrazas", () => {
   // Valores del Manual del Jugador. Escritos aquí para que cualquier cambio
   // futuro tenga que justificarse contra el libro.
