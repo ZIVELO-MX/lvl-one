@@ -55,6 +55,12 @@ export const CHARACTER_FIELDS = [
   "level", "age", "status", "concept_id", "stats_method", "equipment", "equipped_items",
   "spells", "hp_current", "hp_temp", "gold", "silver", "copper", "platinum",
   "spell_slots_used", "gender", "asi_bonuses",
+  // Casillas de la hoja oficial añadidas en la migración 010. Si un campo no
+  // está en esta lista, pick() lo descarta y el guardado lo pierde en silencio.
+  "race_skills",
+  "personality_traits", "inspiration", "hit_dice_used", "death_saves",
+  "electrum", "xp", "other_proficiencies",
+  "height", "weight", "eyes", "skin", "hair", "allies", "treasure",
 ] as const;
 
 export const PLAYER_FIELDS = ["user_id", "name", "role", "character_id"] as const;

@@ -4,7 +4,10 @@ import { WizardShell } from "../WizardShell";
 import { LivePreview } from "../LivePreview";
 import { BACKGROUNDS } from "@/data/backgrounds";
 import { CLASSES } from "@/data/classes";
-import type { CharacterDraft } from "@/types/character";
+import { RACES } from "@/data/races";
+import { SKILLS_BY_STAT, type CharacterDraft } from "@/types/character";
+
+const ALL_SKILLS = Object.values(SKILLS_BY_STAT).flat().sort((a, b) => a.localeCompare(b));
 
 export function Step5Background({ draft, id }: { draft: CharacterDraft; id: string }) {
   const { dispatch } = useApp();
@@ -26,6 +29,23 @@ export function Step5Background({ draft, id }: { draft: CharacterDraft; id: stri
   const classSkills = cls?.skillChoices?.options ?? [];
   const maxSkills = cls?.skillChoices?.count ?? 2;
   const bgSkills = selected?.skills ?? [];
+
+  // Habilidades que concede la raza por elección (el semielfo escoge dos
+  // cualesquiera). Van en su propia lista para no gastar los huecos de clase.
+  const race = RACES.find(r => r.id === draft.raceId);
+  const raceChoice = race?.skillChoices;
+  const raceSkills = draft.raceSkills ?? [];
+  const raceOptions = raceChoice?.from ?? ALL_SKILLS;
+  // Ya competente por clase o trasfondo: elegirla otra vez no daría nada.
+  const yaCompetente = new Set([...bgSkills, ...(draft.selectedSkills ?? []), ...(race?.skillProficiencies ?? [])]);
+
+  const toggleRaceSkill = (skill: string) => {
+    if (raceSkills.includes(skill)) {
+      up({ raceSkills: raceSkills.filter(s => s !== skill) });
+    } else if (raceSkills.length < (raceChoice?.count ?? 0)) {
+      up({ raceSkills: [...raceSkills, skill] });
+    }
+  };
 
   return (
     <WizardShell id={id} step={5} title="Elige tu trasfondo"
@@ -94,6 +114,40 @@ export function Step5Background({ draft, id }: { draft: CharacterDraft; id: stri
               );
             })}
           </div>
+
+          {raceChoice && (
+            <div style={{ marginTop: 20 }}>
+              <div className="lo-label" style={{ marginBottom: 4 }}>Habilidades de {race?.name}</div>
+              <p style={{ fontSize: 12, color: "var(--text-low)", marginBottom: 10 }}>
+                Tu herencia te deja elegir {raceChoice.count} habilidad{raceChoice.count === 1 ? "" : "es"} más,
+                {raceChoice.from ? " de esta lista." : " la que quieras."}
+                {" "}<span style={{ color: raceSkills.length >= raceChoice.count ? "var(--moss-green)" : "var(--quest-gold-hi)" }}>
+                  {raceSkills.length}/{raceChoice.count} elegidas
+                </span>
+              </p>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: 6 }}>
+                {raceOptions.map(skill => {
+                  const isPicked = raceSkills.includes(skill);
+                  const repetida = yaCompetente.has(skill) && !isPicked;
+                  const lleno = raceSkills.length >= raceChoice.count && !isPicked;
+                  const disabled = repetida || lleno;
+                  return (
+                    <button type="button" key={skill} onClick={() => !disabled && toggleRaceSkill(skill)}
+                      title={repetida ? "Ya eres competente por clase o trasfondo" : undefined}
+                      style={{
+                        padding: "8px 12px", borderRadius: 8, textAlign: "left",
+                        cursor: disabled ? "default" : "pointer", opacity: disabled && !isPicked ? 0.4 : 1,
+                        border: isPicked ? "1px solid var(--quest-gold)" : "1px solid var(--line-strong)",
+                        background: isPicked ? "rgba(214,168,79,0.08)" : "transparent",
+                        display: "flex", justifyContent: "space-between", alignItems: "center", gap: 6 }}>
+                      <span style={{ fontSize: 12, color: isPicked ? "var(--quest-gold-hi)" : "var(--text-mid)" }}>{skill}</span>
+                      {repetida && <span style={{ fontSize: 9, color: "var(--text-low)" }}>ya la tienes</span>}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           {selected && (
             <div className="lo-card-elev" style={{ padding: 14, marginTop: 16 }}>

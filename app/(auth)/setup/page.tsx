@@ -53,7 +53,7 @@ export default function SetupPage() {
       const supabase = createClient();
       const { data, error } = await supabase.auth.updateUser({
         password: pwd,
-        data: { username: trimmed, needs_setup: false },
+        data: { username: trimmed, needs_setup: false, onboarded: false },
       });
 
       if (error) { setErr(error.message); setLoading(false); return; }

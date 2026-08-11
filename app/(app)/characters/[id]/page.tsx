@@ -121,7 +121,8 @@ export default function CharacterSheetPage({ params }: Props) {
 
   const profBonus = built.proficiencyBonus;
   const proficientSaves: string[] = built.class?.saves ?? [];
-  const proficientSkills = [...(built.background?.skills ?? []), ...(character.selectedSkills ?? [])];
+  // buildCharacter ya fusiona trasfondo, elegidas y las que concede la raza.
+  const proficientSkills = built.skillProficiencies;
 
   const skillMod = (skill: string): number => {
     const stat = (Object.entries(SKILLS_BY_STAT) as [StatKey, string[]][])
@@ -264,6 +265,78 @@ export default function CharacterSheetPage({ params }: Props) {
             )}
           </div>
         </div>
+
+        {/* ── COMBAT STATS ──
+            CA, iniciativa, velocidad, competencia y percepción pasiva: cinco
+            números de la hoja oficial que se calculaban y no se enseñaban. */}
+        <div className="lo-card-elev" style={{ padding: 20, marginBottom: 16 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(96px, 1fr))", gap: 12 }}>
+            {[
+              { etiqueta: "CA", valor: String(built.ac) },
+              { etiqueta: "Iniciativa", valor: fmtMod(built.initiative) },
+              { etiqueta: "Velocidad", valor: `${built.speed} m` },
+              { etiqueta: "Competencia", valor: fmtMod(profBonus) },
+              { etiqueta: "Percepción pasiva", valor: String(10 + skillMod("Percepción")) },
+            ].map(({ etiqueta, valor }) => (
+              <div key={etiqueta} style={{ textAlign: "center" }}>
+                <div style={{ fontFamily: "var(--font-display)", fontSize: 24, color: "var(--text-hi)" }}>{valor}</div>
+                <div style={{ fontSize: 10, color: "var(--text-low)", textTransform: "uppercase", letterSpacing: "0.06em" }}>{etiqueta}</div>
+              </div>
+            ))}
+          </div>
+          {built.languages.length > 0 && (
+            <div style={{ marginTop: 16, paddingTop: 14, borderTop: "1px solid var(--line)" }}>
+              <div className="lo-label" style={{ marginBottom: 6 }}>Idiomas</div>
+              <p style={{ fontSize: 12, color: "var(--text-mid)", margin: 0 }}>{built.languages.join(" · ")}</p>
+            </div>
+          )}
+          {built.derivedProficiencies.length > 0 && (
+            <div style={{ marginTop: 12 }}>
+              <div className="lo-label" style={{ marginBottom: 6 }}>Otras competencias</div>
+              <p style={{ fontSize: 12, color: "var(--text-mid)", margin: 0 }}>{built.derivedProficiencies.join(" · ")}</p>
+            </div>
+          )}
+        </div>
+
+        {/* ── RASGOS Y ATRIBUTOS ──
+            La casilla de la hoja oficial. Los rasgos raciales, los de clase y
+            el del trasfondo estaban en los datos y no se enseñaban en ninguna
+            parte: el jugador no sabía qué sabe hacer su personaje. */}
+        {(() => {
+          // La raza los guarda como cadenas y la subraza como objetos.
+          const nombreRasgo = (t: string | { name: string }) => (typeof t === "string" ? t : t.name);
+          const rasgosRaza = [
+            ...(built.race?.traits ?? []).map(nombreRasgo),
+            ...(built.subrace?.traits ?? []).map(nombreRasgo),
+          ];
+          const rasgosClase = (built.class?.classFeatures ?? [])
+            .filter(f => f.level <= character.level)
+            .map(f => `${f.name} (nv ${f.level})`);
+          const grupos = [
+            { titulo: built.race?.name ?? "Raza", items: rasgosRaza },
+            { titulo: built.class?.name ?? "Clase", items: rasgosClase },
+            { titulo: built.background?.name ?? "Trasfondo", items: built.background?.feature ? [built.background.feature] : [] },
+          ].filter(g => g.items.length > 0);
+
+          if (!grupos.length) return null;
+          return (
+            <div className="lo-card-elev" style={{ padding: 20, marginBottom: 16 }}>
+              <div className="lo-label" style={{ marginBottom: 12 }}>Rasgos y atributos</div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16 }}>
+                {grupos.map(g => (
+                  <div key={g.titulo}>
+                    <div style={{ fontSize: 11, color: "var(--quest-gold-hi)", marginBottom: 6 }}>{g.titulo}</div>
+                    <ul style={{ margin: 0, paddingLeft: 16, display: "flex", flexDirection: "column", gap: 4 }}>
+                      {g.items.map(item => (
+                        <li key={item} style={{ fontSize: 12, color: "var(--text-mid)", lineHeight: 1.5 }}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })()}
 
         {/* ── STATS + SKILLS ── */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
