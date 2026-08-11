@@ -163,6 +163,38 @@ describe("razas", () => {
   });
 });
 
+describe("características a elegir de la raza", () => {
+  const base = { FUE: 10, DES: 10, CON: 10, INT: 10, SAB: 10, CAR: 10 };
+
+  it("el semielfo sube +2 CAR fijo y dos más a elección", () => {
+    const halfelf = RACES.find(r => r.id === "halfelf");
+    const asi = halfelf?.asi as { CAR?: number; choices?: { choose: number; amount: number }[] };
+    expect(asi?.CAR, "+2 CAR fijo").toBe(2);
+    expect(asi?.choices?.[0]?.choose, "dos a elección").toBe(2);
+    expect(asi?.choices?.[0]?.amount, "de +1 cada una").toBe(1);
+  });
+
+  it("lo que elige el jugador manda sobre el reparto automático", () => {
+    // Un semielfo hechicero quiere CON y DES, no lo que salga por orden.
+    const built = buildCharacter({
+      ...newDraft(), raceId: "halfelf", baseStats: base,
+      asiBonuses: { CON: 1, DES: 1 },
+    });
+    expect(built.stats.CON, "CON elegida").toBe(11);
+    expect(built.stats.DES, "DES elegida").toBe(11);
+    expect(built.stats.CAR, "CAR viene fija de la raza").toBe(12);
+    // Y no debe repartir de más: el total sube 2 + 2, nada más.
+    const suma = Object.values(built.stats).reduce((a, b) => a + b, 0);
+    expect(suma, "sube 4 puntos en total").toBe(64);
+  });
+
+  it("sin elección del jugador sigue repartiendo, para no dejar el personaje corto", () => {
+    const built = buildCharacter({ ...newDraft(), raceId: "halfelf", baseStats: base });
+    const suma = Object.values(built.stats).reduce((a, b) => a + b, 0);
+    expect(suma, "reparto automático de respaldo").toBe(64);
+  });
+});
+
 describe("subclases", () => {
   // Cuántas trae cada clase en el Manual del Jugador. Suman 40.
   const MANUAL: Record<string, number> = {

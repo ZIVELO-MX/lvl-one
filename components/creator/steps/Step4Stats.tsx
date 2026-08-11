@@ -146,6 +146,65 @@ export function Step4Stats({ draft, id }: { draft: CharacterDraft; id: string })
               </p>
             </div>
           )}
+          {/* Características a elegir de la raza. El semielfo sube +1 a dos a
+              su gusto, y el humano variante igual: hasta ahora las repartía
+              buildCharacter por orden alfabético, sin preguntar. */}
+          {(() => {
+            const reglas = [race?.asi, subrace?.asi]
+              .filter((a): a is NonNullable<typeof a> => !!a?.choices)
+              .flatMap(a => a.choices ?? []);
+            if (!reglas.length) return null;
+
+            const total = reglas.reduce((n, c) => n + c.choose, 0);
+            const cantidad = reglas[0].amount;
+            // No tiene sentido elegir una que la raza ya sube de fijo.
+            const fijas = new Set(STAT_KEYS.filter(k => getRaceBonus(k) > 0 || getSubraceBonus(k) > 0));
+            const permitidas = reglas[0].from
+              ? STAT_KEYS.filter(k => reglas[0].from!.includes(k))
+              : STAT_KEYS;
+            const elegidas = STAT_KEYS.filter(k => (draft.asiBonuses?.[k] ?? 0) > 0);
+
+            const alternar = (k: StatKey) => {
+              const actual = { ...(draft.asiBonuses ?? {}) };
+              if (actual[k]) delete actual[k];
+              else if (elegidas.length < total) actual[k] = cantidad;
+              up({ asiBonuses: actual });
+            };
+
+            return (
+              <div style={{ marginTop: 16 }}>
+                <div className="lo-label" style={{ marginBottom: 4 }}>Características de {race?.name}</div>
+                <p style={{ fontSize: 11, color: "var(--text-low)", marginBottom: 8 }}>
+                  Sube +{cantidad} a {total} características a tu elección.{" "}
+                  <span style={{ color: elegidas.length >= total ? "var(--moss-green)" : "var(--quest-gold-hi)" }}>
+                    {elegidas.length}/{total}
+                  </span>
+                </p>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 6 }}>
+                  {permitidas.map(k => {
+                    const puesta = (draft.asiBonuses?.[k] ?? 0) > 0;
+                    const bloqueada = fijas.has(k) && !puesta;
+                    const lleno = elegidas.length >= total && !puesta;
+                    const disabled = bloqueada || lleno;
+                    return (
+                      <button type="button" key={k} onClick={() => !disabled && alternar(k)}
+                        title={bloqueada ? "Tu raza ya sube esta característica" : undefined}
+                        style={{
+                          padding: "8px 6px", borderRadius: 8, cursor: disabled ? "default" : "pointer",
+                          opacity: disabled && !puesta ? 0.4 : 1,
+                          border: puesta ? "1px solid var(--quest-gold)" : "1px solid var(--line-strong)",
+                          background: puesta ? "rgba(214,168,79,0.08)" : "transparent",
+                          color: puesta ? "var(--quest-gold-hi)" : "var(--text-mid)", fontSize: 12,
+                        }}>
+                        {k}{puesta ? ` +${cantidad}` : ""}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })()}
+
           <div style={{ marginTop: 16, padding: "10px 12px", borderRadius: 8,
             background: "rgba(244,231,197,0.03)", border: "1px solid var(--line-strong)" }}>
             <div style={{ fontSize: 10, color: "var(--text-low)", lineHeight: 1.5 }}>
